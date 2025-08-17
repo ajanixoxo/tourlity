@@ -11,7 +11,7 @@ const Button: React.FC<ButtonProps> = ({
   className = '', 
   ...props 
 }) => {
-  const baseStyles = 'px-5 py-3 border-2 cursor-pointer rounded-3xl font-medium transition-colors duration-200';
+  const baseStyles = 'px-5 py-2 border-2 cursor-pointer rounded-3xl font-medium transition-colors duration-200';
   
   const variantStyles = {
     primary: 'bg-primary-color hover:bg-[#CA3F33] text-white',

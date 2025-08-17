@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Lobster, Plus_Jakarta_Sans } from "next/font/google";
+
 import "./globals.css";
 
 // Configure your fonts

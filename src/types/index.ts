@@ -12,7 +12,7 @@ export interface Tour {
   groupSize: string
   language: string[]
   categories: string[]
-  images: string[]
+  images: string
   host: Host
   isLive?: boolean
   isFeatured?: boolean
