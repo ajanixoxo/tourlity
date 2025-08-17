@@ -44,6 +44,20 @@ body{
 .stroke-color{
   border:1px solid var(--stroke-color)
 }
+.major-hero{
+  font-family: "Inter", Robot0;
+  font-size:78px;
+  font-weight: bold;
+  line-height: 130px;
+  color:white
+}
+.mobile-major-hero{
+  font-family: "Inter", Roboto;
+  font-size:40px;
+  font-weight: bold;
+  line-height: 140px;
+  color:white;
+}
 /* Define custom utilities using your variables */
 @layer utilities {
   .bg-primary-color { background-color: var(--primary-color); }

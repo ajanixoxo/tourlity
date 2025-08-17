@@ -13,7 +13,7 @@ function Navbar() {
   };
 
   return (
-    <nav className='relative h-20'>
+    <nav className='relative h-20 z-[999]'>
       {/* Main Navbar */}
       <div className={`absolute w-full flex flex-col ${isMobileMenuOpen ? "shadow-lg" : ""}  justify-between py-1 px-2 items-center bg-white border rounded-3xl border-gray-200`}>
         <div className='flex justify-between p-2 items-center w-full'>
@@ -33,14 +33,14 @@ function Navbar() {
             {/* Desktop Navigation Links - Hidden on mobile */}
             <div className='hidden lg:block'>
               <ul className='flex justify-between gap-3 items-center text-[14px] secondary-text-color navlink'>
-                <li><Link href='' className='flex gap-2 justify-between items-center'>Explore Tours</Link></li>
+                <li><Link href='' className='flex gap-2 justify-between items-center hover:text-[#CA3F33] transition'>Explore Tours</Link></li>
                 <li>
-                  <Link href='' className='flex gap-2 justify-between items-center'>
+                  <Link href='' className='flex gap-2 justify-between items-center hover:text-[#CA3F33] transition'>
                     <Dot className='w-4 h-4 muted-color' /> Become a Host
                   </Link>
                 </li>
-                <li><Link href='' className='flex gap-2 justify-between items-center'><Dot className='w-4 h-4 muted-color' />About</Link></li>
-                <li><Link href='' className='flex gap-2 justify-between items-center'><Dot className='w-4 h-4 muted-color' />Contact</Link></li>
+                <li><Link href='' className='flex gap-2 justify-between items-center hover:text-[#CA3F33] transition'><Dot className='w-4 h-4 muted-color' />About</Link></li>
+                <li><Link href='' className='flex gap-2 justify-between items-center hover:text-[#CA3F33] transition'><Dot className='w-4 h-4 muted-color' />Contact</Link></li>
               </ul>
             </div>
           </div>
@@ -56,10 +56,11 @@ function Navbar() {
             onClick={toggleMobileMenu}
             className='lg:hidden p-2 text-charcoal hover:text-primary-color transition-colors'
           >
-            {isMobileMenuOpen ? <X size={24} /> : <div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 5L20 5" stroke="#5A5A5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M4 12L20 12" stroke="#5A5A5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M4 19L14 19" stroke="#5A5A5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            {isMobileMenuOpen ? <X size={24} /> : <div>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 5L20 5" stroke="#5A5A5A"  strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M4 12L20 12" stroke="#5A5A5A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M4 19L14 19" stroke="#5A5A5A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             </div>}
           </button>
@@ -67,9 +68,9 @@ function Navbar() {
 
         {/* Mobile Dropdown Menu - Inside the same container */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden ml-3 z-50">
+          <div className="lg:hidden ml-3 z-50 ">
             {/* Navigation Links */}
-            <div className="space-y-6 mb-6">
+            <div className="space-y-6 mb-6 px-2">
               <Link
                 href=''
                 className='block text-charcoal hover:text-primary-color transition-colors text-[16px]'
