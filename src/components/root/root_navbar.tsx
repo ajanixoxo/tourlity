@@ -33,14 +33,14 @@ function Navbar() {
             {/* Desktop Navigation Links - Hidden on mobile */}
             <div className='hidden lg:block'>
               <ul className='flex justify-between gap-3 items-center text-[14px] secondary-text-color navlink'>
-                <li><Link href='' className='flex gap-2 justify-between items-center hover:text-[#CA3F33] transition'>Explore Tours</Link></li>
+                <li><Link href='/explore-tour' className='flex gap-2 justify-between items-center hover:text-[#CA3F33] transition'>Explore Tours</Link></li>
                 <li>
-                  <Link href='' className='flex gap-2 justify-between items-center hover:text-[#CA3F33] transition'>
+                  <Link href='/become-a-host' className='flex gap-2 justify-between items-center hover:text-[#CA3F33] transition'>
                     <Dot className='w-4 h-4 muted-color' /> Become a Host
                   </Link>
                 </li>
-                <li><Link href='' className='flex gap-2 justify-between items-center hover:text-[#CA3F33] transition'><Dot className='w-4 h-4 muted-color' />About</Link></li>
-                <li><Link href='' className='flex gap-2 justify-between items-center hover:text-[#CA3F33] transition'><Dot className='w-4 h-4 muted-color' />Contact</Link></li>
+                <li><Link href='/about' className='flex gap-2 justify-between items-center hover:text-[#CA3F33] transition'><Dot className='w-4 h-4 muted-color' />About</Link></li>
+                <li><Link href='/contact' className='flex gap-2 justify-between items-center hover:text-[#CA3F33] transition'><Dot className='w-4 h-4 muted-color' />Contact</Link></li>
               </ul>
             </div>
           </div>
@@ -72,28 +72,28 @@ function Navbar() {
             {/* Navigation Links */}
             <div className="space-y-6 mb-6 px-2">
               <Link
-                href=''
+                href='/explore-tour'
                 className='block text-charcoal hover:text-primary-color transition-colors text-[16px]'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Explore Tours
               </Link>
               <Link
-                href=''
+                href='/become-a-host'
                 className='block text-charcoal hover:text-primary-color transition-colors text-[16px]'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Become a Host
               </Link>
               <Link
-                href=''
+                href='/about'
                 className='block text-charcoal hover:text-primary-color transition-colors text-[16px]'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 About
               </Link>
               <Link
-                href=''
+                href='/contact'
                 className='block text-charcoal hover:text-primary-color transition-colors text-[16px]'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -103,20 +103,23 @@ function Navbar() {
 
             {/* Mobile Buttons */}
             <div className="gap-3 flex mb-3">
+              <Link href=''> 
               <Button
                 variant='secondary'
                 className=' !px-5 w-max'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Access Account
-              </Button>
-              <Button
+              </Button></Link>
+             
+              <Link href='/sign-up'> <Button
                 variant='primary'
                 className=' !px-5 w-max'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Create Account
-              </Button>
+              </Button></Link>
+             
             </div>
           </div>
         )}
