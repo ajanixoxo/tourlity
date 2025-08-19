@@ -16,7 +16,7 @@
   --secondary-color: #5A5A5A;
   --muted-ash: #A0A0A0;
   --stroke-color: #E0E0E0;
-  --box-color:#f5f5f4;
+  --box-color:#F5F5F4;
 
 
 
@@ -86,6 +86,7 @@ body{
 }
 .secondary-text-color{
  color: var(--secondary-color);
+
 }
 
 .muted-color{
@@ -97,7 +98,7 @@ body{
 }
 
 .stroke-color{
-  border:1px solid var(--stroke-color)
+  border:2px solid var(--stroke-color)
 }
 .major-hero{
   font-family: "Inter", Robot0;

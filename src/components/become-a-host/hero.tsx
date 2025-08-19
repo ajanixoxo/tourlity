@@ -4,7 +4,7 @@ export function BecomeHostHero() {
   return (
     <section className="relative h-[500px] bg-gradient-to-r from-black/50 to-black/30 rounded-4xl">
       <div
-        className="absolute inset-0 bg-cover bg-center "
+        className="absolute inset-0 bg-cover bg-center rounded-4xl"
         style={{
           backgroundImage: `url('/images/become-host-hero.png')`,
         }}
