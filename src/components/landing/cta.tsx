@@ -21,7 +21,7 @@ function CTA() {
               <h2 className="text-[32px] sm:text-[37px] lg:text-[42px] font-plus-jakarta font-bold leading-[40px] sm:leading-[47px] lg:leading-[53px] text-center text-white">
                 Ready to Start Your Journey?
               </h2>
-              <p className="text-sm font-inter font-normal leading-5 text-center text-[#ffffffcc] w-full lg:px-18">
+              <p className="text-sm font-inter font-normal leading-5 text-center text-[#ffffffcc] w-full lg:px-18 max-w-xl">
                 Join Tourlity today and discover authentic local experiences around the world. Connect with passionate hosts and create unforgettable memories.
               </p>
             </div>

@@ -153,7 +153,7 @@ export function BecomeHostContent() {
                                 <div className=" bg-white w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4">
                                     {benefit.icon}
                                 </div>
-                                <h3 className="text-[24px] font-semibold text-gray-900 mb-3">{benefit.title}</h3>
+                                <h3 className="text-[24px] font-semibold  mb-3">{benefit.title}</h3>
                                 <p className=" leading-relaxed description ">{benefit.description}</p>
                             </div>
                         ))}
