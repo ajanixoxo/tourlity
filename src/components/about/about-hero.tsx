@@ -2,7 +2,7 @@
 
 export function AboutHero() {
   return (
-    <section className="relative h-[500px] bg-gradient-to-r from-black/50 to-black/30 rounded-4xl">
+    <section className="relative h-[500px] lg:h-[400px] bg-gradient-to-r from-black/50 to-black/30 rounded-4xl">
       <div
         className="absolute inset-0 bg-cover bg-center rounded-4xl"
         style={{
