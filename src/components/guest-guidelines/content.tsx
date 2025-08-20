@@ -65,7 +65,7 @@ export const cardDetails: CardData[] = [
 
 const GuestGuidelinesContent = () => {
     return (
-        <section className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6 px-16 ">
+        <section className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6 lg:px-16 ">
             {cardDetails.map((card, index) => (
                 <div
                     key={index}
