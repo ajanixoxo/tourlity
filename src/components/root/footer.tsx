@@ -4,9 +4,9 @@ import React from 'react';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="w-full bg-global-9 pt-14">
-      <div className="w-full box-color rounded-2xl">
-        <div className="w-full bg-global-8 rounded-[32px] px-4 sm:px-6 lg:px-10 py-10 sm:py-12 lg:py-14">
+    <footer className="w-full bg-global-9 pt-14  mb-3">
+      <div className="w-full box-color rounded-2xl relative overflow-hidden">
+        <div className="w-full bg-global-8 rounded-[32px] px-4 sm:px-6 lg:px-10 pt-10 sm:pt-12 lg:pt-14">
           <div className="flex flex-col gap-6 lg:gap-10">
             {/* Main Footer Content */}
             <div className="flex flex-col lg:flex-row justify-between items-start gap-8 lg:gap-10 mr-0 lg:mr-10">
@@ -129,19 +129,21 @@ const Footer: React.FC = () => {
             </div>
 
             {/* Bottom Section */}
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-8">
-              <p className="text-sm description font-inter font-normal leading-[17px] text-global-2 text-center sm:text-left">
+            <div className="flex flex-col mt-16 sm:flex-row justify-between  gap-4 sm:gap-8">
+              <p className="text-sm relative -top-10 lg:top-0 description font-inter font-normal leading-[17px] text-global-2  sm:text-left">
                 © 2025 Tourlity. All Rights Reserved
               </p>
-              <div className="w-full sm:w-[28%] max-w-[316px]">
-                <img 
-                  src="/images/img_tourlity.png" 
-                  alt="Tourlity brand image" 
-                  className="w-full h-auto max-h-[120px] sm:max-h-[150px] lg:max-h-[188px] object-contain"
-                />
-              </div>
             </div>
           </div>
+        </div>
+        
+        {/* Positioned Image - moved outside the inner container but inside box-color container */}
+        <div className="absolute bottom-0 -rotate-30 lg:rotate-0 right-0 w-[40%] sm:w-[35%] lg:w-[30%] max-w-[316px] transform translate-y-[20%] translate-x-[0%]">
+          <img 
+            src="/images/img_tourlity.png" 
+            alt="Tourlity brand image" 
+            className="w-full h-auto max-h-[120px] sm:max-h-[150px] lg:max-h-[188px] object-contain"
+          />
         </div>
       </div>
     </footer>
