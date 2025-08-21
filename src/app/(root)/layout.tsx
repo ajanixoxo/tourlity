@@ -1,5 +1,5 @@
 import Navbar from "@/components/root/root_navbar"
-import FooterWrapper from '@/components/root/footer_wrapper'
+import FooterWrapper from "@/components/root/footer_wrapper"
 
 const LayoutPage = async ({ children }: { children: React.ReactNode }) => {
     return (
