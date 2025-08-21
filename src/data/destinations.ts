@@ -130,5 +130,72 @@ export const destinations: Destination[] = [
       experienceCount: 250,
       image: '/images/img_image_7.png',
       slug: ""
-    }
+    },
+     {
+      id: "5",
+      name: 'Tokoyo ',
+      country: 'Japan',
+      experienceCount: 278,
+      image: '/images/tokoyo.png',
+      slug: ""
+    },
+     {
+      id: "6",
+      name: 'Berlin ',
+      country: 'Germany',
+      experienceCount: 222,
+      image: '/images/germany.png',
+      slug: ""
+    },
+     {
+      id: "7",
+      name: 'Lagos',
+      country: 'Nigeria',
+      experienceCount: 100,
+      image: '/images/nigeria.png',
+      slug: ""
+    },
+     {
+      id: "8",
+      name: 'Andres',
+      country: 'Peru',
+      experienceCount: 30,
+      image: '/images/peru.png',
+      slug: ""
+    },
+     {
+      id: "9",
+      name: 'Doha',
+      country: 'Qater',
+      experienceCount: 250,
+      image: '/images/qater.png',
+      slug: ""
+    },
+     {
+      id: "10",
+      name: 'Oaxaca',
+      country: 'Mexico',
+      experienceCount: 120,
+      image: '/images/mexico.png',
+      slug: ""
+    },
+     {
+      id: "11",
+      name: 'Cape Town',
+      country: 'SA',
+      experienceCount: 166,
+      image: '/images/SA.png',
+      slug: ""
+    },
+     {
+      id: "12",
+      name: 'Jaipur',
+      country: 'India',
+      experienceCount: 200,
+      image: '/images/india.png',
+      slug: ""
+    },
+
+    
+
   ];

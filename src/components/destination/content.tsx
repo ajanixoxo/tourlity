@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 import Button from '../root/button'
 import { destinations } from '@/data/destinations'
-function PopularDestination() {
+function DestinationContent() {
   return (
     <section className="w-full bg-global-9 py-14">
       <div className="w-full mx-auto ">
@@ -29,9 +29,9 @@ function PopularDestination() {
             </Button>
           </div>
           {/* Destinations Grid */}
-          <div className="flex flex-col sm:flex-row  justify-between gap-4 w-full overflow-x-auto">
-            {destinations.slice(0,4).map((destination) => (
-              <div key={destination.id} className="relative w-full sm:w-[300px] h-[276px] rounded-3xl overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full  overflow-x-auto">
+            {destinations.map((destination) => (
+              <div key={destination.id} className="relative w-full sm:w-[300px] h-[276px] lg:mt-[16px] rounded-3xl overflow-hidden">
                 <Image
                   src={destination.image}
                   alt={`${destination.name}, ${destination.country}`}
@@ -57,4 +57,4 @@ function PopularDestination() {
   )
 }
 
-export default PopularDestination
+export default DestinationContent
