@@ -52,13 +52,13 @@ export default function ContactForm() {
 
   return (
     <section className="py-16 ">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto px-2 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Send Us a Message</h2>
           <p className="description">Whether you&apos;re here to explore or host, we&apos;d love to hear from you.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="box-color rounded-2xl p-8 shadow-sm">
+        <form onSubmit={handleSubmit} className="box-color rounded-2xl p-4 lg:p-8 shadow-sm">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
               <Label htmlFor="fullName" className="text-[20px] font-semibold  mb-2 block">

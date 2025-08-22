@@ -22,19 +22,19 @@ const DarkFooter: React.FC = () => {
                 {/* Social Icons */}
                 <div className="flex items-center gap-2 mt-4">
                   <button 
-                    className="w-10 h-10 bg-header-2 rounded-[20px] p-3 hover:bg-header-1 transition-colors duration-200"
+                    className="w-10 h-10 bg-header-2 bg-button-1 rounded-full p-3 hover:bg-header-1 transition-colors duration-200"
                     aria-label="Social media link"
                   >
                     <img src="/images/img_social_icons.svg" alt="Social icon" className="w-4 h-4" />
                   </button>
                   <button 
-                    className="w-10 h-10 bg-header-2 rounded-[20px] p-3 hover:bg-header-1 transition-colors duration-200"
+                    className="w-10 h-10 bg-header-2 bg-button-1 rounded-full p-3 hover:bg-header-1 transition-colors duration-200"
                     aria-label="Social media link"
                   >
                     <img src="/images/img_social_icons_gray_700.svg" alt="Social icon" className="w-4 h-4" />
                   </button>
                   <button 
-                    className="w-10 h-10 bg-header-2 rounded-[20px] p-2.5 hover:bg-header-1 transition-colors duration-200"
+                    className="w-10 h-10 bg-header-2 bg-button-1 rounded-full p-2.5 hover:bg-header-1 transition-colors duration-200"
                     aria-label="Social media link"
                   >
                     <img src="/images/img_vector.svg" alt="Social icon" className="w-5 h-5" />

@@ -156,7 +156,7 @@ export function AboutContent() {
 
           <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-8">
             {values.map((value, index) => (
-              <div key={index} className="text-center p-15 box-color rounded-[16px]">
+              <div key={index} className="text-center p-7 lg:p-15 box-color rounded-[16px]">
                 <div className=" bg-white w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4">
                   {value.icon}
                 </div>
@@ -169,7 +169,7 @@ export function AboutContent() {
 
         <div className="py-16 px-4 grid gap-8  ">
           <div>
-            <h2 className="text-4xl font-plus-jakarta font-bold ">Meet Our Team
+            <h2 className="text-[32px] lg:text-4xl font-plus-jakarta font-bold ">Meet Our Team
             </h2>
             <p className="description">
               A team passionate about making authentic travel experiences accessible to all.

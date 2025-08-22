@@ -2,7 +2,7 @@
 "use client"
 import { useState } from "react";
 import Button from "../root/button"
-
+import Star from "../root/start";
 export function BecomeHostContent() {
     const [input1, setInput1] = useState('');
 
@@ -75,44 +75,26 @@ export function BecomeHostContent() {
         {
             name: "Marco Rossi",
             role: "Cooking Experience Host",
-            image: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/kcrha3nz_expires_30_days.png",
+            image: "/images/img_image_12.png",
             testimonial: "Sharing my family's pasta-making traditions has been incredibly rewarding. I've met amazing people from around the world and built a thriving business doing what I love.",
             rating: "4.3 (98 Reviews)",
-            stars: [
-                "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/1x2jsao0_expires_30_days.png",
-                "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/lq2lc9c1_expires_30_days.png",
-                "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/cpdsdyrd_expires_30_days.png",
-                "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/c9mvftw1_expires_30_days.png",
-                "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/a5gqzqhd_expires_30_days.png"
-            ]
+            stars: 5,
         },
         {
             name: "Yuki Tanaka",
             role: "Tea Ceremony Host",
-            image: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/yky6qbrq_expires_30_days.png",
+            image: "/images/img_image_13.png",
             testimonial: "Hosting tea ceremonies allows me to preserve and share our cultural heritage. It's wonderful to see guests discover the beauty and tranquility of this ancient practice.",
             rating: "4.8 (75 Reviews)",
-            stars: [
-                "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/ghi7i6l6_expires_30_days.png",
-                "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/3weiyni7_expires_30_days.png",
-                "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/p411ubnb_expires_30_days.png",
-                "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/9x3kgm0e_expires_30_days.png",
-                "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/66q6qfqv_expires_30_days.png"
-            ]
+            stars: 5,
         },
         {
             name: "Sofia Martinez",
             role: "Street Art Tour Host",
-            image: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/hpb3zcpo_expires_30_days.png",
+            image: "/images/img_image_14.png",
             testimonial: "Through my street art tours, I've been able to showcase our city's creative spirit and support local artists. Every tour brings new perspectives and connections.",
             rating: "4.9 (300 Reviews)",
-            stars: [
-                "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/31zoutkr_expires_30_days.png",
-                "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/cg4y6lnc_expires_30_days.png",
-                "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/mqenpzzp_expires_30_days.png",
-                "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/umxh138w_expires_30_days.png",
-                "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/R1dJEF17rA/a1pmyw1r_expires_30_days.png"
-            ]
+            stars: 5,
         }
     ];
 
@@ -149,7 +131,7 @@ export function BecomeHostContent() {
 
                     <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-8">
                         {benefits.map((benefit, index) => (
-                            <div key={index} className="text-center p-15 box-color rounded-[16px]">
+                            <div key={index} className="text-center p-7 lg:p-15 box-color rounded-[16px]">
                                 <div className=" bg-white w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4">
                                     {benefit.icon}
                                 </div>
@@ -169,7 +151,7 @@ export function BecomeHostContent() {
 
                     <div className="grid grid-cols-1  lg:grid-cols-3 gap-8 ">
                         {steps.map((step, index) => (
-                            <div key={index} className="mt-6  box-color p-10 rounded-[18px]">
+                            <div key={index} className="mt-6  box-color p-7 lg:p-10 rounded-[18px]">
                                 <div className="w-12 h-12 bg-white text-primary-color rounded-full flex items-center justify-center  mb-4 text-xl font-bold">
                                     {step.step}
                                 </div>
@@ -182,7 +164,7 @@ export function BecomeHostContent() {
 
                 <div className="flex flex-col mb-16 items-start self-stretch  gap-10">
                     <div className="flex flex-col items-start gap-3">
-                        <h2 className="text-[#1E2023] font-plus-jakarta text-[42px] font-bold">
+                        <h2 className="text-[#1E2023] font-plus-jakarta text-[32px] lg:text-[42px] font-bold">
                             Success Stories
                         </h2>
                         <span className="description text-sm">
@@ -193,11 +175,11 @@ export function BecomeHostContent() {
                     <div className="grid grid-cols-1 lg:gird-cols-3 gap-6">
                         {successStories.map((story, index) => (
                             <div key={index} className="flex flex-1 flex-col items-start box-color p-6 gap-3 rounded-[18px]">
-                                <div className="flex flex-col items-start self-stretch">
+                                <div className="flex flex-col items-start ">
                                     <div className="flex items-center pr-0.5 mb-2.5 gap-2.5">
                                         <img
                                             src={story.image}
-                                            className="w-[46px] h-[46px] object-fill"
+                                            className="w-10 h-10 object-cover"
                                             alt={story.name}
                                         />
                                         <div className="flex flex-col shrink-0 items-start gap-1">
@@ -214,13 +196,8 @@ export function BecomeHostContent() {
                                     </span>
                                 </div>
                                 <div className="flex items-center pr-[3px] gap-1.5">
-                                    {story.stars.map((star, starIndex) => (
-                                        <img
-                                            key={starIndex}
-                                            src={star}
-                                            className="w-6 h-6 object-fill"
-                                            alt="star"
-                                        />
+                                    {Array.from({ length: story.stars }, (_, index) => (
+                                        <Star key={index} />
                                     ))}
                                     <span className="text-[#5A5A5A] text-xs">
                                         {story.rating}
@@ -270,10 +247,10 @@ export function BecomeHostContent() {
                 <div className="flex flex-col items-center  justify-center">
                     <div className="flex flex-col w-full gap-6">
                         <div className="flex flex-col items-center justify-center gap-3">
-                            <h1 className="font-plus-jakarta text-[42px] font-bold ">
+                            <h1 className="font-plus-jakarta text-[32px] lg:text-[42px] font-bold ">
                                 Stay Inspired
                             </h1>
-                            <p className="description text-sm text-center w-[421px]">
+                            <p className="description text-sm text-center lg:w-[421px]">
                                 Subscribe to our newsletter for travel inspiration, featured experiences, and exclusive offers.
                             </p>
                         </div>

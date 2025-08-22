@@ -18,6 +18,7 @@ export default function ToursGrid({ tours }: ToursGridProps) {
 
   const displayedTours = tours.slice(0, visibleTours)
   const hasMoreTours = visibleTours < tours.length
+  console.log(hasMoreTours)
 
   return (
     <div>
@@ -60,13 +61,13 @@ export default function ToursGrid({ tours }: ToursGridProps) {
             ))}
           </div>
 
-          {hasMoreTours && (
+          {/* {hasMoreTours && ( */}
             <div className="text-center">
-              <Button onClick={loadMoreTours} className="bg-coral-500 hover:bg-coral-600 text-white px-8 py-3">
+              <Button onClick={loadMoreTours} variant="secondary" className="!bg-white">
                 Load More Tours
               </Button>
             </div>
-          )}
+          {/* )} */}
         </>
       )}
     </div>

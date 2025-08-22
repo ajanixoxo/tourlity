@@ -31,21 +31,21 @@ function BlogHero() {
                             Discover travel tips, cultural insights, and inspiring stories from our global community.
                         </p>
     
-                        <form onSubmit={handleSearch} className="max-w-xl mx-auto ">
-                            <div className="flex flex-col sm:flex-row gap-4 backdrop-blur-xs bg-[#3e3e3e66] stroke-color !border-[#e0e0e0]/30 !border-[1px] rounded-2xl p-2">
-                                <input
-                                    type="text"
-                                    placeholder="Search for articles of your choice.."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="flex-1 border-0 text-base text-white focus:outline-none placeholder:muted-color"
-                                />
-                                <Button type="submit" variant="primary" className="flex items-center justify-center border-red-400 rounded-[14px] text-[#F5F5F4]  px-6 py-2">
-                                    <Search className="w-4 h-4 mr-2" />
-                                    Search
-                                </Button>
-                            </div>
-                        </form>
+                         <form onSubmit={handleSearch} className="max-w-xl px-2 mx-auto ">
+                                    <div className="flex sm:flex-row gap-4 backdrop-blur-xs bg-[#3e3e3e66] stroke-color !border-[#e0e0e0]/30 !border-[1px] rounded-2xl p-2">
+                                      <input
+                                        type="text"
+                                        placeholder="Search for articles"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        className="w-[70%] lg:w-auto flex-1 border-0 text-base text-white focus:outline-none placeholder:muted-color"
+                                      />
+                                      <Button type="submit" variant="primary" className="w-[30%] lg:w-auto flex items-center justify-center">
+                                        <Search className="w-4 h-4 mr-2" />
+                                        Search
+                                      </Button>
+                                    </div>
+                                  </form>
                     </div>
                 </div>
             </section>

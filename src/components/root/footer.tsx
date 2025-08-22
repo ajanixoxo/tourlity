@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
+import Link from 'next/link';
 import React from 'react';
 
 const Footer: React.FC = () => {
@@ -12,9 +13,9 @@ const Footer: React.FC = () => {
             <div className="flex flex-col lg:flex-row justify-between items-start gap-8 lg:gap-10 mr-0 lg:mr-10">
               {/* Brand Section */}
               <div className="flex flex-col gap-2 w-full lg:w-[34%]">
-                <h1 className="lobster">
+                <Link href="/" className="lobster">
                   Tourlity
-                </h1>
+                </Link>
                 <p className="text-sm font-inter description font-normal leading-5 text-global-2 w-full">
                   Connecting travelers with authentic local experiences around the world. Our platform brings together passionate hosts and curious explorers.
                 </p>
@@ -22,19 +23,19 @@ const Footer: React.FC = () => {
                 {/* Social Icons */}
                 <div className="flex items-center gap-2 mt-4">
                   <button 
-                    className="w-10 h-10 bg-header-2 rounded-[20px] p-3 hover:bg-header-1 transition-colors duration-200"
+                    className="w-10 bg-button-1 rounded-full h-10 bg-header-2  p-3 hover:bg-header-1 transition-colors duration-200"
                     aria-label="Social media link"
                   >
                     <img src="/images/img_social_icons.svg" alt="Social icon" className="w-4 h-4" />
                   </button>
                   <button 
-                    className="w-10 h-10 bg-header-2 rounded-[20px] p-3 hover:bg-header-1 transition-colors duration-200"
+                    className="w-10 h-10 bg-button-1 rounded-full bg-header-2  p-3 hover:bg-header-1 transition-colors duration-200"
                     aria-label="Social media link"
                   >
                     <img src="/images/img_social_icons_gray_700.svg" alt="Social icon" className="w-4 h-4" />
                   </button>
                   <button 
-                    className="w-10 h-10 bg-header-2 rounded-[20px] p-2.5 hover:bg-header-1 transition-colors duration-200"
+                    className="w-10 h-10 bg-header-2 bg-button-1 rounded-full p-2.5 hover:bg-header-1 transition-colors duration-200"
                     aria-label="Social media link"
                   >
                     <img src="/images/img_vector.svg" alt="Social icon" className="w-5 h-5" />
@@ -50,15 +51,15 @@ const Footer: React.FC = () => {
                     Explore
                   </h3>
                   <div className="flex flex-col gap-2 description">
-                    <a href="#" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
+                    <Link href="/explore-tour" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
                       Virtual Tours
-                    </a>
-                    <a href="#" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
+                    </Link>
+                    <Link href="/categories" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
                       Categories
-                    </a>
-                    <a href="#" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
+                    </Link>
+                    <Link href="/destinations" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
                       Destinations
-                    </a>
+                    </Link>
                   </div>
                 </div>
 
@@ -68,15 +69,15 @@ const Footer: React.FC = () => {
                     Quick Links
                   </h3>
                   <div className="flex flex-col gap-2 description">
-                    <a href="#" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
+                    <Link href="/become-a-host" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
                       Become a Host
-                    </a>
-                    <a href="#" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
+                    </Link>
+                    <Link href="/about" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
                       About
-                    </a>
-                    <a href="#" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
+                    </Link>
+                    <Link href="/blog" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
                       Blogs
-                    </a>
+                    </Link>
                   </div>
                 </div>
 
@@ -87,19 +88,19 @@ const Footer: React.FC = () => {
                   </h3>
                   <ul className="flex flex-col gap-2 description">
                     <li>
-                      <a href="#" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
+                      <Link href="/faqs" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
                         FAQs
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="#" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
+                      <Link href="/contact" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
                         Contact Us
-                      </a>
+                      </Link>
                     </li>
                   </ul>
-                  <a href="#" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
+                  <Link href="/guidelines" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
                     Guidelines
-                  </a>
+                  </Link>
                 </div>
 
                 {/* Legal Section */}
@@ -109,19 +110,19 @@ const Footer: React.FC = () => {
                   </h3>
                   <ul className="flex flex-col gap-2 description">
                     <li>
-                      <a href="#" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
+                      <Link href="/terms-of-service" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
                         Terms of Service
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="#" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
+                      <Link href="/policy" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
                         Privacy Policy
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="#" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
+                      <Link href="/cookies" className="text-sm font-inter font-normal leading-[17px] text-global-2 hover:text-header-1 transition-colors duration-200">
                         Cookie Policy
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>

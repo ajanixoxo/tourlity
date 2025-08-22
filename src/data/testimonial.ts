@@ -18,7 +18,7 @@ export const testimonials: Testimonial[] = [
         rating: 5,
         comment: 'Akiko\'s tea ceremony was a serene and mindful experience that gave us a deep appreciation for Japanese traditions. Her attention to detail and willingness to answer all our questions made it educational and enjoyable. A truly authentic cultural immersion!',
         image: '/images/img_image_13.png',
-        avatar: "",
+        avatar: "", 
         location: "",
         tourTitle: ""
     },

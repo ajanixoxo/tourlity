@@ -1,10 +1,8 @@
 "use client"
-import React, { useState } from 'react'
+import React from 'react'
 import Image from 'next/image'
-import {ChevronLeft, ChevronRight} from "lucide-react"
 import CTA from '../landing/cta'
 function CategoriesContent() {
-  const [currentIndex, setCurrentIndex] = useState(0)
   
 const categories = [
     {
@@ -33,17 +31,6 @@ const categories = [
     }
   ]
 
-const nextSlide = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === categories.length - 1 ? 0 : prevIndex + 1
-    )
-  }
-
-const prevSlide = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === 0 ? categories.length - 1 : prevIndex - 1
-    )
-  }
 
 const CategoryCard = ({ category, index }: { category: typeof categories[0], index: number }) => (
     <div key={index} className="relative w-full h-[344px] rounded-[18px] overflow-hidden">
@@ -83,7 +70,7 @@ return (
           {/* Section Header */}
           <div className="flex flex-row justify-start items-center w-full">
             <div className="flex flex-col gap-3 justify-start items-start w-full">
-              <h2 className="text-[32px] sm:text-[37px] lg:text-[42px] font-plus-jakarta font-semibold leading-[40px] sm:leading-[47px] lg:leading-[53px] text-left text-global-1">
+              <h2 className="text-[30px] w-max lg:text-[42px] font-plus-jakarta font-semibold leading-[40px] sm:leading-[47px] lg:leading-[53px] text-left text-global-1">
                 Explore by Category
               </h2>
               <p className="text-sm font-inter font-normal leading-[17px] text-left text-global-2">
@@ -93,61 +80,13 @@ return (
           </div>
 
           {/* Desktop Grid - Hidden on mobile */}
-          <div className="hidden lg:grid grid-cols-2 gap-8 w-full">
+          <div className=" grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
             {categories.map((category, index) => (
               <CategoryCard key={index} category={category} index={index} />
             ))}
           </div>
 
-          {/* Mobile Carousel - Hidden on desktop */}
-          <div className="lg:hidden w-full relative">
-            {/* Carousel Container */}
-            <div className="overflow-hidden w-full">
-              <div 
-                className="flex transition-transform duration-300 ease-in-out"
-                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-              >
-                {categories.map((category, index) => (
-                  <div key={index} className="w-full flex-shrink-0 px-4">
-                    <CategoryCard category={category} index={index} />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Navigation Controls */}
-            <div className="flex justify-center items-center mt-4 ">
-              <button
-                onClick={prevSlide}
-                className="w-10 h-10 stroke-color bg-white/20 backdrop-blur-sm  flex items-center justify-center hover:bg-white/30 transition-colors"
-                aria-label="Previous category"
-              >
-               <ChevronLeft className="secondary-text-color"/>
-              </button>
-
-              {/* Dots Indicator */}
-              {/* <div className="flex space-x-2">
-                {categories.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentIndex(index)}
-                    className={`w-2 h-2 rounded-full transition-colors ${
-                      index === currentIndex ? 'bg-global-1' : 'bg-gray-300'
-                    }`}
-                    aria-label={`Go to category ${index + 1}`}
-                  />
-                ))}
-              </div> */}
-
-              <button
-                onClick={nextSlide}
-                className="w-10 h-10 stroke-color bg-white/20 backdrop-blur-sm  flex items-center justify-center hover:bg-white/30 transition-colors"
-                aria-label="Next category"
-              >
-             <ChevronRight className="secondary-text-color"/>
-              </button>
-            </div>
-          </div>
+          
         </div>
       </div>
       <CTA/>

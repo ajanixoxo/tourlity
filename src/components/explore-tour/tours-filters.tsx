@@ -73,7 +73,7 @@ export default function ToursFilters({ filters, onFiltersChange }: ToursFiltersP
     return (
         <div className="box-color rounded-lg shadow-sm p-6 sticky top-4">
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-gray-900">Filters</h2>
+                <h2 className="text-[14px] font-semibold text-[#1F1F1F]">Filters</h2>
 
             </div>
 

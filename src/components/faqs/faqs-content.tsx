@@ -57,15 +57,15 @@ export default function FAQsContent() {
 
   return (
     <section className="py-16 ">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="lg:max-w-4xl mx-auto px-3 sm:px-3 lg:px-8">
         <div className="space-y-4">
           {faqs.map((faq) => (
             <div key={faq.id} className="stroke-color p-2 !border box-color rounded-lg overflow-hidden">
               <button
                 onClick={() => toggleFAQ(faq.id)}
-                className="w-full px-6 py-4 text-left transition-colors flex items-center justify-between"
+                className="w-full lg:px-6 py-4 text-left transition-colors flex items-center justify-between"
               >
-                <h3 className="text-lg font-plus-jakarta font-semibold ">{faq.question}</h3>
+                <h3 className="text[28px] lg:text-lg font-plus-jakarta font-semibold ">{faq.question}</h3>
                 {openFAQ === faq.id ? (
                   <ChevronUp className="w-5 h-5 secondary-text-color" />
                 ) : (

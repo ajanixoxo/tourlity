@@ -62,7 +62,7 @@ const NewsletterSubscription: React.FC<NewsletterSubscriptionProps> = ({
   };
 
   return (
-    <section className={`bg-secondary py-16  ${className}`}>
+    <section className={`bg-secondary py-16  -mx-4 lg:-mx-14 ${className}`}>
       <div className="text-center">
         {/* Heading */}
         <h2 className="font-plus-jakarta text-[42px] font-bold text-white ">
@@ -89,11 +89,11 @@ const NewsletterSubscription: React.FC<NewsletterSubscriptionProps> = ({
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4 px-2 mt-2">
               <div className="relative">
                 <div className="bg-muted-ash backdrop-blur-sm rounded-xl p-1 shadow-lg">
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <div className="flex-1 min-w-0">
+                  <div className="flex flex-row gap-2">
+                    <div className="flex-1 min-w-0 ">
                       <input
                         type="email"
                         value={email}
@@ -110,14 +110,15 @@ const NewsletterSubscription: React.FC<NewsletterSubscriptionProps> = ({
                       variant="primary"
                     //   className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 disabled:from-red-400 disabled:to-red-400 text-white font-medium px-6 py-3 sm:py-3.5 rounded-lg transition-all duration-200 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed text-sm sm:text-base whitespace-nowrap shadow-lg"
                     >
-                      {isLoading ? (
+                      {/* {isLoading ? (
                         <div className="flex items-center justify-center">
                           <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
                           Subscribing...
                         </div>
                       ) : (
                         'Subscribe to Newsletter'
-                      )}
+                      )} */}
+                        Subscribe  <span className="hidden lg:flex"> to Newsletter</span>
                     </Button>
                   </div>
                 </div>

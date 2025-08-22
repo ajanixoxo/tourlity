@@ -68,7 +68,7 @@ function Navbar() {
 
         {/* Mobile Dropdown Menu - Inside the same container */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden ml-3 z-50 ">
+          <div className="lg:hidden relative   mt-2 z-50 ">
             {/* Navigation Links */}
             <div className="space-y-6 mb-6 px-2">
               <Link
@@ -106,7 +106,7 @@ function Navbar() {
               <Link href=''> 
               <Button
                 variant='secondary'
-                className=' !px-5 w-max'
+                className=' !px-2  !text-[13px]'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Access Account
@@ -114,7 +114,7 @@ function Navbar() {
              
               <Link href='/sign-up'> <Button
                 variant='primary'
-                className=' !px-5 w-max'
+                className=' !px-2 !text-[13px]'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Create Account

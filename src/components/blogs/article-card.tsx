@@ -161,20 +161,20 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, featured = false }) 
                             alt={article.author.name}
                             className="w-8 h-8 rounded-full object-cover"
                         />
-                        <span className=" description">
+                    <span className="description">
                             {article.author.name}
-                        </span>
+                    </span>
                     </div>
-                    <time className="text-xs sm:text-sm muted-color">
+                    <div className="text-xs sm:text-sm muted-color">
                         {article.publishDate}
-                    </time>
+                    </div>
                 </div>
 
                 {/* Continue Reading Button */}
                 <Button
                     variant={`${featured
-                            ? 'primary'
-                            : 'secondary'
+                        ? 'primary'
+                        : 'secondary'
                         }`}
                     onClick={handleContinueReading}
                     className="w-full"

@@ -53,8 +53,8 @@ function BlogContent() {
 
     ]
     return (
-        <div>
-            <div className="flex flex-col lg:flex-row items-center justify-between  py-[90px] w-full  lg:px-4 gap-[45px] mb-16">
+        <div className=''>
+            <div className="flex flex-col lg:flex-row items-center justify-between  py-[90px] w-full  lg:px-4 gap-[45px] mb-8">
                 <div className="lg:w-1/2">
                     <h2 className="text-3xl md:text-[42px] font-bold  mb-6">
                         Culture and Traditions
@@ -71,7 +71,7 @@ function BlogContent() {
                         </span>
                     </Button>
                 </div>
-                <div className="relative mb-16 lg:w-1/2 h-[400px] flex justify-end rounded-[18px]">
+                <div className="relative  lg:w-1/2 h-[400px] flex justify-end rounded-[18px]">
                     <img src="/images/mission.png" className="h-full rounded-4xl object-cover w-full" alt="" />
                     <div className='absolute w-full bottom-0 px-4 py-2 bg-transparent rounded-b-4xl backdrop-blur-xs maskt-to-t'>
                         <div className='rounded-4xl bg-[#181717]/60 p-2 px-4 w-max text-white mt-2 '><span className='font-inter text-[12px] font-normal'>Featured</span>
@@ -80,8 +80,8 @@ function BlogContent() {
                             <div>
                                 <h3 className='font-plus-jakarta text-lg text-white font-semibold lg:text-[28px]'>The Art of Japanese Tea Ceremony: A Journey Through Tradition</h3>
                             </div>
-                            <div className='flex flex-col lg:flex-row gap-6 items-center'>
-                                <div className='flex gap-3'>
+                            <div className='flex  lg:flex-row mt-2 gap-1 lg:gap-6 items-center'>
+                                <div className='flex gap-2'>
                                     <svg width={16} height={17} viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M4.38505 10.821C3.44187 11.3826 0.96891 12.5294 2.47511 13.9644C3.21087 14.6653 4.03033 15.1666 5.06058 15.1666H10.9394C11.9697 15.1666 12.7891 14.6653 13.5249 13.9644C15.0311 12.5294 12.5581 11.3826 11.615 10.821C9.40321 9.50407 6.59679 9.50407 4.38505 10.821Z" stroke="white" strokeLinecap="round" strokeLinejoin="round" />
                                         <path d="M11 4.83331C11 6.49017 9.65685 7.83331 8 7.83331C6.34315 7.83331 5 6.49017 5 4.83331C5 3.17646 6.34315 1.83331 8 1.83331C9.65685 1.83331 11 3.17646 11 4.83331Z" stroke="white" />
@@ -89,7 +89,7 @@ function BlogContent() {
                                     <h4 className='description !text-white'>By Akiko Tanaka</h4>
                                 </div>
 
-                                <div className='flex gap-3'>
+                                <div className='flex gap-2'>
                                     <svg width={16} height={17} viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <circle cx="7.99992" cy="8.49998" r="6.66667" stroke="white" />
                                         <path d="M8 5.83331V8.49998L9.33333 9.83331" stroke="white" strokeLinecap="round" strokeLinejoin="round" />

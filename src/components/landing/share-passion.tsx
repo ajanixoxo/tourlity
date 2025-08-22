@@ -2,9 +2,9 @@ import React from 'react'
 import Button from '../root/button'
 function SharePassion() {
   return (
-    <section className="w-full relative">
+    <section className="w-full rounded-4xl relative">
       <video
-        className="absolute inset-0 w-full h-full object-cover "
+        className="absolute inset-0 w-full h-full object-cover rounded-4xl "
         autoPlay
         muted
         loop
@@ -35,7 +35,7 @@ function SharePassion() {
               Turn your knowledge, skills, and local expertise into unforgettable experiences for travelers. Join our community of hosts and earn while sharing what you love.
             </p>
           </div>
-          <Button className="bg-[#f26457] text-white border border-[#ca3f33] rounded-[14px] px-4 py-2.5 shadow-[0px_7px_25px_#3e3e3e19]">
+          <Button variant='primary'>
             Become a Host
           </Button>
         </div>

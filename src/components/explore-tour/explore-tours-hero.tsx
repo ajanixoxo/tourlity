@@ -25,12 +25,12 @@ export default function ExploreToursHero() {
       />
       <div className="absolute inset-0 bg-black/30 rounded-[32px]" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+      <div className="relative z-10 max-w-8xl lg:max-w-7xl mx-auto lg:px-4 h-full flex items-center">
         <div className="text-center w-full">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Explore Amazing <span className="italic">Tours</span>
+          <h1 className="text-[32px] md:text-[42px] font-bold text-white mb-6">
+            Explore Amazing <span className="italic font-normal">Tours</span>
           </h1>
-          <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
+          <p className="text-[14px] text-white/90 mb-8 max-w-2xl mx-auto">
             Unforgettable adventures guided by passionate locals who share their culture, stories, and hidden gems.
           </p>
 
@@ -49,21 +49,21 @@ export default function ExploreToursHero() {
               </Button>
             </div>
           </form> */}
-           <form onSubmit={handleSearch} className="max-w-xl mx-auto ">
-                        <div className="flex flex-col sm:flex-row gap-4 backdrop-blur-xs bg-[#3e3e3e66] stroke-color !border-[#e0e0e0]/30 !border-[1px] rounded-2xl p-2">
-                            <input
-                                type="text"
-                                placeholder="Search for tours (e.g., Paris Cooking, Virtual culture)"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="flex-1 border-0 text-base text-white focus:outline-none placeholder:muted-color"
-                            />
-                            <Button type="submit" variant="primary" className="flex items-center justify-center border-red-400 rounded-[14px] text-[#F5F5F4]  px-6 py-2">
-                                <Search className="w-4 h-4 mr-2" />
-                                Search
-                            </Button>
-                        </div>
-                    </form>
+          <form onSubmit={handleSearch} className="max-w-xl px-2 mx-auto ">
+            <div className="flex sm:flex-row gap-4 backdrop-blur-xs bg-[#3e3e3e66] stroke-color !border-[#e0e0e0]/30 !border-[1px] rounded-2xl p-2">
+              <input
+                type="text"
+                placeholder="Search for tours (e.g., Paris Cooking, Virtual culture)"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-[70%] lg:w-auto flex-1 border-0 text-base text-white focus:outline-none placeholder:muted-color"
+              />
+              <Button type="submit" variant="primary" className="w-[30%] lg:w-auto flex items-center justify-center">
+                <Search className="w-4 h-4 mr-2" />
+                Search
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
     </section>

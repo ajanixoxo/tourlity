@@ -52,7 +52,7 @@ function CookiesContent() {
     return (
         <div className="grid grid-cols-1 lg:px-16 gap-6 mb-16">
             {cookiePolicy.map((step, index) => (
-                <div key={index} className="mt-6 w-[80%] box-color p-10 rounded-[18px] mx-auto">
+                <div key={index} className="mt-6 lg:w-[80%] box-color p-4 lg:p-10 rounded-[18px] w-full lg:mx-auto">
                     <div className="w-12 h-12 bg-white text-primary-color rounded-full flex items-center justify-center mb-4 text-xl font-bold">
                         {step.step}
                     </div>
