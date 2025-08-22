@@ -40,7 +40,7 @@ function Reviews() {
                                                 alt={testimonial.name}
                                                 width={46}
                                                 height={46}
-                                                className="rounded-full object-cover"
+                                                className="rounded-full object-cover  border-2 border-white"
                                             />
                                             <div className="flex flex-col gap-1 justify-center items-start w-full">
                                                 <h4 className="text-base font-plus-jakarta font-semibold leading-[21px] text-left text-global-1">

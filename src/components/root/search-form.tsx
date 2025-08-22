@@ -31,7 +31,7 @@ const SearchExperiences: React.FC<SearchExperiencesProps> = ({ onSearch }) => {
   };
 
   return (
-    <div className="bg-[#3e3e3e66] rounded-2xl p-4 w-full max-w-6xl mx-auto">
+    <div className="bg-[#1e050566] rounded-2xl p-4 w-full max-w-6xl mx-auto mb-2">
 
       <div className="flex flex-col lg:flex-row gap-3 justify-center lg:items-end items-center w-full">
         {/* Destination Input */}
@@ -40,25 +40,25 @@ const SearchExperiences: React.FC<SearchExperiencesProps> = ({ onSearch }) => {
             Where do you want to go too?
           </label>
           <div className='flex relative justify-center items-center'>
-              <div
+            <div
               className="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer z-10"
 
-            > 
-            <Image
-              src='/images/img_location05.svg'
-              alt="Calendar icon"
-              className="w-4 h-4 sm:w-5 sm:h-5"
-              width={16}
-              height={16}
-            />
+            >
+              <Image
+                src='/images/img_location05.svg'
+                alt="Calendar icon"
+                className="w-4 h-4 sm:w-5 sm:h-5"
+                width={16}
+                height={16}
+              />
             </div>
-           
+
             <input
               type="text"
               placeholder="Destination of your choice"
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
-              className="w-[300px] lg:w-full pl-10 pr-4 py-3 bg-[#1f1f1f3d] text-white placeholder-gray-300 rounded-xl border border-[#e0e0e066] focus:outline-none
+              className="w-full lg:w-full pl-10 pr-4 py-3 bg-[#1f1f1f3d] text-white placeholder-gray-300 rounded-xl border border-[#e0e0e066] focus:outline-none
           focus:ring-2
           focus:ring-[#f26457]
           focus:border-transparent"
@@ -75,7 +75,7 @@ const SearchExperiences: React.FC<SearchExperiencesProps> = ({ onSearch }) => {
           <label className="text-sm font-inter font-medium leading-[17px] text-white">
             Category
           </label>
-          <div className='flex relative justify-center items-center'>
+          <div className='flex w-full relative justify-center items-center'>
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
               <Image
                 src='/images/img_dashboard_square_01.svg'
@@ -88,7 +88,7 @@ const SearchExperiences: React.FC<SearchExperiencesProps> = ({ onSearch }) => {
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-[300px] lg:w-full pl-10 pr-8 py-3 bg-[#1f1f1f3d] text-white rounded-xl border border-[#e0e0e066] focus:outline-none
+              className="w-full lg:w-full pl-10 pr-8 py-3 bg-[#1f1f1f3d] text-white rounded-xl border border-[#e0e0e066] focus:outline-none
           focus:ring-2
           focus:ring-[#f26457]
           focus:border-transparent appearance-none cursor-pointer"
@@ -139,7 +139,7 @@ const SearchExperiences: React.FC<SearchExperiencesProps> = ({ onSearch }) => {
               onFocus={(e) => (e.currentTarget.type = "date")}
               onBlur={(e) => (e.currentTarget.type = "text")}
               placeholder="Preferred date of your choice"
-              className="w-[300px] lg:w-full pl-10 pr-4 py-3 bg-[#1f1f1f3d] text-white placeholder-gray-300 rounded-xl border border-[#e0e0e066] focus:outline-none
+              className="w-full lg:w-full pl-10 pr-4 py-3 bg-[#1f1f1f3d] text-white placeholder-gray-300 rounded-xl border border-[#e0e0e066] focus:outline-none
           focus:ring-2
           focus:ring-[#f26457]
           focus:border-transparent [color-scheme:dark]"
@@ -151,14 +151,14 @@ const SearchExperiences: React.FC<SearchExperiencesProps> = ({ onSearch }) => {
         <Button
           variant='primary'
           onClick={handleSearch}
-          className="flex items-center w-[300px] lg:w-auto justify-center gap-2 !border-0 font-medium rounded-xl transition-colors duration-200"
+          className="flex items-center w-full lg:w-auto justify-center gap-2 !border-0 font-medium rounded-xl transition-colors duration-200"
         >
           <Search className="h-5 w-5" />
           <span className="hidden sm:inline">Search Experiences</span>
           <span className="sm:hidden">Search Experiences</span>
         </Button>
       </div>
-     
+
     </div>
   );
 };

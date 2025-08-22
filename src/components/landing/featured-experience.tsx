@@ -12,7 +12,7 @@ function FeaturedExperience() {
           {/* Section Header */}
           <div className="flex flex-row justify-start items-center w-full">
             <div className="flex flex-col gap-3 justify-start items-start w-full">
-              <h2 className="text-[32px] sm:text-[37px] lg:text-[42px] font-plus-jakarta font-bold leading-[40px] sm:leading-[47px] lg:leading-[53px] text-left text-global-1">
+              <h2 className="text-[30px] lg:text-[42px] font-plus-jakarta font-bold leading-[40px] sm:leading-[47px] lg:leading-[53px] text-left text-global-1">
                 Featured Experiences
               </h2>
               <p className="text-sm font-inter description font-normal leading-[17px] text-left text-global-2">
@@ -22,9 +22,9 @@ function FeaturedExperience() {
           </div>
           {/* Experiences List */}
           <div className="w-full lg:overflow-x-auto " style={{scrollbarWidth:"none"}}>
-            <div className="flex flex-col lg:flex-row gap-6 w-max lg:w-full">
+            <div className="flex flex-col lg:flex-row gap-6 w-full lg:w-full">
               {experiences.map((experience) => (
-                <div key={experience.id} className="flex flex-col box-color justify-start items-center w-[350px] lg:w-[400px] bg-global-8 rounded-[18px] flex-shrink-0">
+                <div key={experience.id} className="flex flex-col box-color justify-start items-center w-full lg:w-[400px] bg-global-8 rounded-[18px] flex-shrink-0">
                   <div className="flex flex-col gap-6 justify-start items-center w-full mb-6.5">
                     {/* Experience Image */}
                     <div className="relative w-full h-[292px] rounded-t-[18px] overflow-hidden">
@@ -79,7 +79,7 @@ function FeaturedExperience() {
                               width={16}
                               height={16}
                             />
-                            <span className="text-sm  font-inter font-light description leading-[17px] text-global-2 ml-2">
+                            <span className="text-sm  w-max font-inter font-light description leading-[17px] text-global-2 ml-2">
                               {experience.location}
                             </span>
                           </div>

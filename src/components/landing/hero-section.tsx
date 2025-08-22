@@ -40,7 +40,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-black/40 rounded-4xl" />
 
       {/* Content */}
-      <div className=" mt-2 lg:mt-auto relative z-10 max-w-7xl mx-auto px-1 sm:px-6 lg:px-8 h-full flex items-center">
+      <div className=" mt-2 lg:mt-auto relative z-10 lg:max-w-7xl mx-auto px-1 sm:px-4 lg:px-8 h-full flex items-center">
         <div className="text-center w-full">
           <h1 className="[font-family:'Inter',Roboto] text-[40px] font-bold  text-white lg:text-[78px] lg:leading-[130px]">
             Discover Authentic Local <span className="italic">Experiences</span>
