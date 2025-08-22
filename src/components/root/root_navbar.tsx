@@ -20,7 +20,7 @@ function Navbar() {
           <div className='flex items-center gap-5'>
             {/* Logo */}
             <Link href="/">
-              <h1 className ='lobster'>Tourlity</h1>
+              <h1 className='lobster'>Tourlity</h1>
             </Link>
 
             {/* Line - Hidden on mobile */}
@@ -57,11 +57,11 @@ function Navbar() {
             className='lg:hidden p-2 text-charcoal hover:text-primary-color transition-colors'
           >
             {isMobileMenuOpen ? <X size={24} /> : <div>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 5L20 5" stroke="#5A5A5A"  strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M4 12L20 12" stroke="#5A5A5A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M4 19L14 19" stroke="#5A5A5A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 5L20 5" stroke="#5A5A5A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M4 12L20 12" stroke="#5A5A5A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M4 19L14 19" stroke="#5A5A5A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </div>}
           </button>
         </div>
@@ -102,24 +102,24 @@ function Navbar() {
             </div>
 
             {/* Mobile Buttons */}
-            <div className="gap-3 flex mb-3">
-              <Link href=''> 
-              <Button
-                variant='secondary'
-                className=' !px-2  !text-[13px]'
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Access Account
-              </Button></Link>
-             
+            <div className="gap-3 justify-between flex mb-3">
+              <Link href=''>
+                <Button
+                  variant='secondary'
+                  className=' !px-4  !text-[13px]'
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Access Account
+                </Button></Link>
+
               <Link href='/sign-up'> <Button
                 variant='primary'
-                className=' !px-2 !text-[13px]'
+                className=' !px-4 !text-[13px]'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Create Account
               </Button></Link>
-             
+
             </div>
           </div>
         )}
