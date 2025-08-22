@@ -68,7 +68,7 @@ function Navbar() {
 
         {/* Mobile Dropdown Menu - Inside the same container */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden relative   mt-2 z-50 ">
+          <div className="lg:hidden w-full relative mt-2 z-50 ">
             {/* Navigation Links */}
             <div className="space-y-6 mb-6 px-2">
               <Link
