@@ -19,7 +19,7 @@ export function TOS_Hero() {
                     <p className="description font-light !text-white   mb-8 max-w-xl mx-auto">
                         Please read these terms carefully before using our services.
                     </p>
-                    <p className="stroke-color  text-[14px] font-light mb-8 max-w-sm mx-auto">
+                    <p className="stroke-text-color  text-[14px] font-light mb-8 max-w-sm mx-auto">
                         Just Updated Jan 2025
                     </p>
                 </div>
