@@ -23,7 +23,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
   return (
     <BaseModal isOpen={isOpen} onClose={onClose}>
       <div className="p-8 text-center">
-        <img src={image} alt="Success" className="w-24 h-24 mx-auto mb-6" />
+        <img src={image} alt="Success" className="w-[50%] h-full mx-auto mb-6" />
         <h2 className="text-xl font-semibold text-[#FF6B6B] mb-6">{title}</h2>
         <Button 
           variant="primary" 

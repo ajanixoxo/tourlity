@@ -12,7 +12,7 @@ const BaseModal: React.FC<BaseModalProps> = ({ isOpen, onClose, children, showOn
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50  flex items-center justify-center">
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black/30 backdrop-blur-xs bg-opacity-50"
@@ -21,10 +21,10 @@ const BaseModal: React.FC<BaseModalProps> = ({ isOpen, onClose, children, showOn
       
       {/* Modal Content */}
       <div className={`
-        relative bg-[#FAF9F6] rounded-[14px] max-h-[100vh] overflow-y-auto
+        relative bg-[#FAF9F6] rounded-[14px] max-h-[100vh] 
         ${showOnMobile 
-          ? 'w-[90%] max-w-md mx-4' 
-          : 'w-full h-full lg:w-[90%] lg:max-w-xl lg:mx-4 lg:h-auto lg:max-h-[100vh] lg:rounded-[14px]'
+          ? 'w-[90%] max-w-xl mx-' 
+          : 'w-full h-full lg:w-[95%] lg:max-w-3xl lg:mx-4 lg:h-auto lg:max-h-[100vh] lg:rounded-[14px]'
         }
       `}>
         {children}

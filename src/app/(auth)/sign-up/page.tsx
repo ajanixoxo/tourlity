@@ -1,12 +1,15 @@
 
 import SignUpContent from '@/components/auth/sign-up/content'
 import React from 'react'
+import { UnauthenticatedOnly } from '@/components/auth/ProtectedRoute'
 
 function SignUp() {
   return (
-   <div>
-    <SignUpContent />
-   </div>
+    <UnauthenticatedOnly>
+      <div>
+        <SignUpContent />
+      </div>
+    </UnauthenticatedOnly>
   )
 }
 

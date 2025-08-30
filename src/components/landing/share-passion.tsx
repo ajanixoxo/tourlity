@@ -2,26 +2,26 @@ import React from 'react'
 import Button from '../root/button'
 function SharePassion() {
   return (
-    <section className="w-full rounded-4xl relative">
+    <section className="w-screen relative -mx-4 lg:-mx-18">
       <video
-        className="absolute inset-0 w-full h-full object-cover rounded-4xl "
+        className="absolute inset-0 w-screen h-full object-cover object-left-top "
         autoPlay
         muted
         loop
         playsInline
         poster="/images/mountain-lake-bridge-travelers.png" // Fallback image while video loads
       >
-        <source src="/videos/hero-background.mp4" type="video/mp4" />
-        <source src="/videos/hero-background.webm" type="video/webm" />
+        <source src="/videos/share_passion.mp4" type="video/mp4" />
+        {/* <source src="/videos/hero-background.webm" type="video/webm" /> */}
         {/* Fallback for browsers that don't support video */}
         <div
-          className="absolute inset-0 bg-cover bg-center rounded-4xl"
+          className="absolute inset-0 bg-cover bg-center "
           style={{
             backgroundImage: `url('/images/hero-bg.jpg')`,
           }}
         />
       </video>
-      <div className="absolute inset-0 z-30 bg-black/40 rounded-4xl" />
+      <div className="absolute w-full inset-0 z-30 bg-black/40 " />
       <div
         className="w-full relative z-40 rounded-2xl py-36 px-4 sm:px-6 lg:px-14"
 

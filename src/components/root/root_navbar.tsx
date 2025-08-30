@@ -47,14 +47,15 @@ function Navbar() {
 
           {/* Desktop Buttons - Hidden on mobile */}
           <div className='hidden lg:flex justify-center items-center gap-2'>
-            <Button variant='secondary'>Access Account</Button>
-            <Button variant='primary'>Create Account</Button>
+            <Link href=''><Button variant='secondary'>Access Account</Button></Link>
+            <Link href='/sign-up'>  <Button variant='primary'>Create Account</Button></Link>
+          
           </div>
 
           {/* Mobile Menu Button - Only visible on mobile */}
           <button
             onClick={toggleMobileMenu}
-            className='lg:hidden p-2 text-charcoal hover:text-primary-color transition-colors'
+            className='lg:hidden p-2 secondary-text-color hover:text-primary-color transition-colors'
           >
             {isMobileMenuOpen ? <X size={24} /> : <div>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -73,28 +74,28 @@ function Navbar() {
             <div className="space-y-6 mb-6 px-2">
               <Link
                 href='/explore-tour'
-                className='block text-charcoal hover:text-primary-color transition-colors text-[16px]'
+                className='block secondary-text-color hover:text-primary-color transition-colors text-[14px]'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Explore Tours
               </Link>
               <Link
                 href='/become-a-host'
-                className='block text-charcoal hover:text-primary-color transition-colors text-[16px]'
+                className='block secondary-text-color hover:text-primary-color transition-colors text-[14px]'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Become a Host
               </Link>
               <Link
                 href='/about'
-                className='block text-charcoal hover:text-primary-color transition-colors text-[16px]'
+                className='block secondary-text-color hover:text-primary-color transition-colors text-[14px]'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 About
               </Link>
               <Link
                 href='/contact'
-                className='block text-charcoal hover:text-primary-color transition-colors text-[16px]'
+                className='block secondary-text-color hover:text-primary-color transition-colors text-[14px]'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Contact
@@ -102,11 +103,11 @@ function Navbar() {
             </div>
 
             {/* Mobile Buttons */}
-            <div className="gap-3 justify-between flex mb-3">
+            <div className="gap-1 justify-between flex mb-3">
               <Link href=''>
                 <Button
                   variant='secondary'
-                  className=' !px-4  !text-[13px]'
+                  className=' !px-4.5 !text-[14px]'
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Access Account
@@ -114,7 +115,7 @@ function Navbar() {
 
               <Link href='/sign-up'> <Button
                 variant='primary'
-                className=' !px-4 !text-[13px]'
+                className=' !px-4.5 !text-[14px] !text-white'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Create Account

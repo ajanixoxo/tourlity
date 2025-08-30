@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Lobster, Plus_Jakarta_Sans } from "next/font/google";
-
 import "./globals.css";
-
+import AuthSyncProvider from "@/components/providers/auth-sync-provider";
+  import { ToastContainer } from 'react-toastify';
 // Configure your fonts
 const inter = Inter({
   subsets: ['latin'],
@@ -33,7 +33,17 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${lobster.variable} ${plusJakarta.variable}`}>
       <body className={`${inter.className} antialiased`}>
-        {children}
+        <ToastContainer
+          
+          className={"bg-white text-[#F26457] rounded-lg shadow-lg p-3"}
+          progressClassName="bg-yellow-400"
+        />
+
+        {/* Sync Zustand store with localStorage user on load */}
+        <AuthSyncProvider>
+          {children}
+        </AuthSyncProvider>
+
       </body>
     </html>
   );

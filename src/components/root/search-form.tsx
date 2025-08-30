@@ -31,7 +31,7 @@ const SearchExperiences: React.FC<SearchExperiencesProps> = ({ onSearch }) => {
   };
 
   return (
-    <div className="bg-[#1e050566] rounded-2xl p-4 w-full max-w-6xl mx-auto mb-2">
+    <div className="bg-[#1e050566] rounded-2xl p-3 w-full max-w-6xl mx-auto mb-2">
 
       <div className="flex flex-col lg:flex-row gap-3 justify-center lg:items-end items-center w-full">
         {/* Destination Input */}
@@ -39,7 +39,7 @@ const SearchExperiences: React.FC<SearchExperiencesProps> = ({ onSearch }) => {
           <label className="text-sm font-inter font-medium leading-[17px] text-white">
             Where do you want to go too?
           </label>
-          <div className='flex relative justify-center items-center'>
+          <div className='w-full flex relative justify-center items-center'>
             <div
               className="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer z-10"
 
@@ -58,10 +58,10 @@ const SearchExperiences: React.FC<SearchExperiencesProps> = ({ onSearch }) => {
               placeholder="Destination of your choice"
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
-              className="w-full lg:w-full pl-10 pr-4 py-3 bg-[#1f1f1f3d] text-white placeholder-gray-300 rounded-xl border border-[#e0e0e066] focus:outline-none
+              className="w-full lg:w-full pl-10 pr-4 py-3 bg-[#1f1f1f3d] text-white placeholder-[#A0A0A0] rounded-xl border border-[#e0e0e066] focus:outline-none
           focus:ring-2
           focus:ring-[#f26457]
-          focus:border-transparent"
+          focus:border-transparent text-[12px]"
             />
           </div>
 
@@ -88,14 +88,14 @@ const SearchExperiences: React.FC<SearchExperiencesProps> = ({ onSearch }) => {
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full lg:w-full pl-10 pr-8 py-3 bg-[#1f1f1f3d] text-white rounded-xl border border-[#e0e0e066] focus:outline-none
+              className="w-full lg:w-full pl-10 pr-8 py-3 bg-[#1f1f1f3d] text-[#A0A0A0] rounded-xl border border-[#e0e0e066] focus:outline-none
           focus:ring-2
           focus:ring-[#f26457]
-          focus:border-transparent appearance-none cursor-pointer"
+          focus:border-transparent appearance-none cursor-pointer text-[12px]"
             >
-              <option value="" className="text-gray-300">Select Category</option>
+              <option value="" className="">Select Category</option>
               {categories.map((cat) => (
-                <option key={cat} value={cat} className="text-white bg-[#1f1f1f3d]">
+                <option key={cat} value={cat} className="!text-white ">
                   {cat}
                 </option>
               ))}
@@ -118,7 +118,7 @@ const SearchExperiences: React.FC<SearchExperiencesProps> = ({ onSearch }) => {
           <label className="text-sm font-inter font-medium leading-[17px] text-white">
             Preferred Date
           </label>
-          <div className='flex relative justify-center items-center'>
+          <div className='w-full flex relative justify-center items-center'>
             <div
               className="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer z-10"
 
@@ -139,10 +139,10 @@ const SearchExperiences: React.FC<SearchExperiencesProps> = ({ onSearch }) => {
               onFocus={(e) => (e.currentTarget.type = "date")}
               onBlur={(e) => (e.currentTarget.type = "text")}
               placeholder="Preferred date of your choice"
-              className="w-full lg:w-full pl-10 pr-4 py-3 bg-[#1f1f1f3d] text-white placeholder-gray-300 rounded-xl border border-[#e0e0e066] focus:outline-none
+              className="w-full lg:w-full pl-10 pr-4 py-3 bg-[#1f1f1f3d] text-white placeholder-[#A0A0A0] rounded-xl border border-[#e0e0e066] focus:outline-none
           focus:ring-2
           focus:ring-[#f26457]
-          focus:border-transparent [color-scheme:dark]"
+          focus:border-transparent [color-scheme:dark] text-[12px]"
             />
           </div>
 

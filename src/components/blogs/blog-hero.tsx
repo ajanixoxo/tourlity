@@ -38,7 +38,7 @@ function BlogHero() {
                                         placeholder="Search for articles"
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        className="w-[70%] lg:w-auto flex-1 border-0 text-base text-white focus:outline-none placeholder:muted-color"
+                                        className="w-[70%] lg:w-auto flex-1 border-0 text-base text-white focus:outline-none placeholder:muted-color text-[14px]"
                                       />
                                       <Button type="submit" variant="primary" className="w-[30%] lg:w-auto flex items-center justify-center">
                                         <Search className="w-4 h-4 mr-2" />

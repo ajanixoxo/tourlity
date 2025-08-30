@@ -22,7 +22,7 @@ function FeaturedExperience() {
           </div>
           {/* Experiences List */}
           <div className="w-full lg:overflow-x-auto " style={{ scrollbarWidth: "none" }}>
-            <div className="flex flex-col lg:flex-row gap-6 w-full lg:w-full">
+            <div className="flex flex-col lg:flex-row gap-7 w-full lg:w-full">
               {experiences.map((experience) => (
                 <div key={experience.id} className="flex flex-col box-color justify-start items-center w-full lg:w-[400px] bg-global-8 rounded-[18px] flex-shrink-0">
                   <div className="flex flex-col gap-6 justify-start items-center w-full mb-6.5">
@@ -124,7 +124,7 @@ function FeaturedExperience() {
                         </div>
                         <Button
                           variant={`${experience.isLive ? "primary" : "secondary"}`}
-                          className=' text-[#F5F5F4]  w-[200px] lg:w-[150px] rounded-[14px]'
+                          className=' text-[#F5F5F4]  w-[200px] lg:w-[200px] rounded-[14px]'
                         >
                           Book Now
                         </Button>

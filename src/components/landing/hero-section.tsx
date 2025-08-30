@@ -23,10 +23,10 @@ export default function HeroSection() {
         muted
         loop
         playsInline
-        poster="/images/mountain-lake-bridge-travelers.png" // Fallback image while video loads
+        poster="/images/hero-bg.png" // Fallback image while video loads
       >
         <source src="/videos/hero-background.mp4" type="video/mp4" />
-        <source src="/videos/hero-background.webm" type="video/webm" />
+        {/* <source src="/videos/hero-background.webm" type="video/webm" /> */}
         {/* Fallback for browsers that don't support video */}
         <div
           className="absolute inset-0 bg-cover bg-center rounded-4xl"
@@ -40,7 +40,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-black/40 rounded-4xl" />
 
       {/* Content */}
-      <div className=" mt-2 lg:mt-auto relative z-10 lg:max-w-7xl mx-auto px-1 sm:px-4 lg:px-8 h-full flex items-center">
+      <div className=" mt-2 lg:mt-auto relative z-10 lg:max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 h-full flex items-center">
         <div className="text-center w-full">
           <h1 className="[font-family:'Inter',Roboto] text-[40px] font-bold  text-white lg:text-[78px] lg:leading-[130px]">
             Discover Authentic Local <span className="italic">Experiences</span>
