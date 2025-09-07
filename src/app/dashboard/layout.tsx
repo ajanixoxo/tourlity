@@ -174,11 +174,21 @@ const sidebarItemsTwo = [
     case 'admin':
       return [
         { label: 'Dashboard', href: '/dashboard', icon: <Home size={20} /> },
-        { label: 'Users', href: '/dashboard/users', icon: <Settings size={20} /> },
-        { label: 'Experiences', href: '/dashboard/experiences', icon: <Tag size={20} /> },
-        { label: 'Bookings', href: '/dashboard/bookings', icon: <Calendar size={20} /> },
-        { label: 'Reports', href: '/dashboard/reports', icon: <Star size={20} /> },
-        { label: 'Settings', href: '/dashboard/settings', icon: <Settings size={20} /> },
+        { label: 'Verification & Approval', href: '/dashboard/verifications', icon: <svg width={18} height={18} viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M1.5 8.25C3.24878 6.41837 5.73243 6.33213 7.5 8.25M6.37132 3.375C6.37132 4.41053 5.53066 5.25 4.49365 5.25C3.45664 5.25 2.61598 4.41053 2.61598 3.375C2.61598 2.33947 3.45664 1.5 4.49365 1.5C5.53066 1.5 6.37132 2.33947 6.37132 3.375Z" stroke="#5A5A5A" strokeLinecap="round" />
+  <path d="M10.5 16.5C12.2488 14.6684 14.7324 14.5821 16.5 16.5M15.3713 11.625C15.3713 12.6605 14.5307 13.5 13.4936 13.5C12.4566 13.5 11.616 12.6605 11.616 11.625C11.616 10.5895 12.4566 9.75 13.4936 9.75C14.5307 9.75 15.3713 10.5895 15.3713 11.625Z" stroke="#5A5A5A" strokeLinecap="round" />
+  <path d="M2.25 10.5C2.25 13.4025 4.5975 15.75 7.5 15.75L6.75 14.25" stroke="#5A5A5A" strokeLinecap="round" strokeLinejoin="round" />
+  <path d="M11.25 2.25H15.75M11.25 4.5H15.75M11.25 6.75H13.875" stroke="#5A5A5A" strokeLinecap="round" strokeLinejoin="round" />
+</svg>
+
+ },
+        { label: 'Listing Moderation', href: '/dashboard/listing-moderation', icon: <Tag size={20} /> },
+        { label: 'Bookings Oversight', href: '/dashboard/bookings-oversight', icon: <Calendar size={20} /> },
+        { label: 'Support', href: '/dashboard/support', icon: <Star size={20} /> },
+        { label: 'Payment Management', href: '/dashboard/payment-management', icon: <Settings size={20} /> },
+         { label: 'Conent Management', href: '/dashboard/content-management', icon: <Settings size={20} /> },
+          { label: 'Analytics and Performance ', href: '/dashboard/analytics-management', icon: <Settings size={20} /> },
+          
       ];
     default: // guest
       return baseItems;

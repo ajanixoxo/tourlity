@@ -3,6 +3,13 @@ import React, { useState } from 'react';
 import { Search } from 'lucide-react';
 import Image from 'next/image'
 import Button from './button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface SearchExperiencesProps {
   onSearch?: (data: { destination: string; category: string; date: string }) => void;
@@ -71,35 +78,34 @@ const SearchExperiences: React.FC<SearchExperiencesProps> = ({ onSearch }) => {
         {/* Category Dropdown */}
 
         <div className="flex flex-col gap-2.5 justify-start items-start w-full lg:w-auto">
-
           <label className="text-sm font-inter font-medium leading-[17px] text-white">
             Category
           </label>
-          <div className='flex w-full relative justify-center items-center'>
+          <div className="w-full relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
               <Image
                 src='/images/img_dashboard_square_01.svg'
-                alt="Calendar icon"
+                alt="Category icon"
                 className="w-4 h-4 sm:w-5 sm:h-5"
                 width={16}
                 height={16}
               />
             </div>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full lg:w-full pl-10 pr-8 py-3 bg-[#1f1f1f3d] text-[#A0A0A0] rounded-xl border border-[#e0e0e066] focus:outline-none
-          focus:ring-2
-          focus:ring-[#f26457]
-          focus:border-transparent appearance-none cursor-pointer text-[12px]"
-            >
-              <option value="" className="">Select Category</option>
-              {categories.map((cat) => (
-                <option key={cat} value={cat} className="!text-white ">
-                  {cat}
-                </option>
-              ))}
-            </select>
+
+            <Select value={category} onValueChange={setCategory}>
+              <SelectTrigger
+                className="w-full pl-10 pr-8 py-3 bg-[#1f1f1f3d] text-[#A0A0A0] rounded-xl border border-[#e0e0e066] text-[12px] focus:ring-2 focus:ring-[#f26457] focus:outline-none"
+              >
+                <SelectValue placeholder="Select Category" />
+              </SelectTrigger>
+              <SelectContent className="bg-[#1f1f1f] text-white border-[#e0e0e066]">
+                {categories.map((cat) => (
+                  <SelectItem key={cat} value={cat} className="cursor-pointer">
+                    {cat}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
               <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,8 +113,8 @@ const SearchExperiences: React.FC<SearchExperiencesProps> = ({ onSearch }) => {
               </svg>
             </div>
           </div>
-
         </div>
+
         {/* Separator */}
 
         <div className="hidden lg:block w-[1px] h-[86px] bg-[#e0e0e06b] self-center" />
