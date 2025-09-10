@@ -37,7 +37,7 @@ function SignUpContent() {
 
   const slides = [
     {
-      image: "/images/sign-up.png",
+      image: "/images/sign-up.png",  
       title: "Start Your Journey with Tourlity",
       description:
         "Join a global community of passionate hosts and curious travelers. Whether you're here to share your culture or discover new ones your adventure starts now.",

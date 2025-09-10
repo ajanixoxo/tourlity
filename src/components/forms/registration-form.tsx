@@ -569,7 +569,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
       setLoading(false);
     }
   };
-
+console.log(handleSubmit)
   const handleOAuthLogin = (provider: string) => {
     console.log(`OAuth login with ${provider}`);
     // Implement OAuth login logic here
@@ -786,7 +786,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
 
 
-        <form onSubmit={handleSubmit} className="space-y-4 max-h-[80vh] lg:max-h-[60vh] overflow-y-auto">
+        <form onSubmit={() => {}} className="space-y-4 max-h-[80vh] lg:max-h-[60vh] overflow-y-auto">
           {fields.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-gray-500">Invalid user type selected. Please go back and select a valid category.</p>
