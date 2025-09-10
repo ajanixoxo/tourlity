@@ -57,7 +57,7 @@ export default function VerificationPage() {
     }
   }
 
-  const handleRequestEdits = async (userId: string, reason: string) => {
+  const handleRequestEdits = async (userId: string) => {
     try {
       await updateUserStatus(userId, "PENDING")
       // You might want to send the reason to the API as well

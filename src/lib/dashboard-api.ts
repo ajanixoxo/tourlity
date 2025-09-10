@@ -1,5 +1,6 @@
 import { FacilitatorProfile, TranslatorProfile, AdminProfile, HostProfile } from "@/types/admin"
 // import { HostProfile } from "@prisma/client"
+import { UserRole, UserStatus  } from "@/types/admin"
 
 // lib/dashboard-api.ts
 export interface User {
@@ -9,11 +10,11 @@ export interface User {
     lastName: string
     phone?: string
     avatar?: string
-    role: 'GUEST' | 'HOST' | 'FACILITATOR' | 'TRANSLATOR' | 'ADMIN'
-    status: 'PENDING' | 'ACTIVE' | 'SUSPENDED' | 'REJECTED'
+    role:UserRole
+    status: UserStatus
     emailVerified: boolean
-    createdAt: string
-    updatedAt: string
+    createdAt: Date
+    updatedAt: Date
     hostProfile?: HostProfile
     facilitatorProfile?: FacilitatorProfile
     translatorProfile?: TranslatorProfile

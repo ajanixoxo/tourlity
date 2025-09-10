@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client"
 
 import type React from "react"
@@ -16,7 +17,7 @@ import {
   Bell,
   ChevronDown,
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import Button from "../root/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 const sidebarItems = [
@@ -82,7 +83,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           </div>
 
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon">
+            <Button variant="secondary">
               <Bell className="h-5 w-5" />
             </Button>
 

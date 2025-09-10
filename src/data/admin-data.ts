@@ -43,6 +43,7 @@ export const adminUsers: User[] = [
       certificationUrl: "/certifications/wade-warren-cert.pdf",
       createdAt: new Date("2025-07-01"),
       updatedAt: new Date("2025-07-01"),
+      idType: ""
     },
   },
   {
@@ -71,6 +72,7 @@ export const adminUsers: User[] = [
       certificationUrl: "/certifications/marvin-mckinney-cert.pdf",
       createdAt: new Date("2025-07-01"),
       updatedAt: new Date("2025-07-01"),
+      idType: ""
     },
   },
   {
@@ -98,6 +100,7 @@ export const adminUsers: User[] = [
       totalEarnings: 3280.75,
       createdAt: new Date("2025-07-01"),
       updatedAt: new Date("2025-07-01"),
+      idType: ""
     },
   },
   {
@@ -126,6 +129,7 @@ export const adminUsers: User[] = [
       certificationUrl: "/certifications/jerome-bell-cert.pdf",
       createdAt: new Date("2025-07-01"),
       updatedAt: new Date("2025-07-01"),
+      idType: ""
     },
   },
   {
@@ -153,6 +157,7 @@ export const adminUsers: User[] = [
       totalEarnings: 6850.30,
       createdAt: new Date("2025-07-01"),
       updatedAt: new Date("2025-07-01"),
+      idType: ""
     },
   },
 ]

@@ -1,6 +1,6 @@
 // api/users/route.ts
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Prisma } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
@@ -14,15 +14,15 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '10')
     const skip = (page - 1) * limit
 
-    // Build where clause
-    const where: any = {}
+    // Build where clause with proper Prisma types
+    const where: Prisma.UserWhereInput = {}
     
     if (role && role !== 'all') {
-      where.role = role.toUpperCase()
+      where.role = role.toUpperCase() as Prisma.EnumUserRoleFilter
     }
     
     if (status && status !== 'all') {
-      where.status = status.toUpperCase()
+      where.status = status.toUpperCase() as Prisma.EnumUserStatusFilter
     }
     
     if (search) {

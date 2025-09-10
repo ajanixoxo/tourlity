@@ -286,7 +286,7 @@ export interface AdminNotification {
   message: string
   type: string
   isRead: boolean
-  data?: any
+  // data?: any
   createdAt: string
 }
 
