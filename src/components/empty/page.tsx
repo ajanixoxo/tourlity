@@ -12,24 +12,7 @@ export default function EmptyDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            <h1 className="text-2xl font-bold text-coral-500">Tourlity</h1>
-            <h2 className="text-xl font-medium text-gray-900">Welcome Crownz 👋</h2>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs">1</span>
-            </div>
-            <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-blue-600 rounded"></div>
-              <span className="text-sm text-gray-700">English</span>
-            </div>
-          </div>
-        </div>
-      </header>
+      
 
       <div className="p-6 space-y-6">
         {/* Page Header */}

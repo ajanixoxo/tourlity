@@ -11,19 +11,6 @@ interface RequestEditsModalProps {
 
 export function RequestEditsModal({ onClose, onSubmit }: RequestEditsModalProps) {
   const [reason, setReason] = useState("")
-  const [showRejectReason, setShowRejectReason] = useState(false)
-  const [rejectReason, setRejectReason] = useState("")
-
-  // Update your reject button click handler
-  const handleReject = () => {
-    if (showRejectReason && rejectReason.trim()) {
-      onSubmit(rejectReason) // Pass reason to parent
-      onClose()
-    } else {
-      setShowRejectReason(true)
-    }
-  }
-
 
   const handleSubmit = () => {
     if (reason.trim()) {

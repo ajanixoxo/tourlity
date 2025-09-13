@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 
-import { User } from '@/types/admin';
+
 import { PersonalInformationTab } from '@/components/dashboards/settings/PersonalInfomationTab';
 import { AccountSecurityTab } from '@/components/dashboards/settings/AccountSecurityTab';
 import { NotificationPreferencesTab } from '@/components/dashboards/settings/NotificationPrefernce';
@@ -9,11 +9,9 @@ import { CookieSettingsTab } from '@/components/dashboards/settings/Cookie';
 import { DataPrivacyTab } from '@/components/dashboards/settings/DataPrivacy';
 import { useAuthStore } from '@/lib/stores/auth-store';
 import Button from '@/components/root/button';
-interface SettingsPageProps {
-  onUpdateUser: (updatedUser: Partial<User>) => void;
-}
 
-const SettingsPage: React.FC<SettingsPageProps> = ({ onUpdateUser }) => {
+
+const SettingsPage: React.FC = ({  }) => {
   const [activeTab, setActiveTab] = useState('personal');
   const { user: authUser, isAuthenticated, isLoading } = useAuthStore();
 
@@ -45,7 +43,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onUpdateUser }) => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'personal':
-        return <PersonalInformationTab user={user} onUpdateUser={onUpdateUser} />;
+        return <PersonalInformationTab user={user} />;
       case 'security':
         return <AccountSecurityTab user={user} />;
       case 'notifications':
@@ -55,7 +53,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onUpdateUser }) => {
       case 'privacy':
         return <DataPrivacyTab />;
       default:
-        return <PersonalInformationTab user={user} onUpdateUser={onUpdateUser} />;
+        return <PersonalInformationTab user={user}  />;
     }
   };
 

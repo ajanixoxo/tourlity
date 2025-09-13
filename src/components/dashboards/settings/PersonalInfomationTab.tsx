@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-// components/PersonalInformationTab.tsx - Updated with API integration
+// components/PersonalInformationTab.tsx - Fixed version
 "use client"
 import React, { useRef, useState, useEffect } from 'react';
 import { Camera } from 'lucide-react';
@@ -10,10 +10,10 @@ import { toast } from 'react-toastify';
 
 interface PersonalInformationTabProps {
   user: User;
-  onUpdateUser: (updatedUser: Partial<User>) => void;
+  // Remove onUpdateUser prop - handle updates internally
 }
 
-export const PersonalInformationTab: React.FC<PersonalInformationTabProps> = ({ user, onUpdateUser }) => {
+export const PersonalInformationTab: React.FC<PersonalInformationTabProps> = ({ user }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,7 +28,7 @@ export const PersonalInformationTab: React.FC<PersonalInformationTabProps> = ({ 
     clearProfileError,
     clearAvatarError,
     currentUser,
-    // fetchCurrentUserProfile
+    fetchCurrentUserProfile // Add this to refresh user data after updates
   } = useDashboardStore();
 
   const [formData, setFormData] = useState({
@@ -87,13 +87,13 @@ export const PersonalInformationTab: React.FC<PersonalInformationTabProps> = ({ 
       try {
         // Upload to server
         await uploadAvatar(file);
-        // Update parent component
-        if (currentUser) {
-          onUpdateUser({
-            avatar: currentUser.avatar,
-            updatedAt: currentUser.updatedAt
-          });
+        
+        // Refresh user data to get updated avatar
+        if (fetchCurrentUserProfile) {
+          await fetchCurrentUserProfile();
         }
+        
+        toast.success('Profile picture updated successfully!');
       } catch (error) {
         // Reset preview on error
         setSelectedImage(null);
@@ -126,20 +126,11 @@ export const PersonalInformationTab: React.FC<PersonalInformationTabProps> = ({ 
 
       await updateUserProfile(updateData);
       
-      // Update parent component
-      if (currentUser) {
-        onUpdateUser({
-          firstName: currentUser.firstName,
-          lastName: currentUser.lastName,
-          phone: currentUser.phone,
-          updatedAt: currentUser.updatedAt,
-          hostProfile: currentUser.hostProfile,
-          facilitatorProfile: currentUser.facilitatorProfile,
-          translatorProfile: currentUser.translatorProfile,
-        });
+      // Refresh user data to get the latest updates
+      if (fetchCurrentUserProfile) {
+        await fetchCurrentUserProfile();
       }
 
-      // Show success message (you can replace this with a proper toast/notification)
       toast.success('Profile updated successfully!');
     } catch (error) {
       console.error('Profile update failed:', error);
@@ -148,8 +139,8 @@ export const PersonalInformationTab: React.FC<PersonalInformationTabProps> = ({ 
     }
   };
 
-  // Display current avatar (priority: selectedImage > user.avatar > default)
-  const displayAvatar = selectedImage || user.avatar || "/images/user.jpg";
+  // Display current avatar (priority: selectedImage > currentUser.avatar > user.avatar > default)
+  const displayAvatar = selectedImage || currentUser?.avatar || user.avatar || "/images/user.jpg";
   console.log("user avatar", displayAvatar)
 
   return (
