@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-
+import { User } from '@/types/admin';
 // User profile interface based on guest user model
 export interface UserProfile {
   id: string
@@ -25,19 +25,19 @@ export interface UserProfile {
 
 interface AuthState {
   // Auth state
-  user: UserProfile | null
+  user: User| null
   isAuthenticated: boolean
   isLoading: boolean
   error: string | null
   
   // Auth actions
-  setUser: (user: UserProfile | null) => void
+  setUser: (user: User | null) => void
   setLoading: (loading: boolean) => void
   setError: (error: string | null) => void
   logout: () => void
   
   // Profile actions
-  updateProfile: (updates: Partial<UserProfile>) => void
+  updateProfile: (updates: Partial<User>) => void
   clearCache: () => void
 }
 

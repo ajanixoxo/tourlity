@@ -1,6 +1,7 @@
 // api/users/[id]/status/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
+import { sendApprovalEmail, sendRejectionEmail } from '@/lib/email'
 
 const prisma = new PrismaClient()
 
@@ -10,7 +11,7 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params
-    const { status } = await request.json()
+    const { status, reason } = await request.json() // Add reason to destructuring
 
     // Validate status
     const validStatuses = ['PENDING', 'ACTIVE', 'SUSPENDED', 'REJECTED']
@@ -24,7 +25,7 @@ export async function PATCH(
     // Update user status
     const updatedUser = await prisma.user.update({
       where: { id },
-      data: { 
+      data: {
         status,
         updatedAt: new Date()
       },
@@ -36,6 +37,19 @@ export async function PATCH(
       }
     })
 
+    // Send email notification based on status
+
+    try {
+      if (status === 'ACTIVE') {
+        await sendApprovalEmail(updatedUser.email, updatedUser.firstName, true)
+      } else if (status === 'REJECTED') {
+        await sendRejectionEmail(updatedUser.email, updatedUser.firstName, reason)
+      }
+    } catch (emailError) {
+      console.error('Failed to send email notification:', emailError)
+      // Don't fail the request if email fails, just log it
+    }
+
     return NextResponse.json({
       success: true,
       data: updatedUser
@@ -43,7 +57,7 @@ export async function PATCH(
 
   } catch (error) {
     console.error('Error updating user status:', error)
-    
+
     if (error instanceof Error && error.message.includes('Record to update not found')) {
       return NextResponse.json(
         { success: false, error: 'User not found' },

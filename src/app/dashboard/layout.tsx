@@ -24,7 +24,8 @@ import {
   LogOut,
   Menu,
 
-  X
+  X,
+  User
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Skeleton from '@/components/skeleton/skeleton';
@@ -349,9 +350,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             ) : (
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                  <span className="text-sm font-medium text-gray-600">
+                {user.avatar ? 
+               (
+                 <div>
+                  <img src={user.avatar} className='object-cover w-10 h-10 rounded-full'alt='user' />
+                 </div>
+                ) : (  
+                <span className="text-sm font-medium text-gray-600">
                     {user?.firstName?.charAt(0)?.toUpperCase() || 'U'}
                   </span>
+                )}
+                
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 truncate">

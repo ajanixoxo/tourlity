@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import jwt from 'jsonwebtoken'
 import type { AuthUser } from '@/lib/auth-utils'
+import { UserRole } from '@/types/admin'
 
 // Helper function to get user from JWT token
 function getUserFromToken(request: NextRequest): AuthUser | null {
@@ -129,7 +130,13 @@ export async function PUT(request: NextRequest) {
 
     // Check if user exists and is active
     const existingUser = await prisma.user.findUnique({
-      where: { id: currentUser.id }
+      where: { id: currentUser.id },
+      include: {
+        hostProfile: true,
+        facilitatorProfile: true,
+        translatorProfile: true,
+        adminProfile: true,
+      }
     })
 
     if (!existingUser) {
@@ -139,15 +146,13 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    if (existingUser.status !== 'ACTIVE') {
-      return NextResponse.json(
-        { error: 'Account not active' },
-        { status: 403 }
-      )
-    }
-
     const body = await request.json()
-    const { firstName, lastName, phone, avatar } = body
+    const { 
+      firstName, 
+      lastName, 
+      phone, 
+      profileData // For role-specific profile updates
+    } = body
 
     // Basic validation
     if (firstName && (typeof firstName !== 'string' || firstName.trim().length === 0)) {
@@ -171,16 +176,107 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    // Update user profile
-    const updatedUser = await prisma.user.update({
+    // Start transaction for updating user and profile
+     await prisma.$transaction(async (tx) => {
+      // Update user basic info
+      const updatedUser = await tx.user.update({
+        where: { id: currentUser.id },
+        data: {
+          ...(firstName && { firstName: firstName.trim() }),
+          ...(lastName && { lastName: lastName.trim() }),
+          ...(phone && { phone: phone.trim() }),
+          updatedAt: new Date(),
+        },
+      })
+      // console.log(result)
+
+      // Update role-specific profile if profileData is provided
+      if (profileData && typeof profileData === 'object') {
+        const { location, languages, bio, specialties } = profileData
+
+        switch (existingUser.role) {
+          case UserRole.HOST:
+            if (existingUser.hostProfile) {
+              await tx.hostProfile.update({
+                where: { userId: currentUser.id },
+                data: {
+                  ...(location && { location: location.trim() }),
+                  ...(languages && Array.isArray(languages) && { languages }),
+                  ...(bio && { bio: bio.trim() }),
+                  ...(specialties && Array.isArray(specialties) && { specialties }),
+                  updatedAt: new Date(),
+                }
+              })
+            } else {
+              await tx.hostProfile.create({
+                data: {
+                  userId: currentUser.id,
+                  location: location || '',
+                  languages: languages || [],
+                  bio: bio || '',
+                  specialties: specialties || [],
+                }
+              })
+            }
+            break
+
+          case UserRole.FACILITATOR:
+            if (existingUser.facilitatorProfile) {
+              await tx.facilitatorProfile.update({
+                where: { userId: currentUser.id },
+                data: {
+                  ...(location && { location: location.trim() }),
+                  ...(languages && Array.isArray(languages) && { languages }),
+                  ...(bio && { bio: bio.trim() }),
+                  ...(specialties && Array.isArray(specialties) && { specialties }),
+                  updatedAt: new Date(),
+                }
+              })
+            } else {
+              await tx.facilitatorProfile.create({
+                data: {
+                  userId: currentUser.id,
+                  location: location || '',
+                  languages: languages || [],
+                  bio: bio || '',
+                  specialties: specialties || [],
+                }
+              })
+            }
+            break
+
+          case UserRole.TRANSLATOR:
+            if (existingUser.translatorProfile) {
+              await tx.translatorProfile.update({
+                where: { userId: currentUser.id },
+                data: {
+                  ...(location && { location: location.trim() }),
+                  ...(languages && Array.isArray(languages) && { sourceLanguages: languages }),
+                  ...(bio && { bio: bio.trim() }),
+                  updatedAt: new Date(),
+                }
+              })
+            } else {
+              await tx.translatorProfile.create({
+                data: {
+                  userId: currentUser.id,
+                  location: location || '',
+                  sourceLanguages: languages || [],
+                  targetLanguages: [],
+                  bio: bio || '',
+                }
+              })
+            }
+            break
+        }
+      }
+
+      return updatedUser
+    })
+
+    // Fetch updated user with profile data
+    const finalUser = await prisma.user.findUnique({
       where: { id: currentUser.id },
-      data: {
-        ...(firstName && { firstName: firstName.trim() }),
-        ...(lastName && { lastName: lastName.trim() }),
-        ...(phone && { phone: phone.trim() }),
-        ...(avatar && { avatar }),
-        updatedAt: new Date(),
-      },
       include: {
         hostProfile: true,
         facilitatorProfile: true,
@@ -192,17 +288,20 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({
       message: 'Profile updated successfully',
       user: {
-        id: updatedUser.id,
-        email: updatedUser.email,
-        firstName: updatedUser.firstName,
-        lastName: updatedUser.lastName,
-        role: updatedUser.role,
-        status: updatedUser.status,
-        emailVerified: updatedUser.emailVerified,
-        phone: updatedUser.phone,
-        avatar: updatedUser.avatar,
-        updatedAt: updatedUser.updatedAt,
-        profile: updatedUser.hostProfile || updatedUser.facilitatorProfile || updatedUser.translatorProfile || updatedUser.adminProfile,
+        id: finalUser!.id,
+        email: finalUser!.email,
+        firstName: finalUser!.firstName,
+        lastName: finalUser!.lastName,
+        role: finalUser!.role,
+        status: finalUser!.status,
+        emailVerified: finalUser!.emailVerified,
+        phone: finalUser!.phone,
+        avatar: finalUser!.avatar,
+        updatedAt: finalUser!.updatedAt,
+        hostProfile: finalUser!.hostProfile,
+        facilitatorProfile: finalUser!.facilitatorProfile,
+        translatorProfile: finalUser!.translatorProfile,
+        adminProfile: finalUser!.adminProfile,
       }
     })
 

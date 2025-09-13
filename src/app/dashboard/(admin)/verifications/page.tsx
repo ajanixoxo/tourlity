@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import Button from "@/components/root/button"
 import { Input } from "@/components/ui/input"
 import { Search, Filter } from "lucide-react"
@@ -10,9 +11,10 @@ import { EmptyState } from "@/components/admin/empty-state"
 import { useDashboardStore } from "@/lib/stores/dashboard-store"
 
 export default function VerificationPage() {
-  const [activeTab, setActiveTab] = useState<"hosts" | "facilitators" | "translators">("hosts")
+  const [activeTab, setActiveTab] = useState<"all" | "hosts" | "facilitators" | "translators">("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
+  const [localSearchQuery, setLocalSearchQuery] = useState("") // For immediate UI updates
 
   const {
     users,
@@ -21,25 +23,60 @@ export default function VerificationPage() {
     pagination,
     fetchUsers,
     updateUserStatus,
+    updateUserStatusWithReason,
+    requestUserEdits,
     clearUsersError
   } = useDashboardStore()
 
-  // Fetch users when component mounts or filters change
+  // Fetch all users only once when component mounts or when search changes
   useEffect(() => {
     const params = {
-      role: activeTab.slice(0, -1), // Remove 's' from plural
+      role: "all", // Always fetch all users
       search: searchQuery || undefined,
-      page: currentPage,
-      limit: 10
+      page: 1, // Always start from page 1 for new searches
+      limit: 1000 // Fetch more users to handle client-side filtering
     }
 
     fetchUsers(params)
-  }, [activeTab, searchQuery, currentPage])
+    setCurrentPage(1) // Reset pagination when fetching new data
+  }, [searchQuery]) // Only depend on searchQuery, not activeTab
 
   // Clear error when component unmounts
   useEffect(() => {
     return () => clearUsersError()
   }, [])
+
+  // Filter users based on active tab and search query
+  const filteredUsers = useMemo(() => {
+    let filtered = users
+
+    // Filter by role (tab)
+    if (activeTab !== "all") {
+      const roleToFilter = activeTab.slice(0, -1).toLowerCase() // Remove 's' and lowercase
+      filtered = filtered.filter(user => 
+        user.role.toLowerCase() === roleToFilter
+      )
+    }
+
+    // Filter by local search (real-time search in UI)
+    if (localSearchQuery.trim()) {
+      const searchTerm = localSearchQuery.toLowerCase()
+      filtered = filtered.filter(user => 
+        user.firstName.toLowerCase().includes(searchTerm) ||
+        user.lastName?.toLowerCase().includes(searchTerm) ||
+        user.email.toLowerCase().includes(searchTerm)
+      )
+    }
+
+    return filtered
+  }, [users, activeTab, localSearchQuery])
+
+  // Pagination logic for filtered users
+  const itemsPerPage = 10
+  const totalFilteredPages = Math.ceil(filteredUsers.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const paginatedUsers = filteredUsers.slice(startIndex, endIndex)
 
   const handleApprove = async (userId: string) => {
     try {
@@ -49,32 +86,31 @@ export default function VerificationPage() {
     }
   }
 
-  const handleReject = async (userId: string) => {
-    try {
-      await updateUserStatus(userId, "REJECTED")
-    } catch (error) {
-      console.error("Failed to reject user:", error)
-    }
+  const handleReject = async (userId: string, reason?: string) => {
+  try {
+    await updateUserStatusWithReason(userId, "REJECTED", reason)
+  } catch (error) {
+    console.error("Failed to reject user:", error)
   }
+}
 
-  const handleRequestEdits = async (userId: string) => {
-    try {
-      await updateUserStatus(userId, "PENDING")
-      // You might want to send the reason to the API as well
-    } catch (error) {
-      console.error("Failed to request edits:", error)
-    }
+const handleRequestEdits = async (userId: string, reason: string) => {
+  try {
+    await requestUserEdits(userId, reason)
+  } catch (error) {
+    console.error("Failed to request edits:", error)
   }
+}
 
   const handleSearch = () => {
-    setCurrentPage(1) // Reset to first page when searching
-    const params = {
-      role: activeTab.slice(0, -1),
-      search: searchQuery || undefined,
-      page: 1,
-      limit: 10
-    }
-    fetchUsers(params, true) // Force refresh
+    // This will trigger the useEffect to fetch from API
+    setSearchQuery(localSearchQuery)
+    setCurrentPage(1)
+  }
+
+  const handleTabChange = (tabId: "all" | "hosts" | "facilitators" | "translators") => {
+    setActiveTab(tabId)
+    setCurrentPage(1) // Reset to first page when changing tabs
   }
 
   const handlePageChange = (page: number) => {
@@ -82,11 +118,15 @@ export default function VerificationPage() {
   }
 
   const tabs = [
+    { id: "all", label: "All" },
     { id: "hosts", label: "Hosts" },
     { id: "facilitators", label: "Facilitators" },
     { id: "translators", label: "Translators" },
   ]
 
+  console.log("users from verification", users)
+  console.log("filtered users", filteredUsers)
+  
   if (usersError) {
     return (
       <div className="space-y-6">
@@ -98,7 +138,7 @@ export default function VerificationPage() {
         <div className="bg-red-50 border border-red-200 rounded-md p-4">
           <p className="text-red-600">Error: {usersError}</p>
           <Button
-            onClick={() => fetchUsers({}, true)}
+            onClick={() => fetchUsers({ role: "all", limit: 1000 }, true)}
             className="mt-2"
             variant="primary"
           >
@@ -124,10 +164,7 @@ export default function VerificationPage() {
               key={tab.id}
               variant={activeTab === tab.id ? "primary" : "secondary"}
               className={`text-sm ${activeTab === tab.id ? "" : "!text-black"}`}
-              onClick={() => {
-                setActiveTab(tab.id as "hosts" | "facilitators" | "translators")
-                setCurrentPage(1)
-              }}
+              onClick={() => handleTabChange(tab.id as "all" | "hosts" | "facilitators" | "translators")}
               disabled={usersLoading}
             >
               {tab.label}
@@ -144,8 +181,8 @@ export default function VerificationPage() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <Input
               placeholder="Find by name, email, or region"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={localSearchQuery}
+              onChange={(e) => setLocalSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
               className="pl-10 w-64"
               disabled={usersLoading}
@@ -172,9 +209,9 @@ export default function VerificationPage() {
       {/* Content */}
       {!usersLoading && (
         <>
-          {users.length > 0 ? (
+          {paginatedUsers.length > 0 ? (
             <UserVerificationTable
-              users={users}
+              users={paginatedUsers}
               onApprove={handleApprove}
               onReject={handleReject}
               onRequestEdits={handleRequestEdits}
@@ -182,38 +219,38 @@ export default function VerificationPage() {
           ) : (
             <EmptyState
               title="No users found"
-              description={`No ${activeTab} found matching your criteria.`}
+              description={`No ${activeTab === "all" ? "users" : activeTab} found matching your criteria.`}
             />
           )}
 
           {/* Pagination */}
-          {pagination && pagination.totalPages > 1 && (
+          {totalFilteredPages > 1 && (
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-600">
-                Showing {((pagination.page - 1) * pagination.limit) + 1} to{" "}
-                {Math.min(pagination.page * pagination.limit, pagination.total)} of{" "}
-                {pagination.total} users
+                Showing {startIndex + 1} to{" "}
+                {Math.min(endIndex, filteredUsers.length)} of{" "}
+                {filteredUsers.length} users
               </p>
               <div className="flex border-2 items-center space-x-0">
                 <Button
                   variant="secondary"
                   className="!rounded-[0px] !text-black border-r-0"
-                  disabled={pagination.page <= 1}
-                  onClick={() => handlePageChange(pagination.page - 1)}
+                  disabled={currentPage <= 1}
+                  onClick={() => handlePageChange(currentPage - 1)}
                 >
                   &lt;
                 </Button>
-                {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
+                {Array.from({ length: Math.min(5, totalFilteredPages) }, (_, i) => {
                   const pageNum = i + 1
                   return (
                     <Button
                       key={pageNum}
                       className={
-                        pagination.page === pageNum
+                        currentPage === pageNum
                           ? "bg-coral-500 text-white !rounded-[0px] border-r-0"
                           : "!rounded-[0px] border-r-0 border-y-0 !text-black"
                       }
-                      variant={pagination.page === pageNum ? "primary" : "secondary"}
+                      variant={currentPage === pageNum ? "primary" : "secondary"}
                       onClick={() => handlePageChange(pageNum)}
                     >
                       {pageNum}
@@ -223,8 +260,8 @@ export default function VerificationPage() {
                 <Button
                   variant="secondary"
                   className="!rounded-[0px] border-y-0 !text-black"
-                  disabled={pagination.page >= pagination.totalPages}
-                  onClick={() => handlePageChange(pagination.page + 1)}
+                  disabled={currentPage >= totalFilteredPages}
+                  onClick={() => handlePageChange(currentPage + 1)}
                 >
                   &gt;
                 </Button>

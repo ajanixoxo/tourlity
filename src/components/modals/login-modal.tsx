@@ -82,7 +82,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
       setIsLoading(false);
     }
   };
-console.log(handleSubmit)
+
 
   const handleOAuthLogin = (provider: string) => {
     console.log(`OAuth login with ${provider}`);
@@ -104,7 +104,7 @@ console.log(handleSubmit)
           </div>
         </div>
 
-        <form onSubmit={() =>{}} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email Field */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">

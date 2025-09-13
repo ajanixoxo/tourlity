@@ -7,51 +7,30 @@ import {  Eye, MoreVertical } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { UserVerificationModal } from "./user-verification-modal"
 import { RequestEditsModal } from "./request-edits-modal"
-import { UserRole, type User } from "@/types/admin"
+import { RejectUserModal } from "./reject-user-modal"
+import {
+  //  UserRole,
+    type User } from "@/types/admin"
 
 interface UserVerificationTableProps {
   users: User[]
   onApprove: (userId: string) => void
-  onReject: (userId: string) => void
+  onReject: (userId: string, reason?: string) => void
   onRequestEdits: (userId: string, reason: string) => void
 }
 
 export function UserVerificationTable({ users, onApprove, onReject, onRequestEdits }: UserVerificationTableProps) {
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [showRequestEdits, setShowRequestEdits] = useState<User | null>(null)
-  
-   const getActiveProfile = (user: User) => {
-    switch (user.role) {
-      case UserRole.HOST:
-        return user.hostProfile;
-      case UserRole.FACILITATOR:
-        return user.facilitatorProfile;
-      case UserRole.TRANSLATOR:
-        return user.translatorProfile;
-      default:
-        return null;
-    }
-  };
-  const getVerificationStatus = (user: User) => {
-    const profile = getActiveProfile(user);
-    if (!profile) return "pending";
-    
-    // If profile has a verified field, use it
-    if ('verified' in profile) {
-      return profile.verified ? "approved" : "pending";
-    }
-    
-    // Fallback to user status
-    return user.status.toLowerCase();
-  };
-  
+  const [showRejectModal, setShowRejectModal] = useState<User | null>(null)
+
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "approved":
+      case "active":
         return <Badge className="!bg-green-100 text-green-800 hover:bg-green-100">Approved</Badge>
       case "pending":
         return <Badge className="!bg-yellow-100 text-yellow-800 hover:bg-yellow-100">Pending</Badge>
-      case "needs_edits":
+      case "rejected":
         return <Badge className="!bg-orange-100 text-orange-800 hover:bg-orange-100">Needs Edits</Badge>
       default:
         return <Badge className="!bg-orange-100 text-orange-800 hover:bg-orange-100" >{status}</Badge>
@@ -86,7 +65,6 @@ export function UserVerificationTable({ users, onApprove, onReject, onRequestEdi
                   <td className="p-4">
                     <Button
                       variant="secondary"
-                    
                       className="!text-coral-500 hover:text-coral-600  border-none flex items-center"
                       onClick={() => setSelectedUser(user)}
                     >
@@ -94,7 +72,7 @@ export function UserVerificationTable({ users, onApprove, onReject, onRequestEdi
                       View Files
                     </Button>
                   </td>
-                  <td className="p-4">{getStatusBadge(getVerificationStatus(user))}</td>
+                  <td className="p-4">{getStatusBadge(user.status)}</td>
                   <td className="p-4">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -106,7 +84,7 @@ export function UserVerificationTable({ users, onApprove, onReject, onRequestEdi
                         <DropdownMenuItem onClick={() => setSelectedUser(user)}>View Details</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => onApprove(user.id)}>Approve</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => setShowRequestEdits(user)}>Request Edits</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => onReject(user.id)}>Reject</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setShowRejectModal(user)}>Reject</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </td>
@@ -125,8 +103,8 @@ export function UserVerificationTable({ users, onApprove, onReject, onRequestEdi
             onApprove(selectedUser.id)
             setSelectedUser(null)
           }}
-          onReject={() => {
-            onReject(selectedUser.id)
+          onReject={(reason:string) => {
+            onReject(selectedUser.id, reason)
             setSelectedUser(null)
           }}
           onRequestEdits={(reason) => {
@@ -142,6 +120,16 @@ export function UserVerificationTable({ users, onApprove, onReject, onRequestEdi
           onSubmit={(reason) => {
             onRequestEdits(showRequestEdits.id, reason)
             setShowRequestEdits(null)
+          }}
+        />
+      )}
+
+      {showRejectModal && (
+        <RejectUserModal
+          onClose={() => setShowRejectModal(null)}
+          onSubmit={(reason?:string) => {
+            onReject(showRejectModal.id, reason)
+            setShowRejectModal(null)
           }}
         />
       )}

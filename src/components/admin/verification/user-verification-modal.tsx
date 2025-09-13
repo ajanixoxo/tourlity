@@ -12,7 +12,7 @@ interface UserVerificationModalProps {
   user: User
   onClose: () => void
   onApprove: () => void
-  onReject: () => void
+  onReject: (reason:string) => void
   onRequestEdits: (reason: string) => void
 }
 
@@ -24,6 +24,7 @@ export function UserVerificationModal({
   onRequestEdits,
 }: UserVerificationModalProps) {
   const [showRequestEdits, setShowRequestEdits] = useState(false)
+  
   // Add dynamic profile data getter
   const getProfileData = (user: User) => {
     switch (user.role) {
@@ -298,7 +299,7 @@ export function UserVerificationModal({
 
           {/* Actions */}
           <div className="flex justify-end space-x-3 mt-8 pt-6 border-t">
-            <Button variant="secondary" onClick={onReject}>
+            <Button variant="secondary" onClick={() => onReject}>
               Reject
             </Button>
             <Button variant="secondary" onClick={() => setShowRequestEdits(true)}>

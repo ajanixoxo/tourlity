@@ -1,66 +1,49 @@
 import { FacilitatorOnly } from '@/components/auth/ProtectedRoute';
+import { DashboardMetrics } from "@/components/dashboard/dashboard-metrics"
+import { PerformanceChart } from "@/components/dashboard/performance-chart"
+import { QuickActions } from "@/components/dashboard/quick-actions"
+import { RecentActivity } from "@/components/dashboard/recent-activity"
+import { ReviewHighlights } from "@/components/dashboard/review-highlights"
+import Button from "@/components/root/button"
+import { facilitatorDashboardData } from "@/data/dashboard-data"
 
 export default function FacilitatorDashboard() {
+  const data = facilitatorDashboardData
+
   return (
     <FacilitatorOnly>
       <div className="space-y-6">
-        {/* Page Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Facilitator Dashboard</h1>
-          <p className="text-gray-600 mt-2">
-            Manage your facilitated tours and schedule.
-          </p>
-        </div>
+        <div className="p-6 space-y-6">
+          {/* Page Header */}
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
+              <p className="text-gray-600 mt-1">Overview of all assigned tours, upcoming sessions, and progress.</p>
+            </div>
+            <Button className="bg-coral-500 hover:bg-coral-600 text-white">Check Assigned Tours</Button>
+          </div>
 
-        {/* Welcome Card */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div className="text-center">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-              Welcome, Facilitator! 🎯
-            </h2>
-            <p className="text-gray-600 mb-4">
-              You&apos;re ready to facilitate amazing experiences. Here&apos;s what you can do:
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <div className="w-12 h-12 bg-[#FF6B6B] rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <span className="text-white text-xl">🎬</span>
-                </div>
-                <h3 className="font-medium text-gray-900 mb-1">Facilitate Tours</h3>
-                <p className="text-sm text-gray-600">Lead and manage tour experiences</p>
-              </div>
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <div className="w-12 h-12 bg-[#FF6B6B] rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <span className="text-white text-xl">📅</span>
-                </div>
-                <h3 className="font-medium text-gray-900 mb-1">Manage Schedule</h3>
-                <p className="text-sm text-gray-600">Organize your availability and bookings</p>
-              </div>
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <div className="w-12 h-12 bg-[#FF6B6B] rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <span className="text-white text-xl">💰</span>
-                </div>
-                <h3 className="font-medium text-gray-900 mb-1">Track Earnings</h3>
-                <p className="text-sm text-gray-600">Monitor your facilitation income</p>
-              </div>
+          {/* Metrics */}
+          <DashboardMetrics metrics={data.metrics} />
+
+          {/* Main Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Performance Chart */}
+            <div className="lg:col-span-2">
+              <PerformanceChart data={data.chartData} hasData={data.hasData} />
+            </div>
+
+            {/* Quick Actions */}
+            <div>
+              <QuickActions actions={data.quickActions} hasData={data.hasData} />
             </div>
           </div>
-        </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <span className="text-blue-600 text-xl">🎬</span>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Active Tours</p>
-                <p className="text-2xl font-bold text-gray-900">0</p>
-              </div>
-            </div>
+          {/* Bottom Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <RecentActivity activities={data.recentActivity} hasData={data.hasData} />
+            <ReviewHighlights reviews={data.reviewHighlights} hasData={data.hasData} />
           </div>
-          {/* ...other stat cards... */}
         </div>
       </div>
     </FacilitatorOnly>

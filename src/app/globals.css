@@ -165,6 +165,9 @@ body {
   .bg-muted-ash {
     background-color: var(--muted-ash);
   }
+  .bg-stroke{
+    background-color: var(--stroke-color);
+  }
 
   .box-color {
     background-color: var(--box-color);
@@ -379,4 +382,10 @@ body {
     0 0 20px rgba(255, 215, 0, 0.3),
     0 0 40px rgba(255, 215, 0, 0.2),
     0 0 60px rgba(255, 215, 0, 0.1);
+}
+
+.input{
+    border: 2px solid var(--stroke-color);
+    background-color: var(--muted);
+    border-radius: 14px;
 }
