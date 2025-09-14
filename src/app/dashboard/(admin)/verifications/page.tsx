@@ -190,7 +190,7 @@ const handleRequestEdits = async (userId: string, reason: string) => {
           </div>
           <Button
             variant="secondary"
-            className="flex justify-center items-center"
+            className="hidden lg:flex justify-center items-center"
             onClick={handleSearch}
             disabled={usersLoading}
           >

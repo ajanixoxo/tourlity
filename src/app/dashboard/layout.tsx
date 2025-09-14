@@ -248,10 +248,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Sidebar */}
       <aside className={`
-        fixed left-0 top-0 z-50 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out
+        fixed left-0 top-0 z-50 h-screen w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        <div className="flex h-full flex-col">
+        <div className="flex h-screen flex-col">
           {/* Logo */}
           <div className="flex h-16 items-center justify-between px-6 ">
             <Link href="/dashboard" className="lobster">
@@ -429,7 +429,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </button>
 
               {/* Language Selector */}
-              <div className="relative">
+              <div className="hidden lg:flex relative">
                 <button className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 rounded-lg">
                   <div className="w-5 h-5 rounded-full">
                     <img src="/images/flag.png" alt="English" className="w-full h-full object-cover rounded-full" />
@@ -443,7 +443,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </header>
 
         {/* Page Content */}
-        <main className="p-6">
+        <main className="p-3 md:p-6">
           {children}
         </main>
       </div>

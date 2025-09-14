@@ -158,8 +158,8 @@ export const loginUser = async (email: string, password: string) => {
     const data = await response.json();
     
     if (!response.ok) { 
-      // console.log(data)
-      throw new Error(data.message || 'Login failed');
+      console.log("login data ", data)
+      throw new Error(data.error || 'Login failed');
      
     }
     

@@ -16,7 +16,7 @@ export default function GuestDashboard() {
           </p>
         </div>
 
-        <section className="relative h-[500px]  top-5 lg:h-[400px] rounded-4xl flex flex-col  overflow-hidden bg-gradient-to-r from-black/50 to-black/30">
+        <section className="relative h-[600px] p-2 mb-5  top-5 lg:h-[400px] rounded-4xl flex flex-col  overflow-hidden bg-gradient-to-r from-black/50 to-black/30">
           {/* Background Video */}
 
           <div
@@ -33,7 +33,7 @@ export default function GuestDashboard() {
           {/* Content */}
           <div className=" mt-2 lg:mt-auto relative z-10 lg:max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 h-full flex items-center">
             <div className="text-center w-full">
-              <h1 className="[font-family:'Inter',Roboto] text-[40px] font-bold  text-white lg:text-[78px] lg:leading-[130px]">
+              <h1 className="[font-family:'Inter',Roboto] text-[35px] font-bold  text-white lg:text-[78px] lg:leading-[130px]">
                 Discover Your Next Adenture
               </h1>
               <p className="text-[14px] lg:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
@@ -47,7 +47,7 @@ export default function GuestDashboard() {
 
         </section>
 
-        <div className='mt-3'>
+        <div className='mt-13 w-full'>
           <Tabs defaultValue="interest" className="space-y-6">
             <TabsList className="w-full overflow-x-auto sm:grid sm:grid-cols-5 flex whitespace-nowrap">
               <TabsTrigger value="interest" className="flex-1 sm:flex-none data-[state=active]:bg-[#F26457] data-[state=active]:text-white">

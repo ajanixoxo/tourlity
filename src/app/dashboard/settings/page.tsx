@@ -58,8 +58,8 @@ const SettingsPage: React.FC = ({  }) => {
   };
 
   return (
-    <div className="min-h-screen  p-6">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen p-3 md:p-6">
+      <div className="md:max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-2xl font-semibold text-gray-900 mb-2">Settings</h1>
@@ -67,7 +67,7 @@ const SettingsPage: React.FC = ({  }) => {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex space-x-2 mb-8  p-1 rounded-xl">
+        <div className=" space-x-2 mb-8  p-1 rounded-xl w-full overflow-x-auto sm:grid sm:grid-cols-5 flex whitespace-nowrap">
           {tabs.map((tab) => (
             <Button
               key={tab.id}

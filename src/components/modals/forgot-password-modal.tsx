@@ -56,7 +56,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} showOnMobile={false}>
-      <div className="p-6 lg:p-10 h-full">
+      <div className="p-6 lg:p-10 h-full flex lg:block items-center justify-center flex-col">
         <div className='flex gap-2 items-between'>
           <button className='cursor-pointer' onClick={handleBackToLogin}>
             <ArrowLeft className='secondary-text-color'/>

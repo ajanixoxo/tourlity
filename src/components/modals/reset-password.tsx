@@ -76,7 +76,7 @@ const ResetPasswordOtpModal: React.FC<ResetPasswordOtpModalProps> = ({
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose}>
-      <div className="p-8 w-full">
+      <div className="p-8 w-full flex lg:block items-center justify-center flex-col">
         <h2 className="text-[20px] lg:text-[32px] font-semibold text-primary-color font-plus-jakarta text-center mb-2">
           Reset Password
         </h2>

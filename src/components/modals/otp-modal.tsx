@@ -69,7 +69,7 @@ const OTPModal: React.FC<OTPModalProps> = ({
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose}>
-      <div className="p-8 w-full">
+      <div className="p-8 w-full flex lg:block items-center justify-center flex-col">
         <h2 className="text-[20px] lg:text-[32px] font-semibold text-primary-color font-plus-jakarta text-center mb-2">
           Thanks for Signing up!
         </h2>
@@ -77,7 +77,7 @@ const OTPModal: React.FC<OTPModalProps> = ({
           We&apos;ve sent an OTP Verification code to {email}.
         </p>
 
-  {/* <div className="mb-6"> */}
+        {/* <div className="mb-6"> */}
         <div className="mb-6">
           <label className="block text-sm font-medium text-black mb-3">
             Enter OTP

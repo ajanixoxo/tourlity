@@ -37,7 +37,7 @@ function SignUpContent() {
 
   const slides = [
     {
-      image: "/images/sign-up.png",  
+      image: "/images/sign-up.png",
       title: "Start Your Journey with Tourlity",
       description:
         "Join a global community of passionate hosts and curious travelers. Whether you're here to share your culture or discover new ones your adventure starts now.",
@@ -77,35 +77,35 @@ function SignUpContent() {
     }
   };
 
-const handleRegistrationSubmit = async (data: RegistrationFormData | globalThis.FormData) => {
-  try {
-    let result;
-    let email = '';
-    
-    if (data instanceof globalThis.FormData) {
-      // Handle file uploads for host/facilitator/translator
-      result = await registerUserWithFiles(data);
-      email = data.get('email') as string || '';
-    } else {
-      // Handle JSON for guest
-      result = await registerUser(data);
-      email = data.email || '';
+  const handleRegistrationSubmit = async (data: RegistrationFormData | globalThis.FormData) => {
+    try {
+      let result;
+      let email = '';
+
+      if (data instanceof globalThis.FormData) {
+        // Handle file uploads for host/facilitator/translator
+        result = await registerUserWithFiles(data);
+        email = data.get('email') as string || '';
+      } else {
+        // Handle JSON for guest
+        result = await registerUser(data);
+        email = data.email || '';
+      }
+
+      console.log("this is result", result);
+      setUserEmail(email);
+      setShowRegistrationForm(false);
+      toast.success("Registration successful! Please verify your email.");
+      setShowOTPModal(true);
+      console.log(result);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message || 'Registration failed');
+      } else {
+        toast.error('Registration failed');
+      }
     }
-    
-    console.log("this is result", result);
-    setUserEmail(email);
-    setShowRegistrationForm(false);
-    toast.success("Registration successful! Please verify your email.");
-    setShowOTPModal(true);
-    console.log(result);
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      toast.error(error.message || 'Registration failed');
-    } else {
-      toast.error('Registration failed');
-    }
-  }
-};
+  };
 
   const handleOTPVerify = async (otp: string) => {
     try {
@@ -144,15 +144,13 @@ const handleRegistrationSubmit = async (data: RegistrationFormData | globalThis.
         const dashboardRoute = await import('@/lib/auth-utils').then(mod => mod.getDashboardRoute(result.user.role));
         window.location.href = dashboardRoute;
       } else {
-        toast.error('Login failed');
+        toast.error('Redirection Failed');
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.log(error)
-        toast.error(error.message || 'Login failed');
-      } else {
-        toast.error('Login failed');
-      }
+        console.log("error from login", error)
+        toast.error(error.message);
+      } 
     }
   };
 
@@ -172,9 +170,7 @@ const handleRegistrationSubmit = async (data: RegistrationFormData | globalThis.
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message || 'OTP verification failed');
-      } else {
-        toast.error('OTP verification failed');
-      }
+      } 
     }
   };
 
@@ -189,9 +185,7 @@ const handleRegistrationSubmit = async (data: RegistrationFormData | globalThis.
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message || 'Forgot password failed');
-      } else {
-        toast.error('Forgot password failed');
-      }
+      } 
     }
   };
 
@@ -212,8 +206,6 @@ const handleRegistrationSubmit = async (data: RegistrationFormData | globalThis.
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message || 'Password reset failed');
-      } else {
-        toast.error('Password reset failed');
       }
     }
   };
@@ -335,7 +327,7 @@ const handleRegistrationSubmit = async (data: RegistrationFormData | globalThis.
           buttonText="Continue to Dashboard"
           onButtonClick={handleSuccess}
         />
-        
+
         <LoginModal
           isOpen={showLoginModal}
           onClose={() => setShowLoginModal(false)}
@@ -349,14 +341,14 @@ const handleRegistrationSubmit = async (data: RegistrationFormData | globalThis.
           onSubmit={handleForgotPasswordSubmit}
           onBackToLogin={handleBackToLogin}
         />
-        
+
         <ResetPasswordOtpModal
           isOpen={showForgotOTPModal}
           onClose={() => setShowForgotOTPModal(false)}
           email={userEmail}
           onVerified={handleForgotOTPVerify}
         />
-        
+
         <CreatePasswordModal
           isOpen={showCreatePasswordModal}
           onClose={() => setShowCreatePasswordModal(false)}

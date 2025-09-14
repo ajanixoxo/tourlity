@@ -569,7 +569,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
       setLoading(false);
     }
   };
-console.log(handleSubmit)
+// console.log(handleSubmit)
   const handleOAuthLogin = (provider: string) => {
     console.log(`OAuth login with ${provider}`);
     // Implement OAuth login logic here

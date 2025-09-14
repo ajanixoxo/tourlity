@@ -55,7 +55,7 @@ function Navbar() {
           {/* Mobile Menu Button - Only visible on mobile */}
           <button
             onClick={toggleMobileMenu}
-            className='lg:hidden p-2 secondary-text-color hover:text-primary-color transition-colors'
+            className='lg:hidden p-2 z-30 secondary-text-color hover:text-primary-color transition-colors'
           >
             {isMobileMenuOpen ? <X size={24} /> : <div>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
