@@ -9,25 +9,25 @@ function ExploreCategory() {
     {
       title: 'Food and Cuisine',
       description: 'Taste authentic dishes, join local cooking classes, and explore street food markets.',
-      image: '/images/img_image.png',
+      image: '/images/img_image_292x368.jpg',
       icon: '/images/img_kitchen_utensils.svg'
     },
     {
       title: 'Culture and History',
       description: 'Walk through heritage sites, discover traditions, and experience local customs firsthand.',
-      image: '/images/img_image_344x572.png',
+      image: '/images/img_image_344x572.jpg',
       icon: '/images/img_home_05.svg'
     },
     {
       title: 'Adventure',
       description: 'Hike breathtaking trails, explore hidden landscapes, and create unforgettable thrill-seeking memories.',
-      image: '/images/img_bg_image.png',
+      image: '/images/img_bg_image.jpg',
       icon: '/images/img_safari.svg'
     },
     {
       title: 'Celebration',
       description: 'Join weddings, festivals, and once-in-a-lifetime cultural celebrations with local communities.',
-      image: '/images/img_bg_image_344x572.png',
+      image: '/images/img_bg_image_344x572.jpg',
       icon: '/images/img_icon.svg'
     }
   ]
@@ -62,7 +62,8 @@ function ExploreCategory() {
               height={24}
             />
           </button>
-          <div className="flex px-6 pt-4 relative bg-transparent backdrop-blur-xs z-40 flex-col gap-2.5 justify-start items-start w-full">
+          {/* bg-transparent backdrop-blur-xs */}
+          <div className="flex px-6 pt-4 relative  z-40 flex-col gap-2.5 justify-start items-start w-full">
             <h3 className="text-[24px] sm:text-[28px] font-plus-jakarta font-semibold leading-[31px] sm:leading-[36px] text-left text-white">
               {category.title}
             </h3>

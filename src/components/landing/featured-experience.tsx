@@ -34,7 +34,7 @@ function FeaturedExperience() {
                         fill
                         className="object-cover"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-b from-[#00000059] to-[#00000059] p-6 flex flex-col gap-[184px] justify-start items-start shadow-[0px_4px_15px_#888888ff]">
+                      <div className="absolute inset-0 p-6 flex flex-col gap-[184px] justify-start items-start shadow-[0px_4px_15px_#888888ff]">
                         <button className="self-end w-9 h-9 bg-[#18171799] rounded-[18px] p-1.5">
                           <Image
                             src="/images/img_favourite.svg"
