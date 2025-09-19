@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import {ChevronLeft, ChevronRight} from "lucide-react"
+
 function ExploreCategory() {
   const [currentIndex, setCurrentIndex] = useState(0)
   
@@ -15,7 +16,7 @@ function ExploreCategory() {
     {
       title: 'Culture and History',
       description: 'Walk through heritage sites, discover traditions, and experience local customs firsthand.',
-      image: '/images/img_image_344x572.jpg',
+      image: '/images/img_image_344x572.png',
       icon: '/images/img_home_05.svg'
     },
     {
@@ -62,14 +63,29 @@ function ExploreCategory() {
               height={24}
             />
           </button>
-          {/* bg-transparent backdrop-blur-xs */}
-          <div className="flex px-6 pt-4 relative  z-40 flex-col gap-2.5 justify-start items-start w-full">
-            <h3 className="text-[24px] sm:text-[28px] font-plus-jakarta font-semibold leading-[31px] sm:leading-[36px] text-left text-white">
-              {category.title}
-            </h3>
-            <p className="text-sm font-inter font-light leading-[17px] sm:leading-[22px] text-left text-white mb-5.5">
-              {category.description}
-            </p>
+          
+          {/* Backdrop blur that blends with the image */}
+          <div className="relative px-6 pt-4 flex flex-col gap-2.5 justify-start items-start w-full">
+            {/* Backdrop blur with mask that starts from within the image */}
+            <div 
+              className="absolute left-0 right-0 bottom-0 backdrop-blur-sm"
+              style={{
+                top: '-60px', // Extends into the image area
+                background: 'linear-gradient(to top, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 40%, transparent 100%)',
+                maskImage: 'linear-gradient(to top, black 0%, black 60%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to top, black 0%, black 60%, transparent 100%)'
+              }}
+            ></div>
+            
+            {/* Content with relative positioning */}
+            <div className="relative z-10">
+              <h3 className="text-[24px] sm:text-[28px] font-plus-jakarta font-semibold leading-[31px] sm:leading-[36px] text-left text-white">
+                {category.title}
+              </h3>
+              <p className="text-sm font-inter font-light leading-[17px] sm:leading-[22px] text-left text-white mt-2.5 mb-5.5">
+                {category.description}
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -124,20 +140,6 @@ function ExploreCategory() {
               >
                <ChevronLeft className="secondary-text-color"/>
               </button>
-
-              {/* Dots Indicator */}
-              {/* <div className="flex space-x-2">
-                {categories.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentIndex(index)}
-                    className={`w-2 h-2 rounded-full transition-colors ${
-                      index === currentIndex ? 'bg-global-1' : 'bg-gray-300'
-                    }`}
-                    aria-label={`Go to category ${index + 1}`}
-                  />
-                ))}
-              </div> */}
 
               <button
                 onClick={nextSlide}

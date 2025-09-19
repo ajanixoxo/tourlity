@@ -1,10 +1,9 @@
-
 import React from 'react'
 import Button from '../root/button'
 import Image from 'next/image'
 import { tours as experiences } from '@/data/tours'
-function FeaturedExperience() {
 
+function FeaturedExperience() {
   return (
     <section className="w-full bg-global-9 py-14">
       <div className="w-full ">
@@ -20,8 +19,9 @@ function FeaturedExperience() {
               </p>
             </div>
           </div>
+
           {/* Experiences List */}
-          <div className="w-full lg:overflow-x-auto " style={{ scrollbarWidth: "none" }}>
+          <div className="w-full lg:overflow-x-auto" style={{ scrollbarWidth: "none" }}>
             <div className="flex flex-col lg:flex-row gap-7 w-full lg:w-full">
               {experiences.map((experience) => (
                 <div key={experience.id} className="flex flex-col box-color justify-start items-center w-full lg:w-[400px] bg-global-8 rounded-[18px] flex-shrink-0">
@@ -34,16 +34,35 @@ function FeaturedExperience() {
                         fill
                         className="object-cover"
                       />
-                      <div className="absolute inset-0 p-6 flex flex-col gap-[184px] justify-start items-start shadow-[0px_4px_15px_#888888ff]">
-                        <button className="self-end w-9 h-9 bg-[#18171799] rounded-[18px] p-1.5">
-                          <Image
-                            src="/images/img_favourite.svg"
-                            alt="Favorite"
-                            width={24}
-                            height={24}
-                          />
-                        </button>
-                        <div className="flex items-center gap-2 bg-[#18171799] rounded-[20px] px-2 py-2">
+
+                      {/* Backdrop blur overlay at the bottom */}
+                      <div
+                        className="absolute left-0 right-0 backdrop-blur-sm"
+                        style={{
+                          bottom: '0px',
+                          top: '60px', // Start the blur from within the image
+                          background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.3) 100%)',
+                          maskImage: 'linear-gradient(to bottom, transparent 0%, transparent 40%, black 100%)',
+                          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, transparent 40%, black 100%)'
+                        }}
+                      ></div>
+
+                      {/* Content overlay */}
+                      <div className="absolute inset-0 p-6 flex flex-col justify-between items-start">
+                        {/* Favorite button at top right */}
+                        <div className="w-full flex justify-end">
+                          <button className="w-9 h-9 bg-[#18171799] rounded-[18px] p-1.5">
+                            <Image
+                              src="/images/img_favourite.svg"
+                              alt="Favorite"
+                              width={24}
+                              height={24}
+                            />
+                          </button>
+                        </div>
+
+                        {/* Host details at bottom - positioned over the backdrop blur */}
+                        <div className="relative z-10 flex items-center gap-2 bg-[#18171799] rounded-[20px] px-2 py-2">
                           <Image
                             src={experience.host.avatar}
                             alt={experience.host.name}
@@ -57,6 +76,7 @@ function FeaturedExperience() {
                         </div>
                       </div>
                     </div>
+
                     {/* Experience Content */}
                     <div className="flex flex-col gap-3.5 justify-start items-center w-full px-4 lg:px-6">
                       <div className="flex flex-col gap-2.5 justify-start items-start w-full">
@@ -106,8 +126,8 @@ function FeaturedExperience() {
                             </span>
                           </div>
                         </div>
-
                       </div>
+
                       <div className="flex justify-center items-center w-full">
                         <div className="flex justify-center items-center w-full">
                           <span className="text-[18px] flex sm:text-[20px] font-inter font-medium leading-[23px] sm:leading-[25px] text-global-1">
@@ -135,7 +155,6 @@ function FeaturedExperience() {
               ))}
             </div>
           </div>
-
         </div>
       </div>
     </section>

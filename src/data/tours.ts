@@ -15,7 +15,7 @@ export const tours: Tour[] = [
     groupSize: "6-10 people",
     language: ["English", "Thai"],
     categories: ["Food and Cuisine", "Culture and History"],
-    images: "/images/img_image_292x368.png", // ✅ from experiences
+    images: "/images/img_image.png", // ✅ from experiences
     host: {
       id: "host1",
       name: "Chef Noi",
