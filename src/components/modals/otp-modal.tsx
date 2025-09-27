@@ -22,19 +22,35 @@ const OTPModal: React.FC<OTPModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Allow pasting all 6 digits at once, or typing one by one
-  const handleChange = (index: number, value: string) => {
-    let newOtp = [...otp];
-    if (value.length === 6) {
-      // User pasted all 6 digits
-      newOtp = value.split('').slice(0, 6);
+  // Handle paste event for any input field
+  const handlePaste = (e: React.ClipboardEvent, index: number) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData('text');
+    
+    // Check if pasted data contains only digits and is 6 characters long
+    if (/^\d{6}$/.test(pastedData)) {
+      const newOtp = pastedData.split('').slice(0, 6);
       setOtp(newOtp);
-      return;
+      // Focus the last input after pasting
+      const lastInput = document.getElementById(`otp-5`);
+      lastInput?.focus();
+    } 
+    console.log(index)
+  };
+ 
+
+  // Allow typing one digit at a time or handle pasted content
+  const handleChange = (index: number, value: string) => {
+    // If user types more than one character (shouldn't happen with maxLength=1, but just in case)
+    if (value.length > 1) {
+      value = value.slice(-1); // Take only the last character
     }
-    if (value.length > 1) return;
+    
+    const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-    // Auto-focus next input
+    
+    // Auto-focus next input when typing
     if (value && index < 5) {
       const nextInput = document.getElementById(`otp-${index + 1}`);
       nextInput?.focus();
@@ -77,7 +93,6 @@ const OTPModal: React.FC<OTPModalProps> = ({
           We&apos;ve sent an OTP Verification code to {email}.
         </p>
 
-        {/* <div className="mb-6"> */}
         <div className="mb-6">
           <label className="block text-sm font-medium text-black mb-3">
             Enter OTP
@@ -92,6 +107,7 @@ const OTPModal: React.FC<OTPModalProps> = ({
                 value={digit}
                 onChange={(e) => handleChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
+                onPaste={(e) => handlePaste(e, index)}
                 className="lg:w-12 lg:h-12 w-10 h-10 border stroke-color rounded-lg text-center text-lg bg-white font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] focus:border-transparent"
               />
             ))}
@@ -123,15 +139,7 @@ const OTPModal: React.FC<OTPModalProps> = ({
             ) : (
               "Confirm"
             )}
-
           </Button>
-          {/* <button
-            type="button"
-            onClick={onResend}
-            className="w-full text-sm text-[#FF6B6B] hover:underline"
-          >
-            Resend OTP
-          </button> */}
         </div>
       </div>
     </BaseModal>

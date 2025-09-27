@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lobster&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
+@import 'animate.css';
 
 /* @custom-variant dark (&:is(.dark *)); */
 
@@ -16,10 +17,10 @@
   --secondary-color: #5A5A5A;
   --secondary-bg: #1E4D4D;
   --muted-ash: #A0A0A0;
-  --stroke-color: #E0E0E0;
+  --stroke-color: #E0E0E0; 
   --box-color: #F5F5F4;
 
-
+    
 
   --radius: 0.625rem;
   --background: #FAF9F6;

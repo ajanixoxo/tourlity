@@ -69,7 +69,7 @@ export const tours: Tour[] = [
     isFeatured: true,
   },
   {
-    id: "4",
+    id: "3",
     title: "Andes Mountain Hiking Adventure",
     description:
       "Kayak beneath towering cliffs, waterfalls, and wildlife in one of nature's most breathtaking settings.",
@@ -101,7 +101,7 @@ export const tours: Tour[] = [
     },
   },
   {
-    id: "5",
+    id: "4",
     title: "Paris Rooftop Fashion Haul",
     description:
       "Exclusive live fashion haul from a Parisian rooftop. Discover the latest trends with stylist Chloé. An unforgettable experience!",
@@ -133,7 +133,7 @@ export const tours: Tour[] = [
     },
   },
   {
-    id: "6",
+    id: "5",
     title: "Bangkok Street Food Live!",
     description:
       "Join Chef Noi live as we explore Bangkok's vibrant street food scene. Ask questions and taste the culture!",
