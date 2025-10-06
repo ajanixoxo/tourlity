@@ -31,7 +31,7 @@ export function RecentTourListings() {
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-gray-900">Recent Tour Listing...</h3>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
@@ -41,14 +41,16 @@ export function RecentTourListings() {
               className="pl-10 w-64"
             />
           </div>
-          <Button variant="secondary" className="flex items-center gap-2 bg-transparent">
-            <Search className="h-4 w-4" />
-            Search
-          </Button>
-          <Button variant="secondary" className="flex items-center gap-2 bg-transparent">
-            <Filter className="h-4 w-4" />
-            Filters
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="secondary" className="flex items-center gap-2 bg-transparent">
+              <Search className="h-4 w-4" />
+              Search
+            </Button>
+            <Button variant="secondary" className="flex items-center gap-2 bg-transparent">
+              <Filter className="h-4 w-4" />
+              Filters
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -56,7 +58,7 @@ export function RecentTourListings() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b bg-[#FFF6F5] border-gray-200">
+              <tr className="border-b bg-[#FFF6F5] border-gray-200">  
                 <th className="text-left py-3 px-4 font-medium text-gray-700">Tour Title</th>
                 <th className="text-left py-3 px-4 font-medium text-gray-700">Host Name</th>
                 <th className="text-left py-3 px-4 font-medium text-gray-700">Guest</th>

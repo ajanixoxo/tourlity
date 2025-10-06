@@ -443,7 +443,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </header>
 
         {/* Page Content */}
-        <main className="p-3 md:p-6">
+        <main className="p-3 md:p-4">
           {children}
         </main>
       </div>
