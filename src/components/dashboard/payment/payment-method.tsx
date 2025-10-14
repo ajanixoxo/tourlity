@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -9,7 +10,7 @@ import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { PaymentMethod, ExchangeRate } from "@/types/payment"
 import PaymentCardSVG from "./payment-card"
-
+import PaymentMethodContent from "@/components/modals/card-payment"
 interface PaymentMethodsProps {
     paymentMethods: PaymentMethod[]
     exchangeRates: ExchangeRate[]
@@ -19,6 +20,7 @@ interface PaymentMethodsProps {
 export function PaymentMethods({ paymentMethods, exchangeRates, hasData }: PaymentMethodsProps) {
     const [showCurrencyPrefs, setShowCurrencyPrefs] = useState(false)
     const [autoConvert, setAutoConvert] = useState(true)
+    const [isPaymentMethodOpen, setIsPaymentMethoddOpen] = useState(false);
 
     // choose icon dynamically
     const getPaymentIcon = (type: string) => {
@@ -110,26 +112,33 @@ export function PaymentMethods({ paymentMethods, exchangeRates, hasData }: Payme
                 </div>
             </div> */}
             <div className="flex flex-col gap-2 lg:flex-row items-start justify-between">
-                <h2  className="text-xl font-semibold text-gray-900 text-left">Payment Methods</h2>
-              
-                    <div className="flex flex-col lg:flex-row items-center gap-3">
+                <h2 className="text-xl font-semibold text-gray-900 text-left">Payment Methods</h2>
 
-                        <div className="flex flex-row gap-2">
-                            <Button variant="primary" className="flex items-center !p-2"
-                             onClick={() => setShowCurrencyPrefs(!showCurrencyPrefs)}>
+                <div className="flex flex-col lg:flex-row items-center gap-3">
 
-                                Check Currency
-                            </Button>
-                            <Button variant="secondary" className="flex items-center gap-2 ">
-                                Add Payment 
-                             
-                            </Button>
-                        </div>
+                    <div className="flex flex-row gap-2">
+                        <Button variant="primary" className="flex items-center !p-2"
+                            onClick={() => setShowCurrencyPrefs(!showCurrencyPrefs)}>
 
+                            Check Currency
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            className="flex items-center gap-2"
+                            onClick={() => {
+                                setIsPaymentMethoddOpen(true);
+                            }} >
+                            Add Payment
+                        </Button>
                     </div>
-              
+
+                </div>
+
             </div>
 
+            {isPaymentMethodOpen && (
+                <PaymentMethodContent onClose={() => setIsPaymentMethoddOpen(false)} />
+            )}
             {/* Currency Preferences (Collapsible) */}
             {showCurrencyPrefs && (
                 <Card className="border-blue-200 bg-blue-50">

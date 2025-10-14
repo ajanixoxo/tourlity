@@ -32,10 +32,10 @@ export function TransactionHistory({ transactions, hasData }: TransactionHistory
     return (
         <Card>
             <CardHeader>
-                <div className="flex flex-col gap-2 lg:flex-row items-start justify-between">
+                <div className="flex flex-col w-full gap-2 lg:flex-row items-start justify-between">
                     <CardTitle>Transaction History</CardTitle>
                     {hasData && (
-                        <div className="flex flex-col lg:flex-row items-start  lg:items-center gap-3 w-full">
+                        <div className="flex flex-col lg:flex-row items-start  lg:items-center gap-3 w-full lg:w-auto">
                             <div className="relative">
                                 <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                                 <Input
@@ -45,7 +45,7 @@ export function TransactionHistory({ transactions, hasData }: TransactionHistory
                                     className="pl-10 w-70 lg:w-64"
                                 />
                             </div>
-                            <div className="flex flex-row gap-2 w-full">
+                            <div className="flex flex-row gap-2 lg:w-auto w-full">
                                 <Button variant="primary" className="flex items-center ">
                                     <Search className="w-4 h-4 mr-2" />
                                     Search

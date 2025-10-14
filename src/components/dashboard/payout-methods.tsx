@@ -6,8 +6,9 @@ import Button from "../root/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Building2, CreditCard} from "lucide-react"
+import { Building2, CreditCard } from "lucide-react"
 import type { PayoutMethod, SetupStep, BankDetails, PayPalDetails } from "@/types/earnings"
+import PaymentMethodContent from "@/components/modals/card-payment"
 
 interface PayoutMethodsProps {
   payoutMethods: PayoutMethod[]
@@ -26,6 +27,7 @@ export function PayoutMethods({ payoutMethods, hasData }: PayoutMethodsProps) {
   const [paypalDetails, setPaypalDetails] = useState<PayPalDetails>({
     paypalId: "",
   })
+  const [isPaymentMethodOpen, setIsPaymentMethoddOpen] = useState(false);
 
   const exchangeRates = [
     { currency: "EUR", rate: 0.92 },
@@ -183,13 +185,19 @@ export function PayoutMethods({ payoutMethods, hasData }: PayoutMethodsProps) {
               Check Currency
               {/* {showCurrency ? <ChevronUp className="ml-2 h-4 w-4" /> : <ChevronDown className="ml-2 h-4 w-4" />} */}
             </Button>
-            <Button variant="primary" className="flex items-center gap-2 ">
+            <Button variant="primary" className="flex items-center gap-2 "
+              onClick={() => {
+                setIsPaymentMethoddOpen(true);
+              }}>
               Add Payment
             </Button>
           </div>
         </div>
 
       </div>
+      {isPaymentMethodOpen && (
+        <PaymentMethodContent onClose={() => setIsPaymentMethoddOpen(false)} />
+      )}
 
       {/* Currency Preferences - Collapsible */}
       {showCurrency && (

@@ -1,50 +1,89 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
-import { useState } from "react"
+import { useEffect } from "react"
+import { usePaymentStore } from "@/lib/stores/payment-store"
+import { fetchTransactions, refreshPaymentData } from "@/lib/api/payment-api"
 import { PaymentSummaryCards } from "@/components/dashboard/payment/payment-summary"
 import { PaymentMethods } from "@/components/dashboard/payment/payment-method"
 import { TransactionHistory } from "@/components/dashboard/payment/transaction-history"
 import Button from "@/components/root/button"
-import { paymentDataWithTransactions, paymentDataEmpty } from "@/data/payment-data"
 
 export default function PaymentDashboard() {
-  // Toggle between states for demo purposes
-  const [hasData, setHasData] = useState(true)
-  const data = hasData ? paymentDataWithTransactions : paymentDataEmpty
+  const summary = usePaymentStore(state => state.summary)
+  const transactions = usePaymentStore(state => state.transactions)
+  const pagination = usePaymentStore(state => state.pagination)
+  const isLoading = usePaymentStore(state => state.isLoading)
+
+  // Handle pagination
+  const handlePageChange = async (page: number) => {
+    if (pagination) {
+      await fetchTransactions(page, pagination.itemsPerPage);
+    }
+  };
+
+  // Refresh data every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshPaymentData();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const hasData = transactions.length > 0;
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      
-
-      <div className=" space-y-6">
+      <div className="space-y-6">
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold text-gray-900">Payment</h1>
             <p className="text-gray-600 mt-1">
-              View your transactions, manage payment methods, and track discounts or referral bonuses
+              View your transactions and track your tour payments
             </p>
           </div>
-          {/* Demo Toggle Button */}
-          {/* <Button onClick={() => setHasData(!hasData)} variant="primary" className="text-gray-600 border-gray-300">
-            Toggle {hasData ? "Empty" : "Data"} State
-          </Button> */}
+          <Button 
+            onClick={refreshPaymentData}
+            variant="outline"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Refreshing...' : 'Refresh'}
+          </Button>
         </div>
 
         {/* Payment Summary */}
-        <PaymentSummaryCards summary={data.summary} />
+        <PaymentSummaryCards 
+          summary={{
+            upcomingTrips: summary?.upcomingTrips || 0,
+            totalSpent: summary?.totalSpent || 0,
+            nextTripDays: 0 // We'll implement this later
+          }} 
+        />
 
         {/* Payment Methods */}
         <PaymentMethods
-          paymentMethods={data.paymentMethods}
-          exchangeRates={data.exchangeRates}
-          hasData={data.hasData}
+          paymentMethods={[
+            {
+              id: 'stripe',
+              type: 'visa',
+              isDefault: true,
+              imgSrc: '/images/visa-payment.png'
+            }
+          ]}
+          exchangeRates={[
+            { currency: "USD", rate: 1 }
+          ]}
+          hasData={true}
         />
 
         {/* Transaction History */}
-        <TransactionHistory transactions={data.transactions} hasData={data.hasData} />
+        <TransactionHistory 
+          transactions={transactions}
+          hasData={hasData}
+          onPageChange={handlePageChange}
+          isLoading={isLoading}
+        />
       </div>
     </div>
   )
