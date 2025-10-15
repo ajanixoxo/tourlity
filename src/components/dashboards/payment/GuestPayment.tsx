@@ -81,8 +81,6 @@ export default function PaymentDashboard() {
         <TransactionHistory 
           transactions={transactions}
           hasData={hasData}
-          onPageChange={handlePageChange}
-          isLoading={isLoading}
         />
       </div>
     </div>
