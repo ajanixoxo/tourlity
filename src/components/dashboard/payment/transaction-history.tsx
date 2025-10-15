@@ -7,6 +7,7 @@ import Button from "@/components/root/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import type { Transaction } from "@/types/payment"
+import Ghost from "@/components/root/ghost"
 
 interface TransactionHistoryProps {
     transactions: Transaction[]
@@ -75,7 +76,8 @@ export function TransactionHistory({ transactions, hasData }: TransactionHistory
             </CardHeader>
             <CardContent>
                 {!hasData ? (
-                    <div className="text-center py-8">
+                    <div className="text-center flex flex-col items-center justify-center py-8">
+                        <Ghost/>
                         <p className="text-gray-500">No transactions yet</p>
                     </div>
                 ) : (

@@ -1,15 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server';
+import jwt from 'jsonwebtoken';
 import { prisma } from '@/lib/prisma';
-import { getServerUser } from '@/lib/get-server-user';
+import { UserProfile } from '@/lib/stores/auth-store';
 
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 const ITEMS_PER_PAGE = 10;
 
 export async function GET(request: NextRequest) {
   try {
-    // Get authenticated user
-    const user = await getServerUser();
-    if (!user) {
+    // Get JWT from cookie
+    const token = request.cookies.get('token')?.value;
+    if (!token) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Verify JWT
+    let payload: UserProfile;
+    try {
+      payload = jwt.verify(token, JWT_SECRET) as UserProfile;
+    } catch {
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+    }
+
+    // Verify user exists and is a guest
+    const user = await prisma.user.findUnique({
+      where: { id: payload.id },
+      select: { id: true, role: true }
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 401 });
     }
 
     if (user.role !== 'GUEST') {

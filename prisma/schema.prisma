@@ -169,6 +169,7 @@ model Booking {
   guest           User          @relation("GuestBookings", fields: [guestId], references: [id], onDelete: Cascade)
   tour            Tour          @relation(fields: [tourId], references: [id], onDelete: Cascade)
   Payment         Payment[]
+  transactions    WalletTransaction[]
 
   @@map("bookings")
 }
@@ -296,18 +297,41 @@ model Wallet {
 }
 
 
+enum TransactionType {
+  DEPOSIT
+  EARNING
+  WITHDRAWAL
+  ESCROW_RELEASE
+  REFUND
+}
+
+enum PayoutStatus {
+  AVAILABLE    // Can be included in a payout
+  PENDING      // Included in a pending payout
+  PROCESSING   // Payout is being processed
+  PAID         // Successfully paid out
+  FAILED       // Payout attempt failed
+}
+
 model WalletTransaction {
-  id          String   @id @default(cuid())
-  walletId    String
-  wallet      Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
-  type        String   // DEPOSIT | EARNING | WITHDRAWAL | ESCROW_RELEASE | REFUND
-  amount      Float
-  currency    String   @default("USD")
-  status      String   @default("COMPLETED")
-  reference   String?  // Stripe payment/payout ID
-  relatedTour String?  // optional: link to tour
-  description String?
-  createdAt   DateTime @default(now())
+  id            String          @id @default(cuid())
+  walletId      String
+  wallet        Wallet         @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  type          TransactionType
+  amount        Float
+  currency      String         @default("USD")
+  status        String         @default("COMPLETED")
+  payoutStatus  PayoutStatus?  @default(AVAILABLE)
+  payoutId      String?        // Reference to a payout if this transaction has been paid out
+  payoutBatch   Payout?        @relation(fields: [payoutId], references: [id])
+  reference     String?        // Stripe payment/payout ID
+  bookingId     String?       // Reference to the booking that generated this earning
+  booking       Booking?      @relation(fields: [bookingId], references: [id])
+  serviceType   String?       // TOUR | FACILITATION | TRANSLATION
+  platformFee   Float         @default(0)
+  netAmount     Float         @default(0)
+  description   String?
+  createdAt     DateTime      @default(now())
 
   Tour Tour[]
 }
@@ -322,9 +346,10 @@ model Payout {
   amount         Float
   currency       String   @default("USD")
   stripePayoutId String?
-  status         String   @default("PENDING") // pending, processing, completed, failed
+  status         PayoutStatus @default(PENDING)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+  transactions   WalletTransaction[] 
 }
 
 model PlatformTransaction {

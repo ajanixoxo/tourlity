@@ -1,8 +1,8 @@
 import { Card } from "@/components/ui/card"
 import type { EarningsMetric } from "@/types/earnings"
-import MoneyBag from "./icons/MoneyBag"
-import MoneyRing from "./icons/MoneyRing"
-import Plane from "./icons/Plane"
+import MoneyBag from "../icons/MoneyBag"
+import MoneyRing from "../icons/MoneyRing"
+import Plane from "../icons/Plane"
 const iconMap = {
   dollar: MoneyBag,
   calendar: MoneyRing,

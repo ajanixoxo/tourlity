@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { usePaymentStore } from '@/lib/stores/payment-store';
 import type { PaymentSummary, Transaction } from '@/types/payment';
 

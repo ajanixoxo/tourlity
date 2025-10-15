@@ -25,7 +25,7 @@ export default function PaymentDashboard() {
   useEffect(() => {
     const interval = setInterval(() => {
       refreshPaymentData();
-    }, 30000);
+    }, 3000000);
 
     return () => clearInterval(interval);
   }, []);
@@ -45,7 +45,7 @@ export default function PaymentDashboard() {
           </div>
           <Button 
             onClick={refreshPaymentData}
-            variant="outline"
+            variant="primary"
             disabled={isLoading}
           >
             {isLoading ? 'Refreshing...' : 'Refresh'}

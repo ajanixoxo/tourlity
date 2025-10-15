@@ -1,8 +1,9 @@
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import Button from "../root/button"
+import Button from "../../root/button"
 import { Search } from "lucide-react"
 import type { EarningsTransaction } from "@/types/earnings"
+import Ghost from "@/components/root/ghost"
 
 interface TransactionHistoryProps {
   transactions: EarningsTransaction[]
@@ -78,12 +79,8 @@ export function TransactionHistory({ transactions, hasData }: TransactionHistory
 
       {!hasData ? (
         <div className="text-center py-12">
-          <div className="w-32 h-32 mx-auto mb-6 opacity-50">
-            <svg viewBox="0 0 200 200" className="w-full h-full">
-              <path d="M50 150 Q100 100 150 150 Q100 120 50 150" fill="#9CA3AF" opacity="0.6" />
-              <circle cx="80" cy="130" r="2" fill="#6B7280" />
-              <circle cx="120" cy="130" r="2" fill="#6B7280" />
-            </svg>
+          <div className="w-full flex items-center justify-center mx-auto mb-6 opacity-50">
+           <Ghost/>
           </div>
           <p className="text-gray-500 text-lg">You have no transaction history yet.</p>
         </div>
