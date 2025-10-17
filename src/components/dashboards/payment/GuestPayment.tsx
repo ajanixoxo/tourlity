@@ -15,6 +15,7 @@ export default function PaymentDashboard() {
   const isLoading = usePaymentStore(state => state.isLoading)
 
   // Handle pagination
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handlePageChange = async (page: number) => {
     if (pagination) {
       await fetchTransactions(page, pagination.itemsPerPage);

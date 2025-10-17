@@ -85,7 +85,7 @@ export function PaymentMethods({ paymentMethods, exchangeRates, hasData }: Payme
                     <p className="text-gray-500 text-lg mb-6">
                         You haven&lsquo;t saved any payment method yet.
                     </p>
-                    <Button className="bg-coral-500 hover:bg-coral-600 text-white">
+                    <Button variant="primary">
                         Add a Payment Method
                     </Button>
                 </div>

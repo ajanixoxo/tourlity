@@ -18,7 +18,7 @@ export default function HostDashboard() {
             <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
             <p className="text-gray-600 mt-1">Overview of all assigned tours, upcoming sessions, and progress.</p>
           </div>
-          <Button className="bg-coral-500 hover:bg-coral-600 text-white">Create New Tour</Button>
+          <Button variant="primary">Create New Tour</Button>
         </div>
 
         {/* Metrics */}

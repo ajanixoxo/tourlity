@@ -21,6 +21,9 @@ model User {
   emailVerifiedAt    DateTime?
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
+  paymentsMade       Payment[]
+  Payout             Payout[]
+  Wallet             Wallet?
   adminProfile       AdminProfile?
   bookings           Booking[]           @relation("GuestBookings")
   facilitatorProfile FacilitatorProfile?
@@ -32,10 +35,7 @@ model User {
   reviews            Review[]            @relation("UserReviews")
   tours              Tour[]              @relation("HostTours")
   translatorProfile  TranslatorProfile?
-  Payout             Payout[]
-  Wallet             Wallet[]
   paymentsReceived   Payment[]           @relation("PaymentHost")
-  paymentsMade   Payment[] // Payments where the user is the payer (Guest)
 
   @@map("users")
 }
@@ -115,61 +115,61 @@ model AdminProfile {
 }
 
 model Tour {
-  id                   String              @id @default(cuid())
-  hostId               String
-  title                String
-  description          String
-  type                 TourType
-  status               TourStatus          @default(DRAFT)
-  price                Float
-  originalPrice        Float?
-  location             String
-  country              String
-  duration             String
-  groupSize            String
-  languages            String[]
-  categories           String[]
-  images               String[]
-  isLive               Boolean             @default(false)
-  isFeatured           Boolean             @default(false)
-  maxVirtualSlots      Int                 @default(20)
-  currentVirtualSlots  Int                 @default(0)
-  maxInPersonSlots     Int?
-  currentInPersonSlots Int                 @default(0)
-  rating               Float               @default(0)
-  reviewCount          Int                 @default(0)
-  createdAt            DateTime            @default(now())
-  updatedAt            DateTime            @updatedAt
-  bookings             Booking[]
-  reviews              Review[]
-  tourRequests         TourRequest[]
-  host                 User                @relation("HostTours", fields: [hostId], references: [id], onDelete: Cascade)
-  WalletTransaction    WalletTransaction[]
-  Payment              Payment[]
+  id                      String                    @id @default(cuid())
+  hostId                  String
+  title                   String
+  description             String
+  type                    TourType
+  status                  TourStatus                @default(DRAFT)
+  price                   Float
+  originalPrice           Float?
+  location                String
+  country                 String
+  duration                String
+  groupSize               String
+  languages               String[]
+  categories              String[]
+  images                  String[]
+  isLive                  Boolean                   @default(false)
+  isFeatured              Boolean                   @default(false)
+  maxVirtualSlots         Int                       @default(20)
+  currentVirtualSlots     Int                       @default(0)
+  maxInPersonSlots        Int?
+  currentInPersonSlots    Int                       @default(0)
+  rating                  Float                     @default(0)
+  reviewCount             Int                       @default(0)
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt
+  TourToWalletTransaction TourToWalletTransaction[]
+  bookings                Booking[]
+  reviews                 Review[]
+  tourRequests            TourRequest[]
+  host                    User                      @relation("HostTours", fields: [hostId], references: [id], onDelete: Cascade)
+  Payment                 Payment[]                 @relation("PaymentToTour")
 
   @@map("tours")
 }
 
 model Booking {
-  id              String        @id @default(cuid())
+  id              String              @id @default(cuid())
   tourId          String
   guestId         String
-  status          BookingStatus @default(PENDING)
+  status          BookingStatus       @default(PENDING)
   amount          Float
-  currency        String        @default("USD")
-  paymentStatus   String        @default("PENDING")
+  currency        String              @default("USD")
+  paymentStatus   String              @default("PENDING")
   paymentMethod   String?
   scheduledDate   DateTime
-  participants    Int           @default(1)
+  participants    Int                 @default(1)
   specialRequests String?
   facilitatorId   String?
   translatorId    String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  guest           User          @relation("GuestBookings", fields: [guestId], references: [id], onDelete: Cascade)
-  tour            Tour          @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
   Payment         Payment[]
   transactions    WalletTransaction[]
+  guest           User                @relation("GuestBookings", fields: [guestId], references: [id], onDelete: Cascade)
+  tour            Tour                @relation(fields: [tourId], references: [id], onDelete: Cascade)
 
   @@map("bookings")
 }
@@ -263,39 +263,95 @@ model PasswordReset {
 model Payment {
   id              String   @id @default(cuid())
   userId          String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   bookingId       String?
-  booking         Booking? @relation(fields: [bookingId], references: [id])
   amount          Float
   currency        String   @default("USD")
   paymentIntentId String?
-  paymentMethod   String?  // e.g., card, wallet
+  paymentMethod   String?
   status          String   @default("PENDING")
   receiptUrl      String?
   metadata        Json?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-
-  Tour Tour[]
-
-  User User[] @relation("PaymentHost")
+  booking         Booking? @relation(fields: [bookingId], references: [id])
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  User            User[]   @relation("PaymentHost")
+  Tour            Tour[]   @relation("PaymentToTour")
 }
-
 
 model Wallet {
-  id        String   @id @default(cuid())
-  userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  balance   Float    @default(0)
-  escrow    Float    @default(0) // funds held until tour completion
-  currency  String   @default("USD")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  transactions WalletTransaction[]
+  id           String              @id @default(cuid())
+  userId       String              @unique
+  balance      Float               @default(0)
+  escrow       Float               @default(0)
+  currency     String              @default("USD")
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
   payouts      Payout[]
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions WalletTransaction[]
 }
 
+model WalletTransaction {
+  id                      String                    @id @default(cuid())
+  walletId                String
+  amount                  Float
+  currency                String                    @default("USD")
+  status                  String                    @default("COMPLETED")
+  reference               String?
+  description             String?
+  createdAt               DateTime                  @default(now())
+  bookingId               String?
+  netAmount               Float                     @default(0)
+  payoutId                String?
+  payoutStatus            PayoutStatus?             @default(AVAILABLE)
+  platformFee             Float                     @default(0)
+  serviceType             String?
+  type                    TransactionType
+  booking                 Booking?                  @relation(fields: [bookingId], references: [id])
+  payoutBatch             Payout?                   @relation(fields: [payoutId], references: [id])
+  wallet                  Wallet                    @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  TourToWalletTransaction TourToWalletTransaction[]
+}
+
+model Payout {
+  id             String              @id @default(cuid())
+  userId         String
+  walletId       String
+  amount         Float
+  currency       String              @default("USD")
+  stripePayoutId String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  status         PayoutStatus        @default(PENDING)
+  user           User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet         Wallet              @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  transactions   WalletTransaction[]
+}
+
+model PlatformTransaction {
+  id          String   @id @default(cuid())
+  type        String
+  amount      Float
+  currency    String   @default("USD")
+  stripeRef   String?
+  relatedUser String?
+  relatedTour String?
+  description String?
+  createdAt   DateTime @default(now())
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model TourToWalletTransaction {
+  A                 String
+  B                 String
+  tours             Tour              @relation(fields: [A], references: [id], onDelete: Cascade)
+  WalletTransaction WalletTransaction @relation(fields: [B], references: [id], onDelete: Cascade)
+
+  @@id([A, B], map: "_TourToWalletTransaction_AB_pkey")
+  @@index([B], map: "_TourToWalletTransaction_B_index")
+  @@map("_TourToWalletTransaction")
+}
 
 enum TransactionType {
   DEPOSIT
@@ -306,64 +362,12 @@ enum TransactionType {
 }
 
 enum PayoutStatus {
-  AVAILABLE    // Can be included in a payout
-  PENDING      // Included in a pending payout
-  PROCESSING   // Payout is being processed
-  PAID         // Successfully paid out
-  FAILED       // Payout attempt failed
+  AVAILABLE
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
 }
-
-model WalletTransaction {
-  id            String          @id @default(cuid())
-  walletId      String
-  wallet        Wallet         @relation(fields: [walletId], references: [id], onDelete: Cascade)
-  type          TransactionType
-  amount        Float
-  currency      String         @default("USD")
-  status        String         @default("COMPLETED")
-  payoutStatus  PayoutStatus?  @default(AVAILABLE)
-  payoutId      String?        // Reference to a payout if this transaction has been paid out
-  payoutBatch   Payout?        @relation(fields: [payoutId], references: [id])
-  reference     String?        // Stripe payment/payout ID
-  bookingId     String?       // Reference to the booking that generated this earning
-  booking       Booking?      @relation(fields: [bookingId], references: [id])
-  serviceType   String?       // TOUR | FACILITATION | TRANSLATION
-  platformFee   Float         @default(0)
-  netAmount     Float         @default(0)
-  description   String?
-  createdAt     DateTime      @default(now())
-
-  Tour Tour[]
-}
-
-
-model Payout {
-  id             String   @id @default(cuid())
-  userId         String
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  walletId       String
-  wallet         Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
-  amount         Float
-  currency       String   @default("USD")
-  stripePayoutId String?
-  status         PayoutStatus @default(PENDING)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  transactions   WalletTransaction[] 
-}
-
-model PlatformTransaction {
-  id          String   @id @default(cuid())
-  type        String   // e.g., "TOUR_PAYMENT", "PAYOUT", "REFUND"
-  amount      Float
-  currency    String   @default("USD")
-  stripeRef   String?  // Stripe charge/payout ID
-  relatedUser String?  // optional userId
-  relatedTour String?  // optional tourId
-  description String?
-  createdAt   DateTime @default(now())
-}
-
 
 enum UserRole {
   GUEST

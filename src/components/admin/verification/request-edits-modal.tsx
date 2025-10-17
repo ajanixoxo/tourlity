@@ -41,7 +41,7 @@ export function RequestEditsModal({ onClose, onSubmit }: RequestEditsModalProps)
             Cancel
           </Button>
           <Button
-            className="bg-coral-500 hover:bg-coral-600 text-white"
+            variant="primary"
             onClick={handleSubmit}
             disabled={!reason.trim()}
           >
