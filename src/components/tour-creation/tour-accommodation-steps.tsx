@@ -24,7 +24,7 @@ export function TourAccommodationStep({ onBack }: TourAccommodationStepProps) {
           <div>
             <Label htmlFor="hotelName">Hotel name</Label>
             <Select>
-              <SelectTrigger className="mt-2">
+              <SelectTrigger className="mt-2 w-full">
                 <SelectValue placeholder="Arrival & Introduction to Paris" />
               </SelectTrigger>
               <SelectContent>
@@ -70,7 +70,7 @@ export function TourAccommodationStep({ onBack }: TourAccommodationStepProps) {
         <div>
           <div className="flex items-center justify-between mb-2">
             <Label>Upload property Image</Label>
-            <span className="text-sm text-coral-500 font-medium">Upload Cover Image first!</span>
+            <span className="text-sm text-primary-color font-medium">Upload Cover Image first!</span>
           </div>
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center hover:border-coral-500 transition-colors cursor-pointer">
             <div className="flex flex-col items-center">

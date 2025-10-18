@@ -75,7 +75,7 @@ const guestData: Guest[] = [
   },
 ]
 
-export function GuestNotesPage() {
+export default function GuestNotesPage() {
   return (
     <div className="p-8">
       <div className="mb-8">
@@ -123,13 +123,13 @@ export function GuestNotesPage() {
 
         {/* Tab Navigation */}
         <div className="flex gap-4 border-b border-border">
-          <Button variant="ghost" className="rounded-none">
+          <Button variant="secondary" className="rounded-none">
             Review Tour Script
           </Button>
-          <Button variant="ghost" className="border-b-2 border-coral-600 rounded-none">
+          <Button variant="secondary" className="border-b-2 border-coral-600 rounded-none">
             Guest Notes
           </Button>
-          <Button variant="ghost" className="rounded-none">
+          <Button variant="secondary" className="rounded-none">
             Message Host
           </Button>
         </div>
@@ -160,10 +160,10 @@ export function GuestNotesPage() {
               </div>
 
               <div className="flex gap-2">
-                <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Button variant="secondary"  className="h-8 w-8">
                   <Phone className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Button variant="secondary"  className="h-8 w-8">
                   <MessageCircle className="w-4 h-4" />
                 </Button>
               </div>

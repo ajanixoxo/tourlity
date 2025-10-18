@@ -66,7 +66,7 @@ const prepToursData: PrepTour[] = [
   },
 ]
 
-export function PrepRoomPage() {
+export default function PrepRoomPage() {
   return (
     <div className="p-8">
       <div className="mb-8">

@@ -52,53 +52,45 @@ export default function HostBookingsPage() {
         {/* Filters and Search */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap gap-2">
-            <button
+            <Button
               onClick={() => {
                 setActiveFilter("upcoming")
                 setCurrentPage(1)
               }}
-              className={`px-6 py-2 rounded-full font-medium transition-colors ${
-                activeFilter === "upcoming"
-                  ? "bg-coral-500 text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-border"
-              }`}
+              variant={activeFilter === "upcoming" ? "primary" : "secondary"}
+              className="rounded-full"
             >
               Upcoming
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => {
                 setActiveFilter("completed")
                 setCurrentPage(1)
               }}
-              className={`px-6 py-2 rounded-full font-medium transition-colors ${
-                activeFilter === "completed"
-                  ? "bg-coral-500 text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-border"
-              }`}
+              variant={activeFilter === "completed" ? "primary" : "secondary"}
+              className="rounded-full"
             >
               Completed
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => {
                 setActiveFilter("cancelled")
                 setCurrentPage(1)
               }}
-              className={`px-6 py-2 rounded-full font-medium transition-colors ${
-                activeFilter === "cancelled"
-                  ? "bg-coral-500 text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-border"
-              }`}
+              variant={activeFilter === "cancelled"? "primary" : "secondary"}
+              className="rounded-full"
             >
               Cancelled
-            </button>
+            </Button>
           </div>
 
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <Button variant="secondary" className="gap-2 bg-transparent">
-              <SlidersHorizontal className="w-4 h-4" />
+            <Button variant="secondary" className="gap-2 flex items-center bg-transparent">
+             
               Filters
+               <SlidersHorizontal className="w-4 h-4" />
             </Button>
-            <div className="relative flex-1 sm:w-64">
+            <div className="relative flex-1 ">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <Input
                 placeholder="Search by Tour title, location"
@@ -107,7 +99,7 @@ export default function HostBookingsPage() {
                   setSearchQuery(e.target.value)
                   setCurrentPage(1)
                 }}
-                className="pl-10"
+                className="pl-10 flex flex-1"
               />
             </div>
             <Button variant="secondary">Search Tour</Button>
@@ -137,19 +129,19 @@ export default function HostBookingsPage() {
                     <td className="px-6 py-4 text-sm">
                       <div className="flex items-center gap-3">
                         {booking.status === "completed" && (
-                          <button className="text-coral-500 hover:text-coral-600 font-medium flex items-center gap-1">
+                          <button className="text-primary-color  hover:text-hover-color font-medium flex items-center gap-1">
                             <Download className="w-4 h-4" />
                             Receipt
                           </button>
                         )}
                         {booking.status === "pending" && (
-                          <button className="text-coral-500 hover:text-coral-600 font-medium flex items-center gap-1">
+                          <button className="text-primary-color hover:text-hover-color font-medium flex items-center gap-1">
                             <Eye className="w-4 h-4" />
                             Track
                           </button>
                         )}
                         {booking.status === "in-progress" && (
-                          <button className="text-coral-500 hover:text-coral-600 font-medium flex items-center gap-1">
+                          <button className="text-primary-color  hover:text-hover-color font-medium flex items-center gap-1">
                             <Download className="w-4 h-4" />
                             Receipt
                           </button>
@@ -181,9 +173,8 @@ export default function HostBookingsPage() {
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-2 rounded font-medium transition-colors ${
-                    currentPage === page ? "bg-coral-500 text-white" : "border border-border hover:bg-muted"
-                  }`}
+                  className={`px-3 py-2 rounded font-medium transition-colors ${currentPage === page ? "bg-coral-500 text-white" : "border border-border hover:bg-muted"
+                    }`}
                 >
                   {page}
                 </button>

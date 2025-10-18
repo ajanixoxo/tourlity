@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerUser } from '@/lib/get-server-user';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(request: NextRequest) {
   try {
     const user = await getServerUser();
@@ -78,7 +79,7 @@ export async function POST(request: NextRequest) {
       // Update payout status
       await prisma.payout.update({
         where: { id: payoutId },
-        data: { status: 'COMPLETED' }
+        data: { status: 'PAID' }
       });
 
       // Update associated transaction

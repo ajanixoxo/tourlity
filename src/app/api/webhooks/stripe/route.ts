@@ -205,7 +205,7 @@ export async function POST(request: NextRequest) {
               currency: 'USD',
               status: 'COMPLETED',
               reference: paymentIntent.id,
-              relatedTour: metadata.tourId,
+              // relatedTour: metadata.tourId,
               description: `Tour payment earnings for ${metadata.tourId}`
             }
           });
@@ -251,7 +251,7 @@ export async function POST(request: NextRequest) {
             // Update payout status
             await tx.payout.update({
               where: { id: payoutRecord.id },
-              data: { status: 'COMPLETED' }
+              data: { status: 'PAID' }
             });
 
             // Create wallet transaction record for the payout
@@ -313,7 +313,7 @@ export async function POST(request: NextRequest) {
               await tx.walletTransaction.create({
                 data: {
                   walletId: wallet.id,
-                  type: 'WITHDRAWAL_FAILED',
+                  type: 'FAILED',
                   amount: payoutRecord.amount,
                   currency: payoutRecord.currency,
                   status: 'FAILED',

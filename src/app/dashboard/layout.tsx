@@ -81,7 +81,7 @@ const getSidebarItems = (role: string): SidebarItem[] => {
         
         { label: 'Bookings', href: '/dashboard/bookings', icon: <Calendar size={18} className="" /> },
         { label: 'Earnings', href: '/dashboard/earnings', icon: <DollarSign size={18} className="" /> },
-        { label: 'Blogs', href: '/dashboard/reviews', icon: <MessageSquare size={18} className="" /> },
+        { label: 'Reviews', href: '/dashboard/reviews', icon: <MessageSquare size={18} className="" /> },
         { label: 'Performance', href: '/dashboard/performance', icon: <TrendingUp size={18} className="" /> },
       ];
     
@@ -220,7 +220,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* Navigation */}
           <nav className="flex-1 py-4  overflow-y-auto">
             {sidebarItems.map((item) => {
-               const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+               const isActive = item.href === '/dashboard' 
+               ? pathname === '/dashboard'
+               : pathname === item.href || pathname.startsWith(item.href + '/');
               return (
                 <Link
                   key={item.href}
@@ -247,7 +249,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           <nav className="py-4 ">
             {sidebarItemsTwo.map((item) => {
-               const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+               const isActive = item.href === '/dashboard' 
+               ? pathname === '/dashboard'
+               : pathname === item.href || pathname.startsWith(item.href + '/');
               return (
                 <Link
                   key={item.href}

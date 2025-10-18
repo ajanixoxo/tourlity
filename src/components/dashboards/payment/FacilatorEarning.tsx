@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import { useEffect } from "react"
@@ -48,7 +49,7 @@ export default function FacilitatorEarnings() {
         {!loading && !error && (
           <>
             <EarningsMetrics metrics={metrics} />
-            <PayoutMethods payoutMethods={payoutMethods} hasData={hasData} />
+            <PayoutMethods />
             <TransactionHistory transactions={transactions} hasData={hasData} />
           </>
         )}

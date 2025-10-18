@@ -104,7 +104,7 @@ const languageNames: Record<string, string> = {
   de: "German",
 }
 
-export function TranslateLivePage() {
+ function TranslateLivePage() {
   return (
     <div className="p-8">
       <div className="mb-8">
@@ -180,3 +180,5 @@ export function TranslateLivePage() {
     </div>
   )
 }
+
+export default  TranslateLivePage

@@ -14,7 +14,7 @@ export function ReviewHighlights({ reviews, hasData }: ReviewHighlightsProps) {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Review Highlights</CardTitle>
-          <Button variant="secondary"  className="text-coral-500">
+          <Button variant="secondary"  className="text-primary-color">
             View All
           </Button>
         </CardHeader>
@@ -32,7 +32,7 @@ export function ReviewHighlights({ reviews, hasData }: ReviewHighlightsProps) {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Review Highlights</CardTitle>
-        <Button variant="secondary"  className="text-coral-500">
+        <Button variant="secondary"  className="text-primary-color">
           View All
         </Button>
       </CardHeader>

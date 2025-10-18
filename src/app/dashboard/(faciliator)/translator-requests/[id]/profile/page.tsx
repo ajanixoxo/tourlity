@@ -39,7 +39,7 @@ const translatorData: Translator = {
   ],
 }
 
-export function TranslatorRequestsPage() {
+ function TranslatorRequestsPage() {
   return (
     <div className="p-8">
       <div className="mb-8">
@@ -125,3 +125,5 @@ export function TranslatorRequestsPage() {
     </div>
   )
 }
+
+export default TranslatorRequestsPage

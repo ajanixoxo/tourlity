@@ -65,7 +65,7 @@ export function UserVerificationTable({ users, onApprove, onReject, onRequestEdi
                   <td className="p-4">
                     <Button
                       variant="secondary"
-                      className="!text-coral-500 hover:text-coral-600  border-none flex items-center"
+                      className="!text-primary-color  hover:text-hover-color  border-none flex items-center"
                       onClick={() => setSelectedUser(user)}
                     >
                       <Eye className="w-4 h-4 mr-1 !text-primary-color" />

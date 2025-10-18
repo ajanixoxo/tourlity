@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card"
 import Button from "@/components/root/button"
 import { ChevronLeft, MapPin, Clock, Users, AlertCircle } from "lucide-react"
 
-export default function AssignedTourDetailsPage({ params }: { params: { id: string } }) {
+export default function AssignedTourDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   return (
     <div className="space-y-6">
       {/* Back Button */}

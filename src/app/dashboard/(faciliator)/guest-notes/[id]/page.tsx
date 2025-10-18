@@ -62,7 +62,7 @@ const guests: Guest[] = [
   },
 ]
 
-export default function GuestDetailsPage({ params }: { params: { id: string } }) {
+export default function GuestDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   return (
     <div className="space-y-6">
       {/* Back Button */}

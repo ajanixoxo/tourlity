@@ -9,7 +9,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { MapPin, Clock, Users, Download } from "lucide-react"
 import Image from "next/image"
 
-export function ReviewScriptPage() {
+export default function ReviewScriptPage() {
   const scriptSections = [
     {
       title: "Welcome & Introduction",
@@ -87,7 +87,7 @@ export function ReviewScriptPage() {
           </div>
 
           <div className="flex gap-2">
-            <Button variant="secondary" size="sm">
+            <Button variant="secondary" >
               <Download className="w-4 h-4 mr-2" />
               Download PDF
             </Button>
@@ -96,13 +96,13 @@ export function ReviewScriptPage() {
 
         {/* Tab Navigation */}
         <div className="flex gap-4 border-b border-border mb-6">
-          <Button variant="ghost" className="border-b-2 border-coral-600 rounded-none">
+          <Button variant="secondary" className="border-b-2 border-coral-600 rounded-none">
             Review Tour Script
           </Button>
-          <Button variant="ghost" className="rounded-none">
+          <Button variant="secondary" className="rounded-none">
             Guest Notes
           </Button>
-          <Button variant="ghost" className="rounded-none">
+          <Button variant="secondary" className="rounded-none">
             Message Host
           </Button>
         </div>

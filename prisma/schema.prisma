@@ -359,6 +359,7 @@ enum TransactionType {
   WITHDRAWAL
   ESCROW_RELEASE
   REFUND
+  FAILED
 }
 
 enum PayoutStatus {

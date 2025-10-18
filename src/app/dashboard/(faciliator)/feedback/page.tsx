@@ -71,7 +71,7 @@ const feedbackData: Feedback[] = [
   },
 ]
 
-export function FeedbackPage() {
+function FeedbackPage() {
   return (
     <div className="p-8">
       <div className="mb-8">
@@ -115,3 +115,4 @@ export function FeedbackPage() {
     </div>
   )
 }
+export default FeedbackPage

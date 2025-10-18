@@ -123,7 +123,7 @@ export function BookingReceiptModal({ receipt, onClose }: BookingReceiptModalPro
           <div className="border-t border-border pt-6">
             <p className="text-sm text-muted-foreground mb-4">
               Need help with this receipt?{" "}
-              <a href="mailto:support@tourplatform.com" className="text-coral-500 hover:text-coral-600 font-medium">
+              <a href="mailto:support@tourplatform.com" className="text-primary-color  hover:text-hover-color font-medium">
                 Contact support at support@tourplatform.com
               </a>
             </p>

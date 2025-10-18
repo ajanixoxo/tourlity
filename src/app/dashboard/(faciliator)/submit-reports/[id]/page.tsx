@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { MapPin, Clock, Users } from "lucide-react"
 import Image from "next/image"
 
-export function SubmitReportDetailsPage() {
+ function SubmitReportDetailsPage() {
   return (
     <div className="p-8">
       <div className="mb-8">
@@ -117,3 +117,4 @@ export function SubmitReportDetailsPage() {
     </div>
   )
 }
+ export default SubmitReportDetailsPage

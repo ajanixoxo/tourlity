@@ -9,12 +9,12 @@ import type { CustomTourRequest } from "@/types/tour-management"
 import Image from "next/image"
 import Link from "next/link"
 
-export default function CustomizeTourDetailsPage({ params }: { params: { id: string } }) {
+export default function CustomizeTourDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedProposal, setSelectedProposal] = useState<string | null>(null)
   const [showProposalDetails, setShowProposalDetails] = useState(false)
 
-  const request = customTourRequests.find((r) => r.id === params.id)
+  const request = customTourRequests.find(async (r) => r.id === (await params).id)
 
   if (!request) {
     return (
@@ -76,7 +76,7 @@ export default function CustomizeTourDetailsPage({ params }: { params: { id: str
             <div>
               <p className="text-sm text-muted-foreground">Location</p>
               <div className="mt-1 flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-coral-500" />
+                <MapPin className="h-4 w-4 text-primary-color" />
                 <p className="font-medium text-foreground">{request.location}</p>
               </div>
             </div>
@@ -91,7 +91,7 @@ export default function CustomizeTourDetailsPage({ params }: { params: { id: str
             <div>
               <p className="text-sm text-muted-foreground">Group Size</p>
               <div className="mt-1 flex items-center gap-2">
-                <Users className="h-4 w-4 text-coral-500" />
+                <Users className="h-4 w-4 text-primary-color" />
                 <p className="font-medium text-foreground">{request.groupInfo}</p>
               </div>
             </div>
@@ -178,7 +178,7 @@ export default function CustomizeTourDetailsPage({ params }: { params: { id: str
                 <div className="mb-4 border-t border-border pt-4">
                   <div className="flex items-center justify-between">
                     <p className="font-semibold text-foreground">Total Price</p>
-                    <p className="text-2xl font-bold text-coral-500">${proposal.totalPrice}</p>
+                    <p className="text-2xl font-bold text-primary-color">${proposal.totalPrice}</p>
                   </div>
                 </div>
 
@@ -190,7 +190,7 @@ export default function CustomizeTourDetailsPage({ params }: { params: { id: str
                   </Button>
                   <Button
                     variant="secondary"
-                    className="text-coral-500 hover:text-coral-600"
+                    className="text-primary-color  hover:text-hover-color"
                     onClick={() => setShowProposalDetails(!showProposalDetails)}
                   >
                     <Eye className="mr-2 h-4 w-4" />

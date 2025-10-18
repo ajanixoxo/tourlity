@@ -32,11 +32,11 @@ export function TourItineraryStep({ onNext, onBack }: TourItineraryStepProps) {
               <button
                 key={day}
                 onClick={() => setSelectedDay(day)}
-                className={`px-6 py-2 rounded-full font-medium transition-colors ${
-                  selectedDay === day ? "bg-coral-500 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                className={`rounded-full w-15  h-15 font-medium transition-colors ${
+                  selectedDay === day ? "bg-primary-color text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >
-                Day {day}
+               <span>Day</span> <span>{day}</span> 
               </button>
             ))}
           </div>
@@ -46,7 +46,7 @@ export function TourItineraryStep({ onNext, onBack }: TourItineraryStepProps) {
           <div>
             <Label htmlFor="todo">To do</Label>
             <Select>
-              <SelectTrigger className="mt-2">
+              <SelectTrigger className="mt-2 w-full">
                 <SelectValue placeholder="Arrival & Introduction to Paris" />
               </SelectTrigger>
               <SelectContent>

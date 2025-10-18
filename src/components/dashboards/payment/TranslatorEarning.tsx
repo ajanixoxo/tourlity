@@ -17,6 +17,7 @@ import {
 
 export default function TranslatorEarnings() {
   const metrics = useEarningsMetrics()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const payoutMethods = usePayoutMethods()
   const transactions = useEarningsTransactions()
   const hasData = useEarningsHasData()
@@ -48,7 +49,7 @@ export default function TranslatorEarnings() {
         {!loading && !error && (
           <>
             <EarningsMetrics metrics={metrics} />
-            <PayoutMethods payoutMethods={payoutMethods} hasData={hasData} />
+            <PayoutMethods />
             <TransactionHistory transactions={transactions} hasData={hasData} />
           </>
         )}

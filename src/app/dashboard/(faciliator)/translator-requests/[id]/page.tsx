@@ -82,7 +82,7 @@ const translators: Translator[] = [
 ]
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function AvailableTranslatorsPage({ params }: { params: { id: string } }) {
+export default function AvailableTranslatorsPage({ params }: { params: Promise<{ id: string }> }) {
   return (
     <div className="space-y-6">
       {/* Back Button */}

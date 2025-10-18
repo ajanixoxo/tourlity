@@ -52,7 +52,7 @@ const checklistItems: ChecklistItem[] = [
 ]
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function ChecklistDetailsPage({ params }: { params: { id: string } }) {
+export default function ChecklistDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const [items, setItems] = useState(checklistItems)
 
   const toggleItem = (id: string) => {

@@ -17,7 +17,7 @@ export default function CreateTourPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-5xl mx-auto">
+      <div className=" mx-auto">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-gray-600 mb-8">
           <span>My Tours</span>
@@ -27,13 +27,13 @@ export default function CreateTourPage() {
 
         {/* Progress Indicator */}
         <div className="mb-12">
-          <div className="flex items-center justify-between max-w-3xl mx-auto">
+          <div className="flex items-center justify-between  mx-auto">
             {steps.map((step, index) => (
               <div key={step.id} className="flex items-center flex-1">
                 <div className="flex flex-col items-center flex-1">
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center font-medium ${
-                      currentStep >= step.id ? "bg-coral-500 text-white" : "bg-gray-200 text-gray-500"
+                      currentStep >= step.id ? "bg-primary-color text-white" : "bg-gray-200 text-gray-500"
                     }`}
                   >
                     {step.id}

@@ -14,7 +14,7 @@ export function RecentActivity({ activities, hasData }: RecentActivityProps) {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Recent Activity</CardTitle>
-          <Button variant="secondary" className="text-coral-500">
+          <Button variant="secondary" className="text-primary-color">
             View All
           </Button>
         </CardHeader>
@@ -32,7 +32,7 @@ export function RecentActivity({ activities, hasData }: RecentActivityProps) {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Recent Activity</CardTitle>
-        <Button variant="secondary"  className="text-coral-500">
+        <Button variant="secondary"  className="text-primary-color">
           View All
         </Button>
       </CardHeader>

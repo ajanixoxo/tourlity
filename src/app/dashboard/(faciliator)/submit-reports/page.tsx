@@ -56,7 +56,7 @@ const statusConfig = {
   completed: { label: "Completed", color: "bg-green-100 text-green-800" },
 }
 
-export function SubmitReportsPage() {
+ function SubmitReportsPage() {
   return (
     <div className="p-8">
       <div className="mb-8">
@@ -124,3 +124,4 @@ export function SubmitReportsPage() {
     </div>
   )
 }
+ export default SubmitReportsPage

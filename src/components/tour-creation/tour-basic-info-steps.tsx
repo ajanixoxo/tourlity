@@ -42,15 +42,14 @@ export function TourBasicInfoStep({ onNext }: TourBasicInfoStepProps) {
           <div>
             <Label htmlFor="tourType">Tour Type</Label>
             <Select>
-              <SelectTrigger className="mt-2">
+              <SelectTrigger className="mt-2 w-full">
                 <SelectValue placeholder="Select type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="food">Food and Cuisine</SelectItem>
-                <SelectItem value="culture">Culture and History</SelectItem>
-                <SelectItem value="adventure">Adventure</SelectItem>
-                <SelectItem value="arts">Arts and Crafts</SelectItem>
-                <SelectItem value="nature">Nature and Outdoors</SelectItem>
+                <SelectItem value="in-progress">In Person</SelectItem>
+                <SelectItem value="virtual">Virtual</SelectItem>
+                <SelectItem value="hybrid">Hybrid</SelectItem>
+              
               </SelectContent>
             </Select>
           </div>

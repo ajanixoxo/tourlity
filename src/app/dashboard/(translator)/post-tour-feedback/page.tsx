@@ -10,7 +10,7 @@ import { MapPin, Clock, Users, Mic } from "lucide-react"
 import Image from "next/image"
 import { useState } from "react"
 
-export function TranslationFeedbackPage() {
+export default function TranslationFeedbackPage() {
   const [isRecording, setIsRecording] = useState(false)
 
   return (
