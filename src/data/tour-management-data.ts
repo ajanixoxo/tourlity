@@ -106,7 +106,7 @@ export const savedTours: SavedTour[] = [
       name: "Marco Rodriguez",
       avatar: "/images/img_image_2.png",
     },
-    image: "/imagesimg_image_10.jpg",
+    image: "/images/img_image_10.jpg",
   },
   {
     id: "2",
@@ -121,7 +121,7 @@ export const savedTours: SavedTour[] = [
       name: "Marco Rodriguez",
       avatar: "/images/img_image_2.png",
     },
-    image: "/imagesimg_image_10.jpg",
+    image: "/images/img_image_10.jpg",
   },
   {
     id: "3",
@@ -136,7 +136,7 @@ export const savedTours: SavedTour[] = [
       name: "Marco Rodriguez",
       avatar: "/images/img_image_2.png",
     },
-    image: "/imagesimg_image_10.jpg",
+    image: "/images/img_image_10.jpg",
   },
 ]
 
@@ -154,7 +154,7 @@ export const bookings: Booking[] = [
       name: "Marco Rodriguez",
       avatar: "/images/img_image_2.png",
     },
-    image: "/imagesimg_image_10.jpg",
+    image: "/images/img_image_10.jpg",
     status: "in-progress",
   },
   {
@@ -170,7 +170,7 @@ export const bookings: Booking[] = [
       name: "Marco Rodriguez",
       avatar: "/images/img_image_2.png",
     },
-    image: "/imagesimg_image_10.jpg",
+    image: "/images/img_image_10.jpg",
     status: "in-progress",
   },
   {
@@ -186,7 +186,7 @@ export const bookings: Booking[] = [
       name: "Marco Rodriguez",
       avatar: "/images/img_image_2.png",
     },
-    image: "/imagesimg_image_10.jpg",
+    image: "/images/img_image_10.jpg",
     status: "in-progress",
   },
 ]
@@ -246,7 +246,7 @@ export const hostBookings: HostBooking[] = [
     dateTime: "Jul 01, 2025 9:00 am",
     status: "completed",
     guestName: "John Doe",
-    guestAvatar: "/imagesimg_image_10.jpg",
+    guestAvatar: "/images/img_image_10.jpg",
   },
   {
     id: "2",
@@ -255,7 +255,7 @@ export const hostBookings: HostBooking[] = [
     dateTime: "Jun 28, 2025 9:00 am",
     status: "pending",
     guestName: "Jane Smith",
-    guestAvatar: "/imagesimg_image_10.jpg",
+    guestAvatar: "/images/img_image_10.jpg",
   },
   {
     id: "3",
@@ -264,7 +264,7 @@ export const hostBookings: HostBooking[] = [
     dateTime: "Jun 28, 2025 9:00 am",
     status: "pending",
     guestName: "Jane Smith",
-    guestAvatar: "/imagesimg_image_10.jpg",
+    guestAvatar: "/images/img_image_10.jpg",
   },
   {
     id: "4",
@@ -273,7 +273,7 @@ export const hostBookings: HostBooking[] = [
     dateTime: "Jun 20, 2025 9:00 am",
     status: "in-progress",
     guestName: "Bob Johnson",
-    guestAvatar: "/imagesimg_image_10.jpg",
+    guestAvatar: "/images/img_image_10.jpg",
   },
   {
     id: "5",
@@ -282,7 +282,7 @@ export const hostBookings: HostBooking[] = [
     dateTime: "Jun 28, 2025 9:00 am",
     status: "pending",
     guestName: "Jane Smith",
-    guestAvatar: "/imagesimg_image_10.jpg",
+    guestAvatar: "/images/img_image_10.jpg",
   },
 ]
 
@@ -355,7 +355,7 @@ export const reviews: Review[] = [
     id: "2",
     hostName: "Yuki Tanaka",
     hostRole: "Tea Ceremony Host",
-    hostAvatar: "/imagesimg_image_10.jpg",
+    hostAvatar: "/images/img_image_10.jpg",
     reviewText:
       "Hosting tea ceremonies allows me to preserve and share our cultural heritage. It's wonderful to see guests discover the beauty and tranquility of this ancient practice.",
     rating: 4.8,
@@ -375,7 +375,7 @@ export const reviews: Review[] = [
     id: "4",
     hostName: "Yuki Tanaka",
     hostRole: "Tea Ceremony Host",
-    hostAvatar: "/imagesimg_image_10.jpg",
+    hostAvatar: "/images/img_image_10.jpg",
     reviewText:
       "Hosting tea ceremonies allows me to preserve and share our cultural heritage. It's wonderful to see guests discover the beauty and tranquility of this ancient practice.",
     rating: 4.8,

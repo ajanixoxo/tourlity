@@ -7,7 +7,7 @@ import Image from "next/image"
 
 export default function ReviewsPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       {/* Header */}
       <div className="border-b border-border bg-white">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -17,7 +17,7 @@ export default function ReviewsPage() {
       </div>
 
       {/* Reviews Grid */}
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl bg-white px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {reviews.map((review) => (
             <div
