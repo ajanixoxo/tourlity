@@ -82,7 +82,7 @@ export const tours: Tour[] = [
     groupSize: "6-12 people",
     language: ["English"],
     categories: ["Nature and Outdoors"],
-    images: "/images/img_image_1.png", // ✅ from experiences
+    images: "/imagesimg_image_10.jpg", // ✅ from experiences
     host: {
       id: "host4",
       name: "Sandra",
@@ -96,7 +96,7 @@ export const tours: Tour[] = [
       location: "",
       reviews: 0,
       specialties: [],
-      image: "/images/img_image_1.png", // ✅ synced
+      image: "/imagesimg_image_10.jpg", // ✅ synced
       isActive: false,
     },
   },
