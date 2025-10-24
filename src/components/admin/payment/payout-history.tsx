@@ -11,7 +11,7 @@ import type { PayoutTransaction } from "@/types/admin-payment"
 
 interface PayoutHistoryProps {
   transactions: PayoutTransaction[]
-  hasData: boolean
+  hasData: boolean | null
 }
 
 export function PayoutHistory({ transactions, hasData }: PayoutHistoryProps) {

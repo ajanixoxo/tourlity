@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import Button from '../root/button'
-import { Tour } from '@/types'
+import { Tour } from '@/types/tour'
 interface TourProps {
     tour: Tour
 }
@@ -9,7 +9,7 @@ function TourCard({ tour }: TourProps) {
     return (
         // lg:overflow-x-auto " style={{scrollbarWidth:"none"}}
 
-        <div key={tour.id} className="flex flex-col box-color justify-start items-center w-full lg:w-[400px] bg-global-8 rounded-[18px] flex-shrink-0">
+        <div key={tour.id} className="flex flex-col box-color justify-start items-center w-full lg:w-[400px] bg-global-8 rounded-[18px] shrink-0">
             <div className="flex flex-col gap-6 justify-start items-center w-full mb-6.5">
                 {/* Experience Image */}
                 <div className="relative w-full h-[292px] rounded-t-[18px] overflow-hidden">
@@ -19,7 +19,7 @@ function TourCard({ tour }: TourProps) {
                         fill
                         className="object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#00000059] to-[#00000059] p-6 flex flex-col gap-[184px] justify-start items-start shadow-[0px_4px_15px_#888888ff]">
+                    <div className="absolute inset-0 bg-linear-to-b from-[#00000059] to-[#00000059] p-6 flex flex-col gap-[184px] justify-start items-start shadow-[0px_4px_15px_#888888ff]">
                         <button className="self-end w-9 h-9 bg-[#18171799] rounded-[18px] p-1.5">
                             <Image
                                 src="/images/img_favourite.svg"
@@ -30,14 +30,14 @@ function TourCard({ tour }: TourProps) {
                         </button>
                         <div className="flex items-center gap-2 bg-[#18171799] rounded-[20px] px-2 py-2">
                             <Image
-                                src={tour.host.avatar}
-                                alt={tour.host.name}
+                                src={tour.host.avatar || '/images/default-avatar.png'}
+                                alt={`${tour.host.firstName} ${tour.host.lastName}`}
                                 width={24}
                                 height={24}
                                 className="rounded-full"
                             />
                             <span className="text-xs font-inter font-normal leading-[15px] text-[#ffffffcc]">
-                                {tour.host.name}
+                                {`${tour.host.firstName} ${tour.host.lastName}`}
                             </span>
                         </div>
                     </div>
@@ -53,7 +53,7 @@ function TourCard({ tour }: TourProps) {
                                 {tour.description}
                             </p>
                         </div>
-                        <button className="bg-button-1 text-global-1 rounded-[16px] px-2 lg:px-4 py-2 text-xs">
+                        <button className="bg-button-1 text-global-1 rounded-2xl px-2 lg:px-4 py-2 text-xs">
                             {tour.categories[0]}
                         </button>
 

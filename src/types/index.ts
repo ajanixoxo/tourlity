@@ -1,21 +1,93 @@
+// export interface Tour {
+//   id: string
+//   title: string
+//   description: string
+//   price: number
+//   originalPrice?: number
+//   rating: number
+//   reviewCount: number
+//   location: string
+//   country?: string
+//   duration: string
+//   groupSize?: string
+//   language?: string[]
+//   categories?: string[]
+//   images: string[]
+//   host: Host
+//   isLive?: boolean
+//   isFeatured?: boolean
+// }
+
+export interface Host {
+  id: string
+  firstName: string
+  lastName: string
+  avatar?: string
+  email: string
+  hostProfile?: {
+    bio?: string
+    location?: string
+    languages: string[]
+    specialties: string[]
+    rating: number
+    reviewCount: number
+  }
+}
+
 export interface Tour {
   id: string
+  hostId: string
   title: string
   description: string
+  type: 'PHYSICAL' | 'VIRTUAL'
+  status: 'DRAFT' | 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'ACTIVE' | 'INACTIVE'
   price: number
   originalPrice?: number
+  location: string
+  country?: string
+  duration: string
+  groupSize?: string
+  languages: string[]
+  categories: string[]
+  images: string[]
+  isLive: boolean
+  isFeatured: boolean
   rating: number
   reviewCount: number
-  location: string
-  country: string
-  duration: string
-  groupSize: string
-  language: string[]
-  categories: string[]
-  images: string
+  startDate?: string | Date
+  endDate?: string | Date
+  coverageAreas?: string[]
+  amenities?: string[]
+  giveFacilitatorAccess: boolean
+  createdAt: string | Date
+  updatedAt: string | Date
+
+  // Relations
   host: Host
-  isLive?: boolean
-  isFeatured?: boolean
+  itinerary?: ItineraryDay[]
+  accommodation?: Accommodation
+}
+
+export interface ItineraryDay {
+  id: string
+  dayNumber: number
+  todo: string
+  hotelLocation: string
+  description: string
+  arrivalTime: string
+  pickupTime: string
+  inclusive?: string
+  exclusive?: string
+}
+
+export interface Accommodation {
+  id: string
+  hotelName: string
+  hotelLocation: string
+  description: string
+  arrivalTime: string
+  pickupTime: string
+  hotelImages: string[]
 }
 
 export interface Destination {
@@ -27,17 +99,17 @@ export interface Destination {
   slug: string
 }
 
-export interface Host {
-  id: string
-  name: string
-  avatar: string
-  rating: number
-  reviewCount: number
-  description: string
-  verified: boolean
-  responseTime: string
-  languages: string[]
-}
+// export interface Host {
+//   id: string
+//   name: string
+//   avatar: string
+//   rating: number
+//   reviewCount: number
+//   description: string
+//   verified: boolean
+//   responseTime: string
+//   languages: string[]
+// }
 
 export interface Category {
   id: string

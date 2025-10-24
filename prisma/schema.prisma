@@ -124,9 +124,9 @@ model Tour {
   price                   Float
   originalPrice           Float?
   location                String
-  country                 String
+  country                 String?
   duration                String
-  groupSize               String
+  groupSize               String?
   languages               String[]
   categories              String[]
   images                  String[]
@@ -146,8 +146,55 @@ model Tour {
   tourRequests            TourRequest[]
   host                    User                      @relation("HostTours", fields: [hostId], references: [id], onDelete: Cascade)
   Payment                 Payment[]                 @relation("PaymentToTour")
+  startDate               DateTime?              // Tour start date
+  endDate                 DateTime?              // Tour end date
+  coverageAreas           String[]               // Where tour takes place (JSON array)
+  amenities               String[]               // Tour amenities (JSON array)
+  giveFacilitatorAccess   Boolean    @default(false) // Allow facilitators to apply to help
+  
+  // ADD THESE NEW RELATIONS:
+  itinerary               ItineraryDay[]
+  accommodation           Accommodation?
 
   @@map("tours")
+}
+
+model ItineraryDay {
+  id              String   @id @default(cuid())
+  tourId          String
+  dayNumber       Int      // Day 1, Day 2, etc.
+  todo            String   // Main activity for the day
+  hotelLocation   String   // Hotel location for that day
+  description     String   // Detailed description of day's activities
+  arrivalTime     String   // Format: HH:MM (24-hour recommended)
+  pickupTime      String   // Format: HH:MM (24-hour recommended)
+  inclusive       String?  // What's included in this day (optional)
+  exclusive       String?  // What's excluded from this day (optional)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  tour            Tour     @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  
+  @@unique([tourId, dayNumber]) // Ensure each tour has unique day numbers
+  @@map("itinerary_days")
+}
+
+// 3. ADD NEW MODEL - Accommodation
+model Accommodation {
+  id              String   @id @default(cuid())
+  tourId          String   @unique // One-to-one relationship
+  hotelName       String
+  hotelLocation   String
+  description     String
+  arrivalTime     String   // Format: HH:MM
+  pickupTime      String   // Format: HH:MM
+  hotelImages     String[] // Array of image URLs
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  tour            Tour     @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  
+  @@map("accommodations")
 }
 
 model Booking {

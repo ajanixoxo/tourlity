@@ -16,14 +16,14 @@ export default function ExploreToursHero() {
   }
 
   return (
-    <section className="relative h-[500px] lg:h-[400px] bg-gradient-to-r rounded-[32px] from-black/50 to-black/30">
+    <section className="relative h-[500px] lg:h-[400px] bg-linear-to-r rounded-4xl from-black/50 to-black/30">
       <div
-        className="absolute inset-0 bg-cover bg-center rounded-[32px]"
+        className="absolute inset-0 bg-cover bg-center rounded-4xl"
         style={{
           backgroundImage: `url('/images/explore-hero-bg.png')`,
         }}
       />
-      <div className="absolute inset-0 bg-black/30 rounded-[32px]" />
+      <div className="absolute inset-0 bg-black/30 rounded-4xl" />
 
       <div className="relative z-10 max-w-8xl lg:max-w-7xl mx-auto lg:px-4 h-full flex items-center">
         <div className="text-center w-full">
@@ -50,7 +50,7 @@ export default function ExploreToursHero() {
             </div>
           </form> */}
           <form onSubmit={handleSearch} className="max-w-xl px-2 mx-auto ">
-            <div className="flex sm:flex-row gap-4 backdrop-blur-xs bg-[#3e3e3e66] stroke-color !border-[#e0e0e0]/30 !border-[1px] rounded-2xl p-2">
+            <div className="flex sm:flex-row gap-4 backdrop-blur-xs bg-[#3e3e3e66] stroke-color border-[#e0e0e0]/30! border! rounded-2xl p-2">
               <input
                 type="text"
                 placeholder="Search for tours (e.g., Paris Cooking, Virtual culture)"

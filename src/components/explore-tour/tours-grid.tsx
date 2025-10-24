@@ -3,10 +3,11 @@
 import { useState } from "react"
 import TourCard from "@/components/cards/tour-card"
 import Button from "../root/button"
-import type { Tour } from "@/types"
+import type { Tour } from "@/types/tour"
 
 interface ToursGridProps {
   tours: Tour[]
+  isLoading?: boolean
 }
 
 export default function ToursGrid({ tours }: ToursGridProps) {
@@ -27,7 +28,7 @@ export default function ToursGrid({ tours }: ToursGridProps) {
         {/* <p className="text-gray-600">
           Showing {displayedTours.length} of {tours.length} tours
         </p> */}
-        <div className=" lg:hidden flex justify-center !border-2 gap-2 rounded-[14px] p-2 items-center stroke-color ">
+        <div className=" lg:hidden flex justify-center border-2! gap-2 rounded-[14px] p-2 items-center stroke-color ">
           <span className="muted-color font-normal">Filters</span>
           <svg width={14} height={14} viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clipPath="url(#clip0_11_5696)">
@@ -62,11 +63,11 @@ export default function ToursGrid({ tours }: ToursGridProps) {
           </div>
 
           {/* {hasMoreTours && ( */}
-            <div className="text-center">
-              <Button onClick={loadMoreTours} variant="secondary" className="!bg-white">
-                Load More Tours
-              </Button>
-            </div>
+          <div className="text-center">
+            <Button onClick={loadMoreTours} variant="secondary" className="bg-white!">
+              Load More Tours
+            </Button>
+          </div>
           {/* )} */}
         </>
       )}

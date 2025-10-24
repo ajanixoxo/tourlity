@@ -1,12 +1,15 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useEffect } from "react"
 import ToursFilters from "./tours-filters"
-import ToursGrid  from "./tours-grid"
-import { tours } from "@/data/tours"
+import ToursGrid from "./tours-grid"
+import { useExploreTourStore } from "@/lib/stores/explore-tours-store"
 import type { SearchFilters } from "@/types"
+import type { Tour } from "@/types/tour"
 
 export default function ToursFiltersAndGrid() {
+  const { tours, isLoading, setFilters: setExploreFilters } = useExploreTourStore()
+
   const [filters, setFilters] = useState<SearchFilters>({
     query: "",
     priceRange: [0, 200],
@@ -16,62 +19,30 @@ export default function ToursFiltersAndGrid() {
     language: "",
   })
 
-  const filteredTours = useMemo(() => {
-    return tours.filter((tour) => {
-      // Search query filter
-      if (
-        filters.query &&
-        !tour.title.toLowerCase().includes(filters.query.toLowerCase()) &&
-        !tour.description.toLowerCase().includes(filters.query.toLowerCase()) &&
-        !tour.location.toLowerCase().includes(filters.query.toLowerCase())
-      ) {
-        return false
-      }
-
-      // Price range filter
-      if (tour.price < filters.priceRange[0] || tour.price > filters.priceRange[1]) {
-        return false
-      }
-
-      // Categories filter
-      if (filters.categories.length > 0 && !filters.categories.some((cat) => tour.categories.includes(cat))) {
-        return false
-      }
-
-      // Duration filter
-      if (filters.duration && !tour.duration.toLowerCase().includes(filters.duration.toLowerCase())) {
-        return false
-      }
-
-      // Group size filter
-      if (filters.groupSize && !tour.groupSize.toLowerCase().includes(filters.groupSize.toLowerCase())) {
-        return false
-      }
-
-      // Language filter
-      if (
-        filters.language &&
-        !tour.language.some((lang) => lang.toLowerCase().includes(filters.language.toLowerCase()))
-      ) {
-        return false
-      }
-
-      return true
+  useEffect(() => {
+    setExploreFilters({
+      query: filters.query,
+      minPrice: filters.priceRange[0],
+      maxPrice: filters.priceRange[1],
+      categories: filters.categories,
+      duration: filters.duration,
+      groupSize: filters.groupSize,
+      language: filters.language,
     })
-  }, [filters])
+  }, [filters, setExploreFilters])
 
   return (
-    <section className="py-8  min-h-screen">
-      <div className="mx-auto lg:px-4 ">
+    <section className="py-8 min-h-screen">
+      <div className="mx-auto lg:px-4">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
-          <div className="hidden lg:block lg:w-80 flex-shrink-0">
+          <div className="hidden lg:block lg:w-80 shrink-0">
             <ToursFilters filters={filters} onFiltersChange={setFilters} />
           </div>
 
           {/* Tours Grid */}
           <div className="flex-1">
-            <ToursGrid tours={filteredTours} />
+            <ToursGrid tours={tours} isLoading={isLoading} />
           </div>
         </div>
       </div>
