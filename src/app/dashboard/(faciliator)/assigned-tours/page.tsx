@@ -75,7 +75,7 @@ export default function MyToursPage() {
 
         {/* Tours Grid or Empty State */}
         {hasNoTours ? (
-          <EmptyState description="You have no tours yet" hasButton={true} />
+          <EmptyState description="You have no tours yet" hasButton={true} title={""} />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredTours.map((tour) => (

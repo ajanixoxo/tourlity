@@ -7,7 +7,7 @@ const ITEMS_PER_PAGE = 10;
 export async function GET(request: NextRequest) {
   try {
     const user = await getServerUser();
-    
+
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -68,6 +68,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get refunded bookings with related information
+    // Change this part of your query:
     const refunds = await prisma.booking.findMany({
       where,
       include: {
@@ -85,7 +86,7 @@ export async function GET(request: NextRequest) {
             title: true
           }
         },
-        payment: {
+        Payment: {  // Change from 'payment' to 'Payment' (capital P)
           select: {
             amount: true,
             currency: true
@@ -103,11 +104,12 @@ export async function GET(request: NextRequest) {
     const total = await prisma.booking.count({ where });
 
     // Format refunds for admin view
+    // Format refunds for admin view
     const formattedRefunds = refunds.map(refund => ({
       id: refund.id,
       guestName: `${refund.guest.firstName} ${refund.guest.lastName}`,
-      tourName: refund.tour.title,
-      amount: refund.payment?.amount || 0,
+      tourName: refund.tour?.title || 'N/A',  // Add optional chaining in case tour is null
+      amount: refund.Payment?.[0]?.amount || 0,  // Get first payment's amount from the array
       dateAndTime: refund.updatedAt.toLocaleString('en-US', {
         year: 'numeric',
         month: 'short',
@@ -116,9 +118,9 @@ export async function GET(request: NextRequest) {
         minute: '2-digit',
         hour12: true
       }),
-      reason: 'Guest Request', // This could be enhanced with a refund reason field
+      reason: 'Guest Request',
       guestEmail: refund.guest.email,
-      tourId: refund.tour.id,
+      tourId: refund.tour?.id,
       guestId: refund.guest.id
     }));
 

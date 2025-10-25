@@ -1,30 +1,84 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Button from "@/components/root/button"
 import { MapPin, DollarSign, Eye } from "lucide-react"
 import { customTourRequests } from "@/data/tour-management-data"
 import type { CustomTourRequest } from "@/types/tour-management"
 import Link from "next/link"
+import { toast } from "react-toastify"
 
 type FilterStatus = "all" | "pending" | "negotiating" | "confirmed" | "declined"
 
+interface CustomTourData {
+  id: string
+  title: string
+  description: string
+  tourType: string
+  location: string
+  budgetProposal: number
+  tourCategory: string
+  groupSize: number
+  preferredLanguages: string[]
+  startDate: string | null
+  endDate: string | null
+  accessibilityNotes: string | null
+  amenitiesNeeded: string[]
+  status: string
+  coverageAreas: string[]
+  createdAt: string
+  guest: {
+    id: string
+    firstName: string
+    lastName: string
+    email: string
+    avatar: string | null
+  }
+  hostResponses: any[]
+  _count: {
+    hostResponses: number
+  }
+}
+
 export default function CustomizeToursPage() {
   const [activeFilter, setActiveFilter] = useState<FilterStatus>("all")
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchQuery, setSearchQuery] = useState("")
+  const [customTours, setCustomTours] = useState<CustomTourData[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const filteredRequests = customTourRequests.filter((request) => {
-    const matchesFilter = activeFilter === "all" || request.status === activeFilter
+  useEffect(() => {
+    fetchCustomTours()
+  }, [activeFilter])
+
+  const fetchCustomTours = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch(`/api/custom-tours?status=${activeFilter === "all" ? "all" : activeFilter}`)
+      const result = await response.json()
+      
+      if (result.success) {
+        setCustomTours(result.data)
+      } else {
+        toast.error("Failed to fetch custom tours")
+      }
+    } catch (error) {
+      console.error("Error fetching custom tours:", error)
+      toast.error("Failed to fetch custom tours")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const filteredRequests = customTours.filter((request) => {
     const matchesSearch =
       searchQuery === "" ||
       request.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       request.location.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesFilter && matchesSearch
+    return matchesSearch
   })
 
-  const getStatusColor = (status: CustomTourRequest["status"]) => {
-    switch (status) {
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
       case "pending":
         return "bg-yellow-100 text-yellow-700"
       case "confirmed":
@@ -38,8 +92,8 @@ export default function CustomizeToursPage() {
     }
   }
 
-  const getStatusLabel = (status: CustomTourRequest["status"]) => {
-    return status.charAt(0).toUpperCase() + status.slice(1)
+  const getStatusLabel = (status: string) => {
+    return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
   }
 
   return (
@@ -107,54 +161,71 @@ export default function CustomizeToursPage() {
         </div>
 
         {/* Tour Requests Grid */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredRequests.map((request) => (
-            <div
-              key={request.id}
-              className="relative rounded-lg border border-border bg-card p-4 transition-shadow hover:shadow-md"
-            >
-              {/* Status Badge */}
-              <div className="mb-3 flex items-center justify-between">
-                <h3 className="text-base font-semibold text-foreground">{request.title}</h3>
-                <span className={`rounded-full px-3 py-1 text-xs font-medium ${getStatusColor(request.status)}`}>
-                  {getStatusLabel(request.status)}
-                </span>
-              </div>
-
-              {/* Categories */}
-              <div className="mb-3 flex flex-wrap gap-2">
-                {request.tourType.map((type, index) => (
-                  <span key={index} className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">
-                    {type}
+        {loading ? (
+          <div className="flex justify-center py-8">
+            <div className="text-muted-foreground">Loading custom tours...</div>
+          </div>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredRequests.map((request) => (
+              <div
+                key={request.id}
+                className="relative rounded-lg border border-border bg-card p-4 transition-shadow hover:shadow-md"
+              >
+                {/* Status Badge */}
+                <div className="mb-3 flex items-center justify-between">
+                  <h3 className="text-base font-semibold text-foreground">{request.title}</h3>
+                  <span className={`rounded-full px-3 py-1 text-xs font-medium ${getStatusColor(request.status)}`}>
+                    {getStatusLabel(request.status)}
                   </span>
-                ))}
-              </div>
+                </div>
 
-              {/* Location */}
-              <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
-                <MapPin className="h-4 w-4" />
-                <span>{request.location}</span>
-              </div>
+                {/* Categories */}
+                <div className="mb-3 flex flex-wrap gap-2">
+                  <span className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">
+                    {request.tourType}
+                  </span>
+                  <span className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">
+                    {request.tourCategory}
+                  </span>
+                </div>
 
-              {/* Price Range */}
-              {request.priceRange && (
+                {/* Location */}
+                <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
+                  <MapPin className="h-4 w-4" />
+                  <span>{request.location}</span>
+                </div>
+
+                {/* Budget */}
                 <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground">
                   <DollarSign className="h-4 w-4" />
-                  <span>{request.priceRange}</span>
+                  <span>${request.budgetProposal}</span>
                 </div>
-              )}
 
-              {/* View Details Link */}
-              <Link
-                href={`/dashboard/customize-tours/${request.id}`}
-                className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
-              >
-                <Eye className="h-4 w-4" />
-                View Details
-              </Link>
-            </div>
-          ))}
-        </div>
+                {/* Group Size */}
+                <div className="mb-4 text-sm text-muted-foreground">
+                  Group Size: {request.groupSize} people
+                </div>
+
+                {/* Host Responses Count */}
+                {request._count.hostResponses > 0 && (
+                  <div className="mb-4 text-sm text-primary">
+                    {request._count.hostResponses} host response{request._count.hostResponses > 1 ? 's' : ''}
+                  </div>
+                )}
+
+                {/* View Details Link */}
+                <Link
+                  href={`/dashboard/customize-tours/${request.id}`}
+                  className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+                >
+                  <Eye className="h-4 w-4" />
+                  View Details
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Empty State */}
         {filteredRequests.length === 0 && (

@@ -32,11 +32,11 @@ export async function GET(
             avatar: true,
             role: true,
             status: true,
-            phoneNumber: true,
-            bio: true,
-            specialties: true,
-            rating: true,
-            reviewCount: true,
+            // phoneNumber: true,
+            // bio: true,
+            // specialties: true,
+            // rating: true,
+            // reviewCount: true,
             createdAt: true
           }
         },
@@ -74,14 +74,14 @@ export async function GET(
             rating: true,
             comment: true,
             createdAt: true,
-            guest: {
-              select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                avatar: true
-              }
-            }
+            // guest: {
+            //   select: {
+            //     id: true,
+            //     firstName: true,
+            //     lastName: true,
+            //     avatar: true
+            //   }
+            // }
           },
           orderBy: {
             createdAt: 'desc'

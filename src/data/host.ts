@@ -11,10 +11,9 @@ export const hosts: Host[] = [
         image: '/images/img_image_292x372.jpg',
         isActive: true,
         avatar: "",
-        reviewCount: 0,
-        verified: false,
-        responseTime: "",
-        languages: []
+        firstName: "",
+        lastName: "",
+        email: ""
     },
     {
         id: "2",
@@ -27,10 +26,9 @@ export const hosts: Host[] = [
         image: '/images/img_image_8.jpg',
         isActive: false,
         avatar: "",
-        reviewCount: 0,
-        verified: false,
-        responseTime: "",
-        languages: []
+        firstName: "",
+        lastName: "",
+        email: ""
     },
     {
         id: "3",
@@ -43,9 +41,8 @@ export const hosts: Host[] = [
         image: '/images/img_image_10.jpg',
         isActive: false,
         avatar: "",
-        reviewCount: 0,
-        verified: false,
-        responseTime: "",
-        languages: []
+        firstName: "",
+        lastName: "",
+        email: ""
     }
   ];

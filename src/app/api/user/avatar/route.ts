@@ -12,7 +12,7 @@ const supabase = createClient(
 )
 
 // Helper function to get user from JWT token
-export function getUserFromToken(request: NextRequest): AuthUser | null {
+function getUserFromToken(request: NextRequest): AuthUser | null {
   try {
     const authHeader = request.headers.get('authorization')
     const cookieToken = request.cookies.get('token')?.value

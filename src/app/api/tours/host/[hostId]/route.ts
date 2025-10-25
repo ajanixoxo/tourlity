@@ -4,7 +4,7 @@ import { getServerUser } from "@/lib/get-server-user";
 
 export async function GET(
   req: Request,
-  { params }: { params: { hostId: string } }
+  { params }: { params: Promise<{ hostId: string }> }
 ) {
   try {
     // Verify user is authenticated
@@ -17,7 +17,7 @@ export async function GET(
     }
 
     // Only allow hosts to view their own tours or admin to view any host's tours
-    if (user.id !== params.hostId && user.role !== "ADMIN") {
+    if (user.id !== (await params).hostId && user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "Forbidden" },
         { status: 403 }
@@ -32,14 +32,14 @@ export async function GET(
     // Get total count
     const total = await prisma.tour.count({
       where: {
-        hostId: params.hostId,
+        hostId: (await params).hostId,
       },
     });
 
     // Get host's tours
     const tours = await prisma.tour.findMany({
       where: {
-        hostId: params.hostId,
+        hostId: (await params).hostId,
       },
       select: {
         id: true,

@@ -231,7 +231,7 @@ export function TourDetailPage({ tourId }: TourDetailPageProps) {
                           {item.meals && (
                             <div className="flex flex-wrap gap-2 pt-2">
                               {item.meals.map((meal) => (
-                                <Badge key={meal} variant="outline">
+                                <Badge key={meal} variant="secondary">
                                   {meal}
                                 </Badge>
                               ))}
@@ -292,8 +292,8 @@ export function TourDetailPage({ tourId }: TourDetailPageProps) {
               <div className="space-y-3">
                 <Button className="w-full bg-coral-500 hover:bg-coral-600 text-white">Approve Tour</Button>
                 <div className="grid grid-cols-2 gap-2">
-                  <Button variant="outline">Request Edits</Button>
-                  <Button variant="outline">Reject Tour</Button>
+                  <Button variant="secondary">Request Edits</Button>
+                  <Button variant="secondary">Reject Tour</Button>
                 </div>
               </div>
             </Card>

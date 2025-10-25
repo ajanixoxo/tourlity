@@ -4,7 +4,7 @@ import { getServerUser } from "@/lib/get-server-user";
 
 export async function GET(
   req: Request,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
     // Verify user is authenticated and has access
@@ -17,7 +17,7 @@ export async function GET(
     }
 
     // Only allow users to view their own tours
-    if (user.id !== params.userId) {
+    if (user.id !== (await params).userId) {
       return NextResponse.json(
         { error: "Forbidden" },
         { status: 403 }
@@ -32,14 +32,14 @@ export async function GET(
     // Get total count
     const total = await prisma.booking.count({
       where: {
-        guestId: params.userId,
+        guestId: (await params).userId,
       },
     });
 
     // Get user's booked tours
     const bookings = await prisma.booking.findMany({
       where: {
-        guestId: params.userId,
+        guestId: (await params).userId,
       },
       select: {
         tour: {
@@ -78,11 +78,14 @@ export async function GET(
     });
 
     // Transform the data to include both tour and booking info
-    const tours = bookings.map(booking => ({
-      ...booking.tour,
-      bookingStatus: booking.status,
-      bookingDate: booking.tour.startDate,
-    }));
+  const tours = bookings
+  .filter((booking) => booking.tour !== null)
+  .map((booking) => ({
+    ...booking.tour!,
+    bookingStatus: booking.status,
+    bookingDate: booking.tour!.startDate ?? "",
+  }));
+
 
     return NextResponse.json({
       tours,

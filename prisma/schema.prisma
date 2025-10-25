@@ -36,6 +36,8 @@ model User {
   tours              Tour[]              @relation("HostTours")
   translatorProfile  TranslatorProfile?
   paymentsReceived   Payment[]           @relation("PaymentHost")
+  customTours        CustomTour[]        @relation("CustomTourGuest")
+  customTourResponses CustomTourHostResponse[] @relation("CustomTourHostResponses")
 
   @@map("users")
 }
@@ -199,7 +201,8 @@ model Accommodation {
 
 model Booking {
   id              String              @id @default(cuid())
-  tourId          String
+  tourId          String?
+  customTourId    String?
   guestId         String
   status          BookingStatus       @default(PENDING)
   amount          Float
@@ -216,7 +219,8 @@ model Booking {
   Payment         Payment[]
   transactions    WalletTransaction[]
   guest           User                @relation("GuestBookings", fields: [guestId], references: [id], onDelete: Cascade)
-  tour            Tour                @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  tour            Tour?               @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  customTour      CustomTour?         @relation("CustomTourBookings", fields: [customTourId], references: [id], onDelete: Cascade)
 
   @@map("bookings")
 }
@@ -400,6 +404,53 @@ model TourToWalletTransaction {
   @@map("_TourToWalletTransaction")
 }
 
+model CustomTour {
+  id                    String                @id @default(cuid())
+  guestId               String
+  title                 String
+  description           String
+  tourType              String                // Cultural, Adventure, Food, Historical
+  location              String
+  country               String?
+  budgetProposal        Float
+  tourCategory          String                // Arts, Nature, Food, Culture
+  groupSize             Int
+  preferredLanguages    String[]
+  startDate             DateTime?
+  endDate               DateTime?
+  accessibilityNotes    String?
+  amenitiesNeeded       String[]
+  status                CustomTourStatus      @default(PENDING)
+  coverageAreas         String[]              // Where the tour should take place
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+  
+  // Relationships
+  guest                 User                  @relation("CustomTourGuest", fields: [guestId], references: [id], onDelete: Cascade)
+  hostResponses         CustomTourHostResponse[]
+  bookings             Booking[]             @relation("CustomTourBookings")
+  
+  @@map("custom_tours")
+}
+
+model CustomTourHostResponse {
+  id              String                @id @default(cuid())
+  customTourId    String
+  hostId          String
+  message         String?
+  proposedPrice   Float?
+  status          HostResponseStatus    @default(PENDING)
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  
+  // Relationships
+  customTour      CustomTour            @relation(fields: [customTourId], references: [id], onDelete: Cascade)
+  host            User                  @relation("CustomTourHostResponses", fields: [hostId], references: [id], onDelete: Cascade)
+  
+  @@unique([customTourId, hostId]) // One response per host per custom tour
+  @@map("custom_tour_host_responses")
+}
+
 enum TransactionType {
   DEPOSIT
   EARNING
@@ -458,4 +509,20 @@ enum SubscriptionTier {
   BASIC
   PREMIUM
   ENTERPRISE
+}
+
+enum CustomTourStatus {
+  PENDING
+  NEGOTIATING
+  ACCEPTED
+  DECLINED
+  CONFIRMED
+  CANCELLED
+}
+
+enum HostResponseStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  NEGOTIATING
 }

@@ -2,6 +2,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import Button from "@/components/root/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -30,6 +31,7 @@ import {
 import { amenitiesOptions } from "@/data/tour-management-data"
 import Link from "next/link"
 import { ChevronRight } from "lucide-react"
+import { toast } from "react-toastify"
 
 const iconMap: Record<string, any> = {
   Tag,
@@ -51,12 +53,80 @@ const iconMap: Record<string, any> = {
 }
 
 export default function NewCustomTourRequestPage() {
+  const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>(["special-deals", "stay", "reserve-pay-later"])
+  
+  // Form state
+  const [formData, setFormData] = useState({
+    guestName: "",
+    tourType: "",
+    description: "",
+    location: "",
+    budgetProposal: "",
+    tourCategory: "",
+    groupSize: "",
+    preferredLanguages: "",
+    startDate: "",
+    endDate: "",
+    accessibilityNotes: "",
+    coverageAreas: ""
+  })
 
   const toggleAmenity = (amenityId: string) => {
     setSelectedAmenities((prev) =>
       prev.includes(amenityId) ? prev.filter((id) => id !== amenityId) : [...prev, amenityId],
     )
+  }
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch("/api/custom-tours", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: `${formData.tourType} Tour in ${formData.location}`,
+          description: formData.description,
+          tourType: formData.tourType,
+          location: formData.location,
+          budgetProposal: parseFloat(formData.budgetProposal),
+          tourCategory: formData.tourCategory,
+          groupSize: parseInt(formData.groupSize),
+          preferredLanguages: formData.preferredLanguages.split(",").map(lang => lang.trim()),
+          startDate: formData.startDate,
+          endDate: formData.endDate,
+          accessibilityNotes: formData.accessibilityNotes,
+          amenitiesNeeded: selectedAmenities,
+          coverageAreas: formData.coverageAreas ? formData.coverageAreas.split(",").map(area => area.trim()) : [formData.location]
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        toast.success("Custom tour request created successfully!")
+        router.push("/dashboard/customize-tours")
+      } else {
+        toast.error(result.error || "Failed to create custom tour request")
+      }
+    } catch (error) {
+      console.error("Error creating custom tour:", error)
+      toast.error("Failed to create custom tour request")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -78,27 +148,34 @@ export default function NewCustomTourRequestPage() {
           </div>
 
           {/* Form */}
-          <form className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* Guest Name and Tour Type */}
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="guestName">Guest Name</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input id="guestName" placeholder="Blueberry Smith"  className="pl-10 !bg-[#FAF9F6]" />
+                  <Input 
+                    id="guestName" 
+                    placeholder="Blueberry Smith" 
+                    className="pl-10 !bg-[#FAF9F6]"
+                    value={formData.guestName}
+                    onChange={(e) => handleInputChange("guestName", e.target.value)}
+                    required
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="tourType">Tour Type</Label>
-                <Select>
-                  <SelectTrigger id="tourType">
+                <Select onValueChange={(value) => handleInputChange("tourType", value)}>
+                  <SelectTrigger id="tourType" className="w-full">
                     <SelectValue placeholder="Select tour type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="cultural">Cultural Tour</SelectItem>
-                    <SelectItem value="adventure">Adventure Tour</SelectItem>
-                    <SelectItem value="food">Food Tour</SelectItem>
-                    <SelectItem value="historical">Historical Tour</SelectItem>
+                    <SelectItem value="Cultural">Cultural Tour</SelectItem>
+                    <SelectItem value="Adventure">Adventure Tour</SelectItem>
+                    <SelectItem value="Food">Food Tour</SelectItem>
+                    <SelectItem value="Historical">Historical Tour</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -107,8 +184,16 @@ export default function NewCustomTourRequestPage() {
             {/* Description */}
             <div className="space-y-2">
               <Label htmlFor="description">Enter Description</Label>
-              <Textarea id="description" placeholder="Type your message here.." rows={5} className="resize-none" />
-              <div className="text-right text-xs text-muted-foreground">0/1000 characters</div>
+              <Textarea 
+                id="description" 
+                placeholder="Type your message here.." 
+                rows={5} 
+                className="resize-none"
+                value={formData.description}
+                onChange={(e) => handleInputChange("description", e.target.value)}
+                required
+              />
+              <div className="text-right text-xs text-muted-foreground">{formData.description.length}/1000 characters</div>
             </div>
 
             {/* Location and Budget */}
@@ -117,14 +202,29 @@ export default function NewCustomTourRequestPage() {
                 <Label htmlFor="location">Enter Location</Label>
                 <div className="relative">
                   <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input id="location" placeholder="Destination of your choice" className="pl-10" />
+                  <Input 
+                    id="location" 
+                    placeholder="Destination of your choice" 
+                    className="pl-10"
+                    value={formData.location}
+                    onChange={(e) => handleInputChange("location", e.target.value)}
+                    required
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="budget">Budget Proposal</Label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
-                  <Input id="budget" placeholder="200" className="pl-8" />
+                  <Input 
+                    id="budget" 
+                    placeholder="200" 
+                    className="pl-8"
+                    type="number"
+                    value={formData.budgetProposal}
+                    onChange={(e) => handleInputChange("budgetProposal", e.target.value)}
+                    required
+                  />
                 </div>
               </div>
             </div>
@@ -132,15 +232,15 @@ export default function NewCustomTourRequestPage() {
             {/* Tour Category */}
             <div className="space-y-2">
               <Label htmlFor="category">Tour Category</Label>
-              <Select>
-                <SelectTrigger id="category">
+              <Select onValueChange={(value) => handleInputChange("tourCategory", value)}>
+                <SelectTrigger id="category" className=" w-1/2 md:w-full">
                   <SelectValue placeholder="Select Category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="arts">Arts and Crafts</SelectItem>
-                  <SelectItem value="nature">Nature and Outdoors</SelectItem>
-                  <SelectItem value="food">Food and Cuisine</SelectItem>
-                  <SelectItem value="culture">Culture and History</SelectItem>
+                  <SelectItem value="Arts">Arts and Crafts</SelectItem>
+                  <SelectItem value="Nature">Nature and Outdoors</SelectItem>
+                  <SelectItem value="Food">Food and Cuisine</SelectItem>
+                  <SelectItem value="Culture">Culture and History</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -151,14 +251,29 @@ export default function NewCustomTourRequestPage() {
                 <Label htmlFor="groupSize">Group Size</Label>
                 <div className="relative">
                   <Users className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input id="groupSize" placeholder="e.g, 12" className="pl-10" />
+                  <Input 
+                    id="groupSize" 
+                    placeholder="e.g, 12" 
+                    className="pl-10"
+                    type="number"
+                    value={formData.groupSize}
+                    onChange={(e) => handleInputChange("groupSize", e.target.value)}
+                    required
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="languages">Preferred Languages</Label>
                 <div className="relative">
                   <Languages className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input id="languages" placeholder="e.g, English" className="pl-10" />
+                  <Input 
+                    id="languages" 
+                    placeholder="e.g, English, Spanish" 
+                    className="pl-10"
+                    value={formData.preferredLanguages}
+                    onChange={(e) => handleInputChange("preferredLanguages", e.target.value)}
+                    required
+                  />
                 </div>
               </div>
             </div>
@@ -169,14 +284,26 @@ export default function NewCustomTourRequestPage() {
                 <Label htmlFor="startDate">Start Date</Label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input id="startDate" type="date" className="pl-10" />
+                  <Input 
+                    id="startDate" 
+                    type="date" 
+                    className="pl-10"
+                    value={formData.startDate}
+                    onChange={(e) => handleInputChange("startDate", e.target.value)}
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="endDate">End Date</Label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input id="endDate" type="date" className="pl-10" />
+                  <Input 
+                    id="endDate" 
+                    type="date" 
+                    className="pl-10"
+                    value={formData.endDate}
+                    onChange={(e) => handleInputChange("endDate", e.target.value)}
+                  />
                 </div>
               </div>
             </div>
@@ -191,8 +318,10 @@ export default function NewCustomTourRequestPage() {
                 placeholder="Any special accessibility requirements or considerations..."
                 rows={4}
                 className="resize-none"
+                value={formData.accessibilityNotes}
+                onChange={(e) => handleInputChange("accessibilityNotes", e.target.value)}
               />
-              <div className="text-right text-xs text-muted-foreground">0/1000 characters</div>
+              <div className="text-right text-xs text-muted-foreground">{formData.accessibilityNotes.length}/1000 characters</div>
             </div>
 
             {/* Amenities Needed */}
@@ -203,18 +332,16 @@ export default function NewCustomTourRequestPage() {
                   const Icon = iconMap[amenity.icon]
                   const isSelected = selectedAmenities.includes(amenity.id)
                   return (
-                    <button
+                    <Button
                       key={amenity.id}
                       type="button"
+                      variant={isSelected ? "primary" : "secondary"}
                       onClick={() => toggleAmenity(amenity.id)}
-                      className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors ${isSelected
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-border bg-background text-foreground hover:bg-muted"
-                        }`}
+                      
                     >
                       {Icon && <Icon className="h-4 w-4" />}
                       {amenity.label}
-                    </button>
+                    </Button>
                   )
                 })}
               </div>
@@ -222,8 +349,12 @@ export default function NewCustomTourRequestPage() {
 
             {/* Submit Button */}
             <div className="flex justify-end pt-4">
-              <Button type="submit" className="w-full md:w-auto">
-                Customize
+              <Button 
+                type="submit" 
+                className="w-full md:w-auto"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Creating..." : "Customize"}
               </Button>
             </div>
           </form>

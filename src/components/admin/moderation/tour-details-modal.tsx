@@ -139,7 +139,7 @@ export function TourDetailsModal({
             <div className="flex-1">
               <div className="flex items-center space-x-2 mb-2">
                 {getStatusBadge(tour.status)}
-                <Badge variant="outline">{tour.type}</Badge>
+                <Badge variant="secondary">{tour.type}</Badge>
               </div>
               <p className="text-gray-600 mb-2">{tour.description}</p>
               <div className="flex items-center space-x-4 text-sm text-gray-500">
@@ -243,7 +243,7 @@ export function TourDetailsModal({
                       <span className="text-sm text-gray-600">Languages:</span>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {tour.languages.map((lang, index) => (
-                          <Badge key={index} variant="outline" className="text-xs">
+                          <Badge key={index} variant="secondary" className="text-xs">
                             {lang}
                           </Badge>
                         ))}
@@ -253,7 +253,7 @@ export function TourDetailsModal({
                       <span className="text-sm text-gray-600">Categories:</span>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {tour.categories.map((category, index) => (
-                          <Badge key={index} variant="outline" className="text-xs">
+                          <Badge key={index} variant="secondary" className="text-xs">
                             {category}
                           </Badge>
                         ))}
@@ -271,7 +271,7 @@ export function TourDetailsModal({
                       <h3 className="font-medium text-gray-900 mb-3">Coverage Areas</h3>
                       <div className="flex flex-wrap gap-1">
                         {tour.coverageAreas.map((area, index) => (
-                          <Badge key={index} variant="outline" className="text-xs">
+                          <Badge key={index} variant="secondary" className="text-xs">
                             {area}
                           </Badge>
                         ))}
@@ -283,7 +283,7 @@ export function TourDetailsModal({
                       <h3 className="font-medium text-gray-900 mb-3">Amenities</h3>
                       <div className="flex flex-wrap gap-1">
                         {tour.amenities.map((amenity, index) => (
-                          <Badge key={index} variant="outline" className="text-xs">
+                          <Badge key={index} variant="secondary" className="text-xs">
                             {amenity}
                           </Badge>
                         ))}
@@ -388,7 +388,7 @@ export function TourDetailsModal({
                   <h4 className="font-medium text-gray-900 mb-2">Specialties</h4>
                   <div className="flex flex-wrap gap-1">
                     {tour.host.specialties.map((specialty, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
+                      <Badge key={index} variant="secondary" className="text-xs">
                         {specialty}
                       </Badge>
                     ))}

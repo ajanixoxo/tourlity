@@ -4,7 +4,7 @@ import { Search, Users, Package } from "lucide-react"
 import Button from "@/components/root/button"
 
 interface EmptyStateProps {
-  title: string
+  title?: string
   description: string
   icon?: "search" | "users" | "package"
   action?: {
