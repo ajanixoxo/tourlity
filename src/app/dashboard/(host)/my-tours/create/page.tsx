@@ -9,6 +9,7 @@ import { TourItineraryStep } from "@/components/tour-creation/tour-itinerary-ste
 import { TourAccommodationStep } from "@/components/tour-creation/tour-accommodation-steps"
 import { useRouter } from "next/navigation"
 import { toast } from "react-toastify"
+import SuccessModal from "@/components/modals/success-modal"
 
 // Types
 export interface TourBasicInfo {
@@ -110,6 +111,7 @@ export default function CreateTourPage() {
       hotelImages: []
     }
   })
+  const [tourSuccess, setTourSuccess] = useState(false)
 
   const steps = [
     { id: 1, name: "Basic Information" },
@@ -121,7 +123,7 @@ export default function CreateTourPage() {
   useEffect(() => {
     if (tourData.basicInfo.startDate && tourData.basicInfo.endDate) {
       const numDays = calculateTourDays(tourData.basicInfo.startDate, tourData.basicInfo.endDate)
-      
+
       // Only reinitialize if the number of days changed and is valid
       if (numDays !== tourData.itinerary.length && numDays > 0) {
         const newItinerary = initializeItineraryDays(numDays)
@@ -146,13 +148,13 @@ export default function CreateTourPage() {
     setTourData(prev => {
       // Find if the day exists
       const existingDayIndex = prev.itinerary.findIndex(day => day.dayNumber === dayNumber)
-      
+
       if (existingDayIndex !== -1) {
         // Update existing day
         const updatedItinerary = [...prev.itinerary]
-        updatedItinerary[existingDayIndex] = { 
-          ...updatedItinerary[existingDayIndex], 
-          ...data 
+        updatedItinerary[existingDayIndex] = {
+          ...updatedItinerary[existingDayIndex],
+          ...data
         }
         return {
           ...prev,
@@ -263,10 +265,12 @@ export default function CreateTourPage() {
       }
 
       const result = await response.json()
-      console.log('Tour created successfully:', result) 
+      console.log('Tour created successfully:', result)
       toast.success('Tour created successfully!')
       // Redirect or show success message
-       router.push('/my-tours')
+      setTourSuccess(true)
+      setTimeout(() => { router.push('/my-tours') }, 2000)
+
     } catch (error) {
       console.error('Error creating tour:', error)
       throw error
@@ -290,9 +294,8 @@ export default function CreateTourPage() {
               <div key={step.id} className="flex items-center flex-1">
                 <div className="flex flex-col items-center flex-1">
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-medium ${
-                      currentStep >= step.id ? "bg-primary-color text-white" : "bg-gray-200 text-gray-500"
-                    }`}
+                    className={`w-10 h-10 rounded-full flex items-center justify-center font-medium ${currentStep >= step.id ? "bg-primary-color text-white" : "bg-gray-200 text-gray-500"
+                      }`}
                   >
                     {step.id}
                   </div>
@@ -310,16 +313,18 @@ export default function CreateTourPage() {
           </div>
         </div>
 
+        <SuccessModal isOpen={tourSuccess} onClose={() => setTourSuccess(false)} image="" title="Tour Successfully Created" buttonText="Go back to Tours" onButtonClick={() => router.push('/dashboard/my-tours')} />
+
         {/* Step Content */}
         {currentStep === 1 && (
-          <TourBasicInfoStep 
+          <TourBasicInfoStep
             data={tourData.basicInfo}
             onUpdate={updateBasicInfo}
             onNext={handleNext}
           />
         )}
         {currentStep === 2 && (
-          <TourItineraryStep 
+          <TourItineraryStep
             data={tourData.itinerary}
             onUpdate={updateItineraryDay}
             onNext={handleNext}
@@ -327,7 +332,7 @@ export default function CreateTourPage() {
           />
         )}
         {currentStep === 3 && (
-          <TourAccommodationStep 
+          <TourAccommodationStep
             data={tourData.accommodation}
             onUpdate={updateAccommodation}
             onBack={handleBack}

@@ -11,15 +11,16 @@ export async function GET(req: Request) {
       : undefined;
     // ✅ now `type` is properly validated as an enum value
 
-    const q = searchParams.get("q") || "";
-    const category = searchParams.get("category") || undefined;
+    const query = searchParams.get("query") || "";
+    const categories = searchParams.get("categories")?.split(',') || [];
     const minPrice = searchParams.get("minPrice")
       ? parseFloat(searchParams.get("minPrice")!)
       : undefined;
     const maxPrice = searchParams.get("maxPrice")
       ? parseFloat(searchParams.get("maxPrice")!)
       : undefined;
-    const location = searchParams.get("location") || undefined;
+    const duration = searchParams.get("duration") || undefined;
+    const groupSize = searchParams.get("groupSize") || undefined;
     const language = searchParams.get("language") || undefined;
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "10", 10);
@@ -27,26 +28,25 @@ export async function GET(req: Request) {
 
     const where: Prisma.TourWhereInput = {
       status: "ACTIVE",
-      ...(q && {
+      ...(query && {
         OR: [
-          { title: { contains: q, mode: Prisma.QueryMode.insensitive } },
-          { description: { contains: q, mode: Prisma.QueryMode.insensitive } },
-          { location: { contains: q, mode: Prisma.QueryMode.insensitive } },
+          { title: { contains: query, mode: Prisma.QueryMode.insensitive } },
+          { description: { contains: query, mode: Prisma.QueryMode.insensitive } },
+          { location: { contains: query, mode: Prisma.QueryMode.insensitive } },
         ],
       }),
       ...(type && { type }), // ✅ now type matches Prisma enum
-      ...(category && { categories: { has: category } }),
+      ...(categories.length > 0 && { categories: { hasEvery: categories } }),
       ...(language && { languages: { has: language } }),
-      ...(location && {
-        location: { contains: location, mode: Prisma.QueryMode.insensitive },
-      }),
+      ...(duration && { duration }),
+      ...(groupSize && { groupSize }),
       ...(minPrice || maxPrice
         ? {
-            price: {
-              ...(minPrice && { gte: minPrice }),
-              ...(maxPrice && { lte: maxPrice }),
-            },
-          }
+          price: {
+            ...(minPrice && { gte: minPrice }),
+            ...(maxPrice && { lte: maxPrice }),
+          },
+        }
         : {}),
     };
 
@@ -56,8 +56,27 @@ export async function GET(req: Request) {
       orderBy: { createdAt: "desc" },
       skip,
       take: limit,
+      include: {
+        host: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            avatar: true,
+            hostProfile: {
+              select: {
+                rating: true,
+                reviewCount: true,
+                verified: true,
+                languages: true,
+                location: true
+              }
+            }
+          }
+        }
+      }
     });
-
+    console.log("✅ Fetched tours:", tours);
     return NextResponse.json({ tours, total, hasMore: skip + tours.length < total });
   } catch (error) {
     console.error("❌ Error in GET /api/tours/explore:", error);

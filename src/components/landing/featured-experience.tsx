@@ -1,9 +1,52 @@
-import React from 'react'
+'use client'
+
+import React, { useEffect, useState } from 'react'
 import Button from '../root/button'
 import Image from 'next/image'
-import { tours as experiences } from '@/data/tours'
+import { fetchExploreTours } from '@/lib/api/explore-tours'
+import type { Tour } from '@/types/tour'
 
 function FeaturedExperience() {
+  const [experiences, setExperiences] = useState<Tour[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchFeaturedTours = async () => {
+      try {
+        // Fetch active tours and limit to 3
+        const response = await fetchExploreTours({
+          limit: 3,
+          page: 1
+        })
+        // Take the first 3 active tours
+        setExperiences(response.tours)
+      } catch (error) {
+        console.error('Error fetching featured tours:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchFeaturedTours()
+  }, [])
+
+  if (isLoading) {
+    return (
+      <section className="w-full bg-global-9 py-14">
+        <div className="container mx-auto">
+          <div className="animate-pulse flex flex-col gap-8">
+            <div className="h-10 bg-gray-200 rounded w-1/3"></div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-gray-200 h-[500px] rounded-[18px]"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section className="w-full bg-global-9 py-14">
       <div className="w-full ">
@@ -11,7 +54,7 @@ function FeaturedExperience() {
           {/* Section Header */}
           <div className="flex flex-row justify-start items-center w-full">
             <div className="flex flex-col gap-3 justify-start items-start w-full">
-              <h2 className="text-[30px] lg:text-[42px] font-plus-jakarta font-bold leading-[40px] sm:leading-[47px] lg:leading-[53px] text-left text-global-1">
+              <h2 className="text-[30px] lg:text-[42px] font-plus-jakarta font-bold leading-10 sm:leading-[47px] lg:leading-[53px] text-left text-global-1">
                 Featured Experiences
               </h2>
               <p className="text-sm font-inter description font-normal leading-[17px] text-left text-global-2">
@@ -24,12 +67,12 @@ function FeaturedExperience() {
           <div className="w-full lg:overflow-x-auto" style={{ scrollbarWidth: "none" }}>
             <div className="flex flex-col lg:flex-row gap-7 w-full lg:w-full">
               {experiences.map((experience) => (
-                <div key={experience.id} className="flex flex-col box-color justify-start items-center w-full lg:w-[400px] bg-global-8 rounded-[18px] flex-shrink-0">
+                <div key={experience.id} className="flex flex-col box-color justify-start items-center w-full lg:w-[400px] bg-global-8 rounded-[18px] shrink-0">
                   <div className="flex flex-col gap-6 justify-start items-center w-full mb-6.5">
                     {/* Experience Image */}
                     <div className="relative w-full h-[292px] rounded-t-[18px] overflow-hidden">
                       <Image
-                        src={experience.images}
+                        src={experience.images[0]}
                         alt={experience.title}
                         fill
                         className="object-cover"
@@ -51,7 +94,7 @@ function FeaturedExperience() {
                       <div className="absolute inset-0 p-6 flex flex-col justify-between items-start">
                         {/* Favorite button at top right */}
                         <div className="w-full flex justify-end">
-                          <button className="w-9 h-9 bg-[#18171799] rounded-[18px] p-1.5">
+                          <button className="w-9 h-9 bg-[#18171799] rounded-full p-1.5">
                             <Image
                               src="/images/img_favourite.svg"
                               alt="Favorite"
@@ -62,16 +105,18 @@ function FeaturedExperience() {
                         </div>
 
                         {/* Host details at bottom - positioned over the backdrop blur */}
-                        <div className="relative z-10 flex items-center gap-2 bg-[#18171799] rounded-[20px] px-2 py-2">
-                          <Image
-                            src={experience.host.avatar}
-                            alt={experience.host.name}
-                            width={24}
-                            height={24}
-                            className="rounded-full"
-                          />
+                        <div className="flex items-center gap-2 bg-[#18171799] rounded-[20px] px-2 py-2">
+                          <div className="w-6 h-6 rounded-full overflow-hidden shrink-0">
+                            <Image
+                              src={experience.host.avatar || '/images/default-avatar.png'}
+                              alt={`${experience.host.firstName} ${experience.host.lastName}`}
+                              width={24}
+                              height={24}
+                              className="object-cover w-full h-full"
+                            />
+                          </div>
                           <span className="text-xs font-inter font-normal leading-[15px] text-[#ffffffcc]">
-                            {experience.host.name}
+                            {`${experience.host.firstName} ${experience.host.lastName}`}
                           </span>
                         </div>
                       </div>
@@ -85,10 +130,10 @@ function FeaturedExperience() {
                             {experience.title}
                           </h4>
                           <p className="text-sm font-inter description font-normal leading-[22px] text-left text-global-2 w-full">
-                            {experience.description}
+                            {experience.description.slice(0, 100)}...
                           </p>
                         </div>
-                        <button className="bg-button-1 text-global-1 rounded-[16px] px-2 lg:px-4 py-2 text-xs">
+                        <button className="bg-button-1 text-global-1 rounded-2xl px-2 lg:px-4 py-2 text-xs">
                           {experience.categories[0]}
                         </button>
 
@@ -122,7 +167,7 @@ function FeaturedExperience() {
                               />
                             </svg>
                             <span className="font-inter font-light text-[10px] lg:text-[14px] leading-[15px] description text-global-2 ml-2">
-                              {experience.rating} ({experience.host.reviewCount} Reviews)
+                              {experience.rating} ({experience.rating} Reviews)
                             </span>
                           </div>
                         </div>

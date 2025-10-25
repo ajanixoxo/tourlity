@@ -49,7 +49,7 @@ export default function OffersPage() {
               <img
                 src={offer.image || "/placeholder.svg"}
                 alt={offer.title}
-                className="w-24 h-24 rounded-lg object-cover flex-shrink-0"
+                className="w-24 h-24 rounded-lg object-cover shrink-0"
               />
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">

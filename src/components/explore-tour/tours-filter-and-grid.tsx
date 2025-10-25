@@ -8,18 +8,28 @@ import type { SearchFilters } from "@/types"
 import type { Tour } from "@/types/tour"
 
 export default function ToursFiltersAndGrid() {
-  const { tours, isLoading, setFilters: setExploreFilters } = useExploreTourStore()
+  const { tours, isLoading, setFilters: setExploreFilters, fetchInitialTours } = useExploreTourStore()
 
   const [filters, setFilters] = useState<SearchFilters>({
     query: "",
-    priceRange: [0, 200],
+    priceRange: [0, 900],
     categories: [],
     duration: "",
     groupSize: "",
     language: "",
   })
 
+  const [hasUserInteracted, setHasUserInteracted] = useState(false)
+
+  // Fetch initial tours without any filters
   useEffect(() => {
+    fetchInitialTours()
+  }, [fetchInitialTours])
+
+  // Only apply filters after user interaction
+  useEffect(() => {
+    if (!hasUserInteracted) return
+
     setExploreFilters({
       query: filters.query,
       minPrice: filters.priceRange[0],
@@ -29,7 +39,12 @@ export default function ToursFiltersAndGrid() {
       groupSize: filters.groupSize,
       language: filters.language,
     })
-  }, [filters, setExploreFilters])
+  }, [filters, setExploreFilters, hasUserInteracted])
+
+  const handleFiltersChange = (newFilters: SearchFilters) => {
+    setHasUserInteracted(true)
+    setFilters(newFilters)
+  }
 
   return (
     <section className="py-8 min-h-screen">
@@ -37,7 +52,7 @@ export default function ToursFiltersAndGrid() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <div className="hidden lg:block lg:w-80 shrink-0">
-            <ToursFilters filters={filters} onFiltersChange={setFilters} />
+            <ToursFilters filters={filters} onFiltersChange={handleFiltersChange} />
           </div>
 
           {/* Tours Grid */}

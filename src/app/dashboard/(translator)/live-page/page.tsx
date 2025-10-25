@@ -116,7 +116,7 @@ const languageNames: Record<string, string> = {
         {liveToursData.map((tour) => (
           <Card key={tour.id} className="p-6">
             <div className="flex gap-6 items-start">
-              <div className="w-32 h-24 rounded-lg overflow-hidden flex-shrink-0">
+              <div className="w-32 h-24 rounded-lg overflow-hidden shrink-0">
                 <Image
                   src={tour.image || "/placeholder.svg"}
                   alt={tour.title}
@@ -172,7 +172,7 @@ const languageNames: Record<string, string> = {
                 </div>
               </div>
 
-              <Button className="bg-coral-600 hover:bg-coral-700 flex-shrink-0">Translate Live Tour</Button>
+              <Button className="bg-coral-600 hover:bg-coral-700 shrink-0">Translate Live Tour</Button>
             </div>
           </Card>
         ))}

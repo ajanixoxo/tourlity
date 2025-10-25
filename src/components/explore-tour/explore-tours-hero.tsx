@@ -1,18 +1,24 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Search } from "lucide-react"
 import Button from "../root/button"
+import { useExploreTourStore } from "@/lib/stores/explore-tours-store"
 
 export default function ExploreToursHero() {
   const [searchQuery, setSearchQuery] = useState("")
+  const [isSearching, setIsSearching] = useState(false)
+  const { setFilters } = useExploreTourStore()
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle search functionality
-    console.log("Searching for:", searchQuery)
+    setIsSearching(true)
+    try {
+      await setFilters({ query: searchQuery })
+    } finally {
+      setIsSearching(false)
+    }
   }
 
   return (
@@ -58,9 +64,23 @@ export default function ExploreToursHero() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-[70%] lg:w-auto flex-1 border-0 text-base text-white focus:outline-none placeholder:muted-color"
               />
-              <Button type="submit" variant="primary" className="w-[30%] lg:w-auto flex items-center justify-center">
-                <Search className="w-4 h-4 mr-2" />
-                Search
+              <Button 
+                type="submit" 
+                variant="primary" 
+                disabled={isSearching}
+                className="w-[30%] lg:w-auto flex items-center justify-center"
+              >
+                {isSearching ? (
+                  <div className="flex items-center">
+                    <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Searching...
+                  </div>
+                ) : (
+                  <>
+                    <Search className="w-4 h-4 mr-2" />
+                    Search
+                  </>
+                )}
               </Button>
             </div>
           </form>

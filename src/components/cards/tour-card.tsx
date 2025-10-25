@@ -14,13 +14,13 @@ function TourCard({ tour }: TourProps) {
                 {/* Experience Image */}
                 <div className="relative w-full h-[292px] rounded-t-[18px] overflow-hidden">
                     <Image
-                        src={tour.images}
+                        src={tour.images[0]}
                         alt={tour.title}
                         fill
                         className="object-cover"
                     />
                     <div className="absolute inset-0 bg-linear-to-b from-[#00000059] to-[#00000059] p-6 flex flex-col gap-[184px] justify-start items-start shadow-[0px_4px_15px_#888888ff]">
-                        <button className="self-end w-9 h-9 bg-[#18171799] rounded-[18px] p-1.5">
+                        <button className="self-end w-9 h-9 bg-[#18171799] rounded-full p-1.5">
                             <Image
                                 src="/images/img_favourite.svg"
                                 alt="Favorite"
@@ -28,19 +28,23 @@ function TourCard({ tour }: TourProps) {
                                 height={24}
                             />
                         </button>
+
                         <div className="flex items-center gap-2 bg-[#18171799] rounded-[20px] px-2 py-2">
-                            <Image
-                                src={tour.host.avatar || '/images/default-avatar.png'}
-                                alt={`${tour.host.firstName} ${tour.host.lastName}`}
-                                width={24}
-                                height={24}
-                                className="rounded-full"
-                            />
+                            <div className="w-6 h-6 rounded-full overflow-hidden shrink-0">
+                                <Image
+                                    src={tour.host.avatar || '/images/default-avatar.png'}
+                                    alt={`${tour.host.firstName} ${tour.host.lastName}`}
+                                    width={24}
+                                    height={24}
+                                    className="object-cover w-full h-full"
+                                />
+                            </div>
                             <span className="text-xs font-inter font-normal leading-[15px] text-[#ffffffcc]">
                                 {`${tour.host.firstName} ${tour.host.lastName}`}
                             </span>
                         </div>
                     </div>
+
                 </div>
                 {/* Experience Content */}
                 <div className="flex flex-col gap-3.5 justify-start items-center w-full px-4 lg:px-6">
@@ -50,11 +54,11 @@ function TourCard({ tour }: TourProps) {
                                 {tour.title}
                             </h4>
                             <p className="text-sm font-inter description font-normal leading-[22px] text-left text-global-2 w-full">
-                                {tour.description}
+                                {tour.description.slice(0, 100)}...
                             </p>
                         </div>
                         <button className="bg-button-1 text-global-1 rounded-2xl px-2 lg:px-4 py-2 text-xs">
-                            {tour.categories[0]}
+                            {tour.categories[1]}
                         </button>
 
                         {/* Location + Rating side by side */}
@@ -87,7 +91,7 @@ function TourCard({ tour }: TourProps) {
                                     />
                                 </svg>
                                 <span className="font-inter font-light text-[10px] lg:text-[14px] leading-[15px] description text-global-2 ml-2">
-                                    {tour.rating} ({tour.host.reviewCount} Reviews)
+                                    {tour.rating} ({tour.rating} Reviews)
                                 </span>
                             </div>
                         </div>

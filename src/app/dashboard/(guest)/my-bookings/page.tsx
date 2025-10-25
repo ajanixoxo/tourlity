@@ -93,7 +93,7 @@ export default function MyBookingsPage() {
               className="flex flex-col gap-4 rounded-lg border border-border bg-card p-4 transition-shadow hover:shadow-md md:flex-row md:items-center"
             >
               {/* Tour Image */}
-              <div className="relative h-48 w-full overflow-hidden rounded-lg md:h-32 md:w-48 md:flex-shrink-0">
+              <div className="relative h-48 w-full overflow-hidden rounded-lg md:h-32 md:w-48 md:shrink-0">
                 <Image
                   src={booking.image || "/placeholder.svg"}
                   alt={booking.title}
@@ -156,7 +156,7 @@ export default function MyBookingsPage() {
               </div>
 
               {/* Actions */}
-              <div className="flex flex-col gap-2 md:flex-shrink-0 md:items-end">
+              <div className="flex flex-col gap-2 md:shrink-0 md:items-end">
 
                 <div className="flex gap-2">
                   {activeFilter === "upcoming" && (

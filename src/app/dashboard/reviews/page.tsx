@@ -26,7 +26,7 @@ export default function ReviewsPage() {
             >
               {/* Host Info */}
               <div className="flex items-start gap-3">
-                <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full">
+                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full">
                   <Image
                     src={review.hostAvatar || "/placeholder.svg"}
                     alt={review.hostName}

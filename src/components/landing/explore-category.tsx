@@ -124,7 +124,7 @@ function ExploreCategory() {
                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
               >
                 {categories.map((category, index) => (
-                  <div key={index} className="w-full flex-shrink-0 px-4">
+                  <div key={index} className="w-full shrink-0 px-4">
                     <CategoryCard category={category} index={index} />
                   </div>
                 ))}

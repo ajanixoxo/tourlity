@@ -24,6 +24,7 @@ export async function fetchExploreTours(params: ExploreToursParams) {
     if (params.limit) queryParams.set('limit', params.limit.toString());
 
     const response = await fetch(`/api/tours/explore?${queryParams.toString()}`);
+    console.log('Fetch Explore Tours Response:', response); 
     if (!response.ok) {
         throw new Error('Failed to fetch tours');
     }

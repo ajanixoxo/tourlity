@@ -10,7 +10,7 @@ interface ToursGridProps {
   isLoading?: boolean
 }
 
-export default function ToursGrid({ tours }: ToursGridProps) {
+export default function ToursGrid({ tours, isLoading = false }: ToursGridProps) {
   const [visibleTours, setVisibleTours] = useState(6)
 
   const loadMoreTours = () => {
@@ -49,7 +49,19 @@ export default function ToursGrid({ tours }: ToursGridProps) {
         </div>
       </div>
 
-      {tours.length === 0 ? (
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="animate-pulse">
+              <div className="bg-gray-200 h-[300px] rounded-[18px] mb-4"></div>
+              <div className="space-y-3">
+                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : tours.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-gray-500 text-lg">No tours found matching your criteria.</p>
           <p className="text-gray-400 text-sm mt-2">Try adjusting your filters to see more results.</p>

@@ -71,7 +71,7 @@ export default function GuestDashboard() {
               <div className="w-full lg:overflow-x-auto " style={{ scrollbarWidth: "none" }}>
                 <div className="flex flex-col lg:flex-row gap-7 w-full lg:w-full">
                   {experiences.slice(0, 4).map((experience) => (
-                    <div key={experience.id} className="flex flex-col box-color justify-start items-center w-full lg:w-[400px] bg-global-8 rounded-[18px] flex-shrink-0">
+                    <div key={experience.id} className="flex flex-col box-color justify-start items-center w-full lg:w-[400px] bg-global-8 rounded-[18px] shrink-0">
                       <div className="flex flex-col gap-6 justify-start items-center w-full mb-6.5">
                         {/* Experience Image */}
                         <div className="relative w-full h-[292px] rounded-t-[18px] overflow-hidden">

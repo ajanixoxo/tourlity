@@ -181,7 +181,7 @@ const PaymentMethodContent = ({ onClose }: { onClose: () => void }) => {
         )}
 
         <div className="flex items-start gap-2 mb-8 text-gray-500 text-xs">
-          <Lock size={14} className="mt-0.5 flex-shrink-0" />
+          <Lock size={14} className="mt-0.5 shrink-0" />
           <p>
             Securely encrypted. Your information is safe with us. We use
             industry-standard SSL encryption to protect your data.

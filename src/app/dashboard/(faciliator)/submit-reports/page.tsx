@@ -68,7 +68,7 @@ const statusConfig = {
         {toursData.map((tour) => (
           <Card key={tour.id} className="p-6">
             <div className="flex gap-6">
-              <div className="w-32 h-24 rounded-lg overflow-hidden flex-shrink-0">
+              <div className="w-32 h-24 rounded-lg overflow-hidden shrink-0">
                 <Image
                   src={tour.image || "/placeholder.svg"}
                   alt={tour.title}

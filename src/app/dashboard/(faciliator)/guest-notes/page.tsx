@@ -109,7 +109,7 @@ export default function GuestNotesPage() {
           <Card key={tour.id} className="p-6 hover:shadow-lg transition-shadow">
             <div className="flex flex-col md:flex-row gap-6">
               {/* Tour Image */}
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <img
                   src={tour.image || "/placeholder.svg"}
                   alt={tour.title}
@@ -155,7 +155,7 @@ export default function GuestNotesPage() {
               </div>
 
               {/* Action Button */}
-              <div className="flex-shrink-0 flex items-center">
+              <div className="shrink-0 flex items-center">
                 <Link href={`/dashboard/facilitator/guest-notes/${tour.id}`}>
                   <Button className="bg-coral-500 hover:bg-coral-600 text-white flex items-center gap-2">
                     View Guest Details
