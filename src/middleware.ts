@@ -93,7 +93,7 @@ export async function middleware(request: NextRequest) {
 
   if (jwtToken) {
     // Use Edge-compatible JWT verification
-    token = await verifyJWT(jwtToken, process.env.JWT_SECRET || 'your_jwt_secret');
+    token = await verifyJWT(jwtToken, process.env.JWT_SECRET || '3cc_0f7c_4464d1');
     if (token && token.role) {
       isAuthenticated = true;
       userRole = token.role;

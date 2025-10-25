@@ -1,21 +1,56 @@
 "use client"
 
-import { useState } from "react"
-import {  SlidersHorizontal, Star, MapPin } from "lucide-react"
+import { useState, useEffect } from "react"
+import { SlidersHorizontal, Star, MapPin, Loader2 } from "lucide-react"
 import Button from "@/components/root/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import Image from "next/image"
 import Link from "next/link"
-import { myTours } from "@/data/tour-management-data"
 import { EmptyState } from "@/components/admin/empty-state"
+import { fetchHostTours } from "@/lib/api/host-tours"
+import type { Tour } from "@/types/tour"
 
 export default function MyToursPage() {
-  const [activeTab, setActiveTab] = useState<"upcoming" | "completed" | "cancelled">("upcoming")
+  const [activeTab, setActiveTab] = useState<"ACTIVE" | "APPROVED" | "INACTIVE">("ACTIVE")
   const [searchQuery, setSearchQuery] = useState("")
+  const [tours, setTours] = useState<Tour[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [page, setPage] = useState(1)
+  const [hasMore, setHasMore] = useState(false)
+  const [total, setTotal] = useState(0)
 
-  const filteredTours = myTours.filter((tour) => tour.status === activeTab)
-  const hasNoTours = filteredTours.length === 0
+  useEffect(() => {
+    const fetchTours = async () => {
+      setIsLoading(true)
+      setError(null)
+      try {
+        const response = await fetchHostTours({
+          status: activeTab,
+          query: searchQuery,
+          page,
+          limit: 9
+        })
+        setTours(response.tours)
+        setTotal(response.total)
+        setHasMore(response.hasMore)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch tours')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchTours()
+  }, [activeTab, searchQuery, page])
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    setPage(1) // Reset to first page when searching
+  }
+
+  const hasNoTours = !isLoading && tours.length === 0
 
   return (
     <div className="min-h-screen  p-6">
@@ -35,64 +70,85 @@ export default function MyToursPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-2">
             <Button
-              onClick={() => setActiveTab("upcoming")}
-              variant={activeTab === "upcoming" ? "primary" : "secondary"}
+              onClick={() => setActiveTab("ACTIVE")}
+              variant={activeTab === "ACTIVE" ? "primary" : "secondary"}
               className="rounded-full"
             >
               Upcoming
             </Button>
             <Button
-              onClick={() => setActiveTab("completed")}
-              variant={activeTab === "completed" ? "primary" : "secondary"}
+              onClick={() => setActiveTab("APPROVED")}
+              variant={activeTab === "APPROVED" ? "primary" : "secondary"}
               className="rounded-full"
             >
               Completed
             </Button>
             <Button
-              onClick={() => setActiveTab("cancelled")}
-              variant={activeTab === "cancelled" ? "primary" : "secondary"}
+              onClick={() => setActiveTab("INACTIVE")}
+              variant={activeTab === "INACTIVE" ? "primary" : "secondary"}
               className="rounded-full"
             >
               Cancelled
             </Button>
           </div>
 
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <Button variant="secondary" className="flex items-center gap-2 bg-transparent">
+          <form onSubmit={handleSearch} className="flex items-center gap-3 w-full sm:w-auto">
+            <Button 
+              type="button"
+              variant="secondary" 
+              className="flex items-center gap-2 bg-transparent"
+            >
               <SlidersHorizontal className="w-4 h-4" />
               Filters
             </Button>
             <div className="relative flex-1 sm:w-96">
-              {/* <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" /> */}
               <Input
                 placeholder="Search by Tour title, location"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 !py-5 !bg-white rounded-[18px]"
+                className="pl-10 py-5! bg-white! rounded-[18px]"
               />
             </div>
-            <Button variant="secondary">Search Tour</Button>
-          </div>
+            <Button type="submit" variant="secondary" disabled={isLoading}>
+              {isLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                'Search Tour'
+              )}
+            </Button>
+          </form>
         </div>
 
-        {/* Tours Grid or Empty State */}
-        {hasNoTours ? (
-          <EmptyState description="You have no tours yet" hasButton={true} />
+        {/* Loading State */}
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <p className="mt-2 text-gray-600">Loading tours...</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-500">{error}</p>
+            <Button onClick={() => setPage(1)} variant="secondary" className="mt-4">
+              Try Again
+            </Button>
+          </div>
+        ) : hasNoTours ? (
+          <EmptyState title="" description="You have no tours yet" hasButton={true} />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredTours.map((tour) => (
+            {tours.map((tour) => (
               <Card key={tour.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="relative h-48">
-                  <Image src={tour.image || "/placeholder.svg"} alt={tour.title} fill className="object-cover" />
+                  <Image src={tour.images[0] || "/placeholder.svg"} alt={tour.title} fill className="object-cover" />
                   <div className="absolute bottom-3 left-3 flex items-center gap-2 bg-[#18171799] rounded-[18px] px-2 py-1">
                     <Image
                       src={tour.host.avatar || "/placeholder.svg"}
-                      alt={tour.host.name}
+                      alt={tour.host.firstName}
                       width={20}
                       height={20}
                       className="rounded-full"
                     />
-                    <span className="text-xs font-medium">{tour.host.name}</span>
+                    <span className="text-xs font-medium">{tour.host.firstName} {tour.host.lastName}</span>
                   </div>
                 </div>
                 <div className="p-4">

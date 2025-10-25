@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { prisma } from '@/lib/prisma';
 import { UserProfile } from '@/lib/stores/auth-store';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+const JWT_SECRET = process.env.JWT_SECRET || '3cc_0f7c_4464d1';
 
 export async function GET(request: NextRequest) {
   try {

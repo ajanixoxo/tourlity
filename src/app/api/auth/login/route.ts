@@ -9,7 +9,7 @@ const loginSchema = z.object({
   password: z.string().min(1, 'Password is required'),
 });
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+const JWT_SECRET = process.env.JWT_SECRET || '3cc_0f7c_4464d1';
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
 // Pre-compute cookie settings

@@ -6,7 +6,7 @@ import { calculatePlatformFee } from '@/lib/payment-utils';
 import { prisma } from '@/lib/prisma';
 import { UserProfile } from '@/lib/stores/auth-store';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+const JWT_SECRET = process.env.JWT_SECRET || '3cc_0f7c_4464d1';
 
 const createPaymentSchema = z.object({
   tourId: z.string().min(1, "Tour ID is required"),

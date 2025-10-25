@@ -58,17 +58,19 @@ export const useTourStore = create<TourStore>()(
         const queryParams = new URLSearchParams({
           page: page.toString(),
           limit: limit.toString(),
-          ...filters as Record<string, string>
+          ...Object.fromEntries(
+            Object.entries(filters).map(([k, v]) => [k, String(v)])
+          )
         });
         
-        const response = await fetch(\`/api/tours/explore?\${queryParams}\`);
+        const response = await fetch(`/api/tours/explore?${queryParams}`);
         if (!response.ok) throw new Error('Failed to fetch tours');
         
         const data = await response.json();
         set(state => ({
           exploreTours: {
             ...state.exploreTours,
-            [\`\${page}-\${limit}-\${JSON.stringify(filters)}\`]: data
+            [`${page}-${limit}-${JSON.stringify(filters)}`]: data
           }
         }));
       } catch (error) {
@@ -96,14 +98,14 @@ export const useTourStore = create<TourStore>()(
     fetchUserTours: async (userId, page, limit) => {
       try {
         set({ isLoading: true, error: null });
-        const response = await fetch(\`/api/tours/user/\${userId}?page=\${page}&limit=\${limit}\`);
+        const response = await fetch(`/api/tours/user/${userId}?page=${page}&limit=${limit}`);
         if (!response.ok) throw new Error('Failed to fetch user tours');
         
         const data = await response.json();
         set(state => ({
           userTours: {
             ...state.userTours,
-            [\`\${userId}-\${page}-\${limit}\`]: data
+            [`${userId}-${page}-${limit}`]: data
           }
         }));
       } catch (error) {
@@ -116,14 +118,14 @@ export const useTourStore = create<TourStore>()(
     fetchHostTours: async (hostId, page, limit) => {
       try {
         set({ isLoading: true, error: null });
-        const response = await fetch(\`/api/tours/host/\${hostId}?page=\${page}&limit=\${limit}\`);
+        const response = await fetch(`/api/tours/host/${hostId}?page=${page}&limit=${limit}`);
         if (!response.ok) throw new Error('Failed to fetch host tours');
         
         const data = await response.json();
         set(state => ({
           hostTours: {
             ...state.hostTours,
-            [\`\${hostId}-\${page}-\${limit}\`]: data
+            [`${hostId}-${page}-${limit}`]: data
           }
         }));
       } catch (error) {
@@ -136,7 +138,7 @@ export const useTourStore = create<TourStore>()(
     fetchTourDetails: async (id) => {
       try {
         set({ isLoading: true, error: null });
-        const response = await fetch(\`/api/tours/\${id}\`);
+        const response = await fetch(`/api/tours/${id}`);
         if (!response.ok) throw new Error('Failed to fetch tour details');
         
         const data = await response.json();

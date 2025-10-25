@@ -20,7 +20,7 @@ function getUserFromToken(request: NextRequest): AuthUser | null {
     // Verify and decode JWT
     const decoded = jwt.verify(
       jwtToken, 
-      process.env.JWT_SECRET || 'your_jwt_secret'
+      process.env.JWT_SECRET || '3cc_0f7c_4464d1'
     ) as AuthUser
 
     return decoded

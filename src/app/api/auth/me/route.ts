@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { prisma } from '@/lib/prisma';
 import { UserProfile } from '@/lib/stores/auth-store';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+const JWT_SECRET = process.env.JWT_SECRET || '3cc_0f7c_4464d1';
 
 // Cache response for null user to avoid repeated processing
 const NULL_USER_RESPONSE = NextResponse.json({ user: null }, { status: 200 });

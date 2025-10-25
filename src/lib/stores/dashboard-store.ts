@@ -37,6 +37,18 @@ interface DashboardState {
   usersLoading: boolean
   usersError: string | null
 
+  // ============ TOUR MODERATION ============
+  tours: any[]
+  toursLoading: boolean
+  toursError: string | null
+  toursPagination: {
+    total: number
+    page: number
+    limit: number
+    totalPages: number
+    hasMore: boolean
+  } | null
+
   // ============ PROFILE MANAGEMENT ============
   profileLoading: boolean
   profileError: string | null
@@ -73,6 +85,12 @@ interface DashboardState {
   updateUserStatusWithReason: (userId: string, status: string, reason?:string) => Promise<void>
   requestUserEdits: (userId: string, status: string, reason?:string ) => Promise<void>
 
+  // ============ TOUR MODERATION ACTIONS ============
+  fetchTours: (params?: { search?: string; page?: number; limit?: number; status?: string }, force?: boolean) => Promise<void>
+  approveTour: (tourId: string) => Promise<void>
+  rejectTour: (tourId: string, reason?: string) => Promise<void>
+  requestTourEdits: (tourId: string, reason: string) => Promise<void>
+
   // ============ PROFILE ACTIONS ============
   fetchCurrentUserProfile: () => Promise<void>
   updateUserProfile: (data: UserProfileData) => Promise<void>
@@ -83,6 +101,7 @@ interface DashboardState {
   // ============ STATE MANAGEMENT ============
   setUsersLoading: (loading: boolean) => void
   clearUsersError: () => void
+  clearToursError: () => void
   clearProfileError: () => void
   clearAvatarError: () => void
   clearPasswordError: () => void
@@ -105,6 +124,12 @@ export const useDashboardStore = create<DashboardState>()(
         users: [],
         usersLoading: false,
         usersError: null,
+
+        // Tour moderation
+        tours: [],
+        toursLoading: false,
+        toursError: null,
+        toursPagination: null,
 
         // Profile management
         profileLoading: false,
@@ -245,6 +270,131 @@ export const useDashboardStore = create<DashboardState>()(
           } catch (error) {
             set({
               usersError: error instanceof Error ? error.message : 'Failed to request edits',
+            })
+          }
+        },
+
+        // ============ TOUR MODERATION ACTIONS ============
+        fetchTours: async (params = {}, force = false) => {
+          const state = get()
+          const now = Date.now()
+
+          // Check cache validity
+          if (!force && state.lastFetch && (now - state.lastFetch < state.cacheExpiry)) {
+            return // Use cached data
+          }
+
+          set({ toursLoading: true, toursError: null })
+
+          try {
+            const queryParams = new URLSearchParams()
+            if (params.search) queryParams.append('search', params.search)
+            if (params.page) queryParams.append('page', params.page.toString())
+            if (params.limit) queryParams.append('limit', params.limit.toString())
+            if (params.status) queryParams.append('status', params.status)
+
+            const response = await fetch(`/api/admin/tours?${queryParams.toString()}`)
+            
+            if (!response.ok) {
+              throw new Error('Failed to fetch tours')
+            }
+
+            const data = await response.json()
+
+            if (data.success) {
+              set({
+                tours: data.data.tours,
+                toursPagination: data.data.pagination,
+                lastFetch: now,
+                toursLoading: false,
+              })
+            } else {
+              throw new Error('Failed to fetch tours')
+            }
+          } catch (error) {
+            set({
+              toursError: error instanceof Error ? error.message : 'Unknown error',
+              toursLoading: false,
+            })
+          }
+        },
+
+        approveTour: async (tourId: string) => {
+          try {
+            const response = await fetch(`/api/admin/tours/${tourId}/approve`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            })
+
+            if (!response.ok) {
+              const errorData = await response.json()
+              throw new Error(errorData.error || 'Failed to approve tour')
+            }
+
+            // Update local state - remove from tours list
+            set((state) => ({
+              tours: state.tours.filter((tour) => tour.id !== tourId),
+            }))
+
+          } catch (error) {
+            set({
+              toursError: error instanceof Error ? error.message : 'Failed to approve tour',
+            })
+          }
+        },
+
+        rejectTour: async (tourId: string, reason?: string) => {
+          try {
+            const response = await fetch(`/api/admin/tours/${tourId}/reject`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ reason }),
+            })
+
+            if (!response.ok) {
+              const errorData = await response.json()
+              throw new Error(errorData.error || 'Failed to reject tour')
+            }
+
+            // Update local state - remove from tours list
+            set((state) => ({
+              tours: state.tours.filter((tour) => tour.id !== tourId),
+            }))
+
+          } catch (error) {
+            set({
+              toursError: error instanceof Error ? error.message : 'Failed to reject tour',
+            })
+          }
+        },
+
+        requestTourEdits: async (tourId: string, reason: string) => {
+          try {
+            const response = await fetch(`/api/admin/tours/${tourId}/request-edits`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ reason }),
+            })
+
+            if (!response.ok) {
+              const errorData = await response.json()
+              throw new Error(errorData.error || 'Failed to request tour edits')
+            }
+
+            // Update local state - remove from tours list
+            set((state) => ({
+              tours: state.tours.filter((tour) => tour.id !== tourId),
+            }))
+
+          } catch (error) {
+            set({
+              toursError: error instanceof Error ? error.message : 'Failed to request tour edits',
             })
           }
         },
@@ -441,6 +591,7 @@ export const useDashboardStore = create<DashboardState>()(
         // ============ STATE MANAGEMENT ============
         setUsersLoading: (loading: boolean) => set({ usersLoading: loading }),
         clearUsersError: () => set({ usersError: null }),
+        clearToursError: () => set({ toursError: null }),
         clearProfileError: () => set({ profileError: null }),
         clearAvatarError: () => set({ avatarError: null }),
         clearPasswordError: () => set({ passwordError: null }),
@@ -479,3 +630,9 @@ export const usePagination = () => useDashboardStore((state) => state.pagination
 // Profile selectors
 export const useProfileLoading = () => useDashboardStore((state) => state.profileLoading)
 export const useAvatarUploading = () => useDashboardStore((state) => state.avatarUploading)
+
+// Tour moderation selectors
+export const useTours = () => useDashboardStore((state) => state.tours)
+export const useToursLoading = () => useDashboardStore((state) => state.toursLoading)
+export const useToursError = () => useDashboardStore((state) => state.toursError)
+export const useToursPagination = () => useDashboardStore((state) => state.toursPagination)

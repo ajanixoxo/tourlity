@@ -3,12 +3,12 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const tour = await prisma.tour.findUnique({
       where: {
-        id: params.id,
+        id: (await params).id,
       },
       include: {
         host: {

@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const tours = await prisma.tour.findMany({
       where: {
-        status: "PUBLISHED",
+        status: "ACTIVE",
         isFeatured: true,
       },
       select: {

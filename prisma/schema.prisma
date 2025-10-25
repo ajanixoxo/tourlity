@@ -120,7 +120,7 @@ model Tour {
   title                   String
   description             String
   type                    TourType
-  status                  TourStatus                @default(DRAFT)
+  status                  TourStatus                @default(PENDING_APPROVAL)
   price                   Float
   originalPrice           Float?
   location                String
