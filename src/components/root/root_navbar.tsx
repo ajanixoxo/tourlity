@@ -19,8 +19,9 @@ function Navbar() {
         <div className='flex justify-between p-2 items-center w-full'>
           <div className='flex items-center gap-5'>
             {/* Logo */}
-            <Link href="/">
-              <h1 className='lobster'>Tourlity</h1>
+            <Link href="/" className='flex items-end justify-end'>
+            <img src={"/images/logo/logo.svg"} alt="" className='w-10'/>
+              <h1 className='lobster !text-3xl'>Tourlity</h1>
             </Link>
 
             {/* Line - Hidden on mobile */}

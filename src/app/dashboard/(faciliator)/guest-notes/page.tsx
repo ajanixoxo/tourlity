@@ -119,7 +119,11 @@ export default function GuestNotesPage() {
 
               {/* Tour Info */}
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-900">{tour.title}</h3>
+                <Link href={`/dashboard/(tour-details)/${tour.id}`}>
+                  <h3 className="text-lg font-semibold text-coral-700 hover:underline cursor-pointer">
+                    {tour.title}
+                  </h3>
+                </Link>
                 <div className="flex flex-col sm:flex-row gap-4 mt-2 text-sm text-gray-600">
                   <span>🕐 {tour.time}</span>
                   <span>📍 {tour.location}</span>

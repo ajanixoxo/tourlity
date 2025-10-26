@@ -13,28 +13,29 @@ const Footer: React.FC = () => {
             <div className="flex flex-col lg:flex-row justify-between items-start gap-8 lg:gap-10 mr-0 lg:mr-10">
               {/* Brand Section */}
               <div className="flex flex-col gap-2 w-full lg:w-[34%]">
-                <Link href="/" className="lobster">
-                  Tourlity
+                <Link href="/" className='flex items-end justify-end'>
+                  <img src={"/images/logo/logo.svg"} alt="" className='w-10' />
+                  <h1 className='lobster !text-3xl'>Tourlity</h1>
                 </Link>
                 <p className="text-sm font-inter description font-normal leading-5 text-global-2 w-full">
                   Connecting travelers with authentic local experiences around the world. Our platform brings together passionate hosts and curious explorers.
                 </p>
-                
+
                 {/* Social Icons */}
                 <div className="flex items-center gap-2 mt-4">
-                  <button 
+                  <button
                     className="w-10 bg-button-1 rounded-full h-10 bg-header-2  p-3 hover:bg-header-1 transition-colors duration-200"
                     aria-label="Social media link"
                   >
                     <img src="/images/img_social_icons.svg" alt="Social icon" className="w-4 h-4" />
                   </button>
-                  <button 
+                  <button
                     className="w-10 h-10 bg-button-1 rounded-full bg-header-2  p-3 hover:bg-header-1 transition-colors duration-200"
                     aria-label="Social media link"
                   >
                     <img src="/images/img_social_icons_gray_700.svg" alt="Social icon" className="w-4 h-4" />
                   </button>
-                  <button 
+                  <button
                     className="w-10 h-10 bg-header-2 bg-button-1 rounded-full p-2.5 hover:bg-header-1 transition-colors duration-200"
                     aria-label="Social media link"
                   >
@@ -137,12 +138,12 @@ const Footer: React.FC = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Positioned Image - moved outside the inner container but inside box-color container */}
         <div className="absolute bottom-0 -rotate-30 lg:rotate-0 right-0 w-[40%] sm:w-[35%] lg:w-[30%] max-w-[316px] transform translate-y-[20%] translate-x-[0%]">
-          <img 
-            src="/images/img_tourlity.png" 
-            alt="Tourlity brand image" 
+          <img
+            src="/images/img_tourlity.png"
+            alt="Tourlity brand image"
             className="w-full h-auto max-h-[120px] sm:max-h-[150px] lg:max-h-[188px] object-contain"
           />
         </div>

@@ -1,9 +1,14 @@
 "use client"
+import { Card } from "@/components/ui/card"
+import Button from "@/components/root/button"
+import { ChevronDown } from "lucide-react"
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend, Tooltip } from "recharts"
+import { EmptyState } from "@/components/admin/empty-state"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts"
-import type { ChartDataPoint } from "@/data/dashboard"
+interface ChartDataPoint {
+  name: string
+  value: number
+}
 
 interface PerformanceChartProps {
   data: ChartDataPoint[]
@@ -13,54 +18,43 @@ interface PerformanceChartProps {
 export function PerformanceChart({ data, hasData }: PerformanceChartProps) {
   if (!hasData) {
     return (
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Performance</CardTitle>
-          <Select defaultValue="this-year">
-            <SelectTrigger className="w-32">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="this-year">This Year</SelectItem>
-              <SelectItem value="last-year">Last Year</SelectItem>
-            </SelectContent>
-          </Select>
-        </CardHeader>
-        <CardContent className="h-80 flex flex-col items-center justify-center">
-          <div className="w-32 h-32 bg-gray-200 rounded-full flex items-center justify-center mb-4">
-            <div className="w-16 h-16 bg-gray-400 rounded-full opacity-50"></div>
-          </div>
-          <p className="text-gray-500 text-center">You haven&apos;t any action yet.</p>
-        </CardContent>
+      <Card className="p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-lg font-semibold text-gray-900">Performance</h3>
+          <Button variant="secondary" className="flex items-center gap-2">
+            This Year
+            <ChevronDown className="h-4 w-4" />
+          </Button>
+        </div>
+        <EmptyState
+          title="No performance data yet"
+          description="Performance metrics will appear here once you have platform activity."
+        />
       </Card>
     )
   }
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Performance</CardTitle>
-        <Select defaultValue="this-year">
-          <SelectTrigger className="w-32">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="this-year">This Year</SelectItem>
-            <SelectItem value="last-year">Last Year</SelectItem>
-          </SelectContent>
-        </Select>
-      </CardHeader>
-      <CardContent>
-        <div className="h-80">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data}>
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#6B7280" }} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#6B7280" }} />
-              <Bar dataKey="value" fill="#EF4444" radius={[4, 4, 0, 0]} opacity={0.8} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </CardContent>
+    <Card className="p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-lg font-semibold text-gray-900">Performance</h3>
+        <Button variant="secondary" className="flex items-center gap-2">
+          This Year
+          <ChevronDown className="h-4 w-4" />
+        </Button>
+      </div>
+      <div className="h-80">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#6b7280" }} />
+            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#6b7280" }} />
+            <Tooltip />
+            <Legend wrapperStyle={{ paddingTop: "20px" }} iconType="circle" />
+            <Bar dataKey="value" name="Value" fill="#ef6144" radius={[2, 2, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </Card>
   )
 }

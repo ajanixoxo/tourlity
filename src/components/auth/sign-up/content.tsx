@@ -251,8 +251,9 @@ function SignUpContent() {
 
         <div className='flex-1 w-full py-15 lg:w-1/2 px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-25'>
           <div>
-            <Link href="/">
-              <h1 className='lobster'>Tourlity</h1>
+          <Link href="/" className='flex items-end justify-end'>
+            <img src={"/images/logo/logo.svg"} alt="" className='w-10'/>
+              <h1 className='lobster !text-3xl'>Tourlity</h1>
             </Link>
           </div>
 

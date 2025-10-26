@@ -1,7 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Button from "../root/button"
-import type { ActivityItem } from "@/data/dashboard"
+
+interface ActivityItem {
+  id: string
+  tourName: string
+  status: "completed" | "pending" | "cancelled"
+  dateTime: string
+  guest?: string
+  host?: string
+}
 
 interface RecentActivityProps {
   activities: ActivityItem[]
@@ -32,7 +40,7 @@ export function RecentActivity({ activities, hasData }: RecentActivityProps) {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Recent Activity</CardTitle>
-        <Button variant="secondary"  className="text-primary-color">
+        <Button variant="secondary" className="text-primary-color">
           View All
         </Button>
       </CardHeader>
@@ -40,7 +48,7 @@ export function RecentActivity({ activities, hasData }: RecentActivityProps) {
         <div className="space-y-4">
           <div className="grid grid-cols-4 gap-4 text-sm font-medium text-gray-600 pb-2 border-b">
             <div>Tour Name</div>
-            <div>Host</div>
+            <div>Person</div>
             <div>Status</div>
             <div>Date and Time</div>
           </div>

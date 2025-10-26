@@ -1,67 +1,70 @@
-import { Card } from "@/components/ui/card"
-import { Plane, UserCheck, MessageSquare, ArrowRight } from "lucide-react"
-import Link from "next/link"
-import { EmptyState } from "@/components/admin/empty-state"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Plane, Users, MessageSquare, ArrowRight } from "lucide-react"
 
-const quickActions = [
-  {
-    title: "Tour",
-    description: "Review Tour Listings",
-    icon: Plane,
-    href: "/admin/listings",
-    iconColor: "text-blue-500",
-    iconBg: "bg-blue-50",
-  },
-  {
-    title: "Host",
-    description: "Verify New Hosts",
-    icon: UserCheck,
-    href: "/admin/verification",
-    iconColor: "text-green-500",
-    iconBg: "bg-green-50",
-  },
-  {
-    title: "Supports",
-    description: "Respond to Support Tickets",
-    icon: MessageSquare,
-    href: "/admin/support",
-    iconColor: "text-orange-500",
-    iconBg: "bg-orange-50",
-  },
-]
+const iconMap = {
+  plane: Plane,
+  users: Users,
+  message: MessageSquare
+}
 
-export function QuickActions() {
-  const hasActions = quickActions.length > 0
+interface QuickAction {
+  id: string
+  title: string
+  description: string
+  icon: string
+  status?: "warning" | "info"
+}
+
+interface QuickActionsProps {
+  actions: QuickAction[]
+  hasData: boolean
+  title?: string
+}
+
+export function QuickActions({ actions, hasData, title = "Quick Actions" }: QuickActionsProps) {
+  if (!hasData) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center justify-center py-12">
+          <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mb-4">
+            <div className="w-12 h-12 bg-gray-400 rounded-full opacity-50"></div>
+          </div>
+          <p className="text-gray-500 text-center">You have no quick actions yet.</p>
+        </CardContent>
+      </Card>
+    )
+  }
 
   return (
-    <Card className="p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-6">Quick Actions</h3>
+    <Card>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {actions.map((action) => {
+          const Icon = iconMap[action.icon as keyof typeof iconMap] || Plane
 
-      {hasActions ? (
-        <div className="space-y-4">
-          {quickActions.map((action) => (
-            <Link key={action.title} href={action.href}>
-              <div className="flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors group">
-                <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg ${action.iconBg}`}>
-                    <action.icon className={`h-5 w-5 ${action.iconColor}`} />
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">{action.title}</p>
-                    <p className="text-sm text-gray-600">{action.description}</p>
-                  </div>
-                </div>
-                <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+          return (
+            <div key={action.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+              <div className="p-2 bg-blue-50 rounded-lg">
+                <Icon className="h-4 w-4 text-blue-600" />
               </div>
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <EmptyState
-          title="You have no quick action yet."
-          description="Quick actions will appear here to help you manage the platform efficiently."
-        />
-      )}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <p className="text-sm font-medium text-gray-900">{action.title}</p>
+                  {action.status === "warning" && <div className="w-2 h-2 bg-red-500 rounded-full"></div>}
+                  {action.status === "info" && <div className="w-2 h-2 bg-blue-500 rounded-full"></div>}
+                </div>
+                <p className="text-sm text-gray-600">{action.description}</p>
+              </div>
+              <ArrowRight className="h-4 w-4 text-gray-400 mt-1" />
+            </div>
+          )
+        })}
+      </CardContent>
     </Card>
   )
 }

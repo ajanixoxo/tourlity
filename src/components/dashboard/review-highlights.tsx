@@ -1,7 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Button from "../root/button"
 import { Star } from "lucide-react"
-import type { ReviewHighlight } from "@/data/dashboard"
+
+interface ReviewHighlight {
+  id: string
+  rating: number
+  text: string
+  tourName?: string
+  guestName?: string
+}
 
 interface ReviewHighlightsProps {
   reviews: ReviewHighlight[]
@@ -14,7 +21,7 @@ export function ReviewHighlights({ reviews, hasData }: ReviewHighlightsProps) {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Review Highlights</CardTitle>
-          <Button variant="secondary"  className="text-primary-color">
+          <Button variant="secondary" className="text-primary-color">
             View All
           </Button>
         </CardHeader>
@@ -32,7 +39,7 @@ export function ReviewHighlights({ reviews, hasData }: ReviewHighlightsProps) {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Review Highlights</CardTitle>
-        <Button variant="secondary"  className="text-primary-color">
+        <Button variant="secondary" className="text-primary-color">
           View All
         </Button>
       </CardHeader>

@@ -5,104 +5,147 @@ import Button from "@/components/root/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Search, Filter, MoreVertical } from "lucide-react"
-import { recentTourListings } from "@/data/admin-data"
 import { EmptyState } from "@/components/admin/empty-state"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import Image from "next/image"
 
-export function RecentTourListings() {
+interface RecentTourListingsProps {
+  tours: Array<{
+    id: string
+    title: string
+    status: string
+    host: {
+      name: string
+      avatar?: string
+    }
+    stats: {
+      bookings: number
+      reviews: number
+    }
+  }>
+  hasData: boolean
+}
+
+export function RecentTourListings({ tours, hasData }: RecentTourListingsProps) {
   const [searchQuery, setSearchQuery] = useState("")
-  const hasListings = recentTourListings.length > 0
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Confirmed":
+    switch (status.toUpperCase()) {
+      case "ACTIVE":
         return "bg-green-100 text-green-800"
-      case "Pending":
+      case "PENDING_APPROVAL":
         return "bg-yellow-100 text-yellow-800"
-      case "Cancelled":
+      case "REJECTED":
         return "bg-red-100 text-red-800"
       default:
         return "bg-gray-100 text-gray-800"
     }
   }
 
+  if (!hasData) {
+    return (
+      <Card className="p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-lg font-semibold text-gray-900">Recent Tour Listings</h3>
+        </div>
+        <EmptyState
+          title="No tour listings yet"
+          description="Recent tour listings will appear here once tours are created."
+        />
+      </Card>
+    )
+  }
+
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">Recent Tour Listing...</h3>
+        <h3 className="text-lg font-semibold text-gray-900">Recent Tour Listings</h3>
 
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
-              placeholder="Search by ID or host..."
+              placeholder="Search tours..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 w-64"
             />
           </div>
-          <div className="flex gap-2">
-            <Button variant="secondary" className="flex items-center gap-2 bg-transparent">
-              <Search className="h-4 w-4" />
-              Search
-            </Button>
-            <Button variant="secondary" className="flex items-center gap-2 bg-transparent">
-              <Filter className="h-4 w-4" />
-              Filters
-            </Button>
-          </div>
+          <Button variant="secondary" className="flex items-center gap-2">
+            <Filter className="h-4 w-4" />
+            Filters
+          </Button>
         </div>
       </div>
 
-      {hasListings ? (
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b bg-[#FFF6F5] border-gray-200">  
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Tour Title</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Host Name</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Guest</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Date</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-gray-200">
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Tour Title</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Host</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Stats</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tours.map((tour) => (
+              <tr key={tour.id} className="border-b border-gray-100 hover:bg-gray-50">
+                <td className="py-4 px-4">
+                  <div className="font-medium text-gray-900">{tour.title}</div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-2">
+                    {tour.host.avatar && (
+                      <div className="relative h-8 w-8 rounded-full overflow-hidden">
+                        <Image
+                          src={tour.host.avatar}
+                          alt={tour.host.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
+                    <span className="text-gray-700">{tour.host.name}</span>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <Badge className={getStatusColor(tour.status)}>
+                    {tour.status.replace("_", " ")}
+                  </Badge>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-4">
+                    <span className="text-sm text-gray-600">
+                      {tour.stats.bookings} bookings
+                    </span>
+                    <span className="text-sm text-gray-600">
+                      {tour.stats.reviews} reviews
+                    </span>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="secondary">
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem>View Details</DropdownMenuItem>
+                      <DropdownMenuItem>Edit Tour</DropdownMenuItem>
+                      <DropdownMenuItem className="text-red-600">
+                        Disable Tour
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {recentTourListings.map((listing) => (
-                <tr key={listing.id} className="border-b border-gray-100 hover:bg-gray-50">
-                  <td className="py-4 px-4 font-medium text-gray-900">{listing.title}</td>
-                  <td className="py-4 px-4 text-gray-700">{listing.hostName}</td>
-                  <td className="py-4 px-4 text-gray-700">{listing.guest}</td>
-                  <td className="py-4 px-4 text-gray-700">{listing.date}</td>
-                  <td className="py-4 px-4">
-                    <Badge className={getStatusColor(listing.status)}>{listing.status}</Badge>
-                  </td>
-                  <td className="py-4 px-4">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="secondary" className="border-none" >
-                          <MoreVertical className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View Details</DropdownMenuItem>
-                        <DropdownMenuItem>Edit Booking</DropdownMenuItem>
-                        <DropdownMenuItem>Contact Host</DropdownMenuItem>
-                        <DropdownMenuItem className="text-red-600">Cancel Booking</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <EmptyState
-          title="No recent tour listings found"
-          description="Recent tour bookings and listings will appear here once you have activity on the platform."
-        />
-      )}
+            ))}
+          </tbody>
+        </table>
+      </div>
     </Card>
   )
 }

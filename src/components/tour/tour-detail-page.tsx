@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { MapPin, Star, Users, Clock, Accessibility, AlertCircle, Info } from "lucide-react"
 import Button from "../root/button"
@@ -13,138 +13,81 @@ interface TourDetailPageProps {
   tourId: string
 }
 
-export function TourDetailPage({ tourId }: TourDetailPageProps) {
-  const [expandedDay, setExpandedDay] = useState<string>("day-1")
+// Define the details type (merged from backend shape and UI needs)
+interface ITourDetail {
+  id: string
+  title: string
+  price: number
+  location: string
+  images: string[]
+  description: string
+  categories: string[]
+  highlights?: string
+  features?: { icon: string; title: string; description: string }[]
+  availableDates?: Array<{ date: string; time: string; note: string; price: number; originalPrice: number; discountPrice: number }>
+  itinerary?: any[]
+  inclusions?: string[]
+  exclusions?: string[]
+  reviews?: Array<{ author: string; location: string; rating: number; text: string; avatar?: string }>
+}
 
-  // Mock data - replace with actual API call
-  const tour = {
-    id: tourId,
-    title: "Paris Rooftop Fashion Haul",
-    price: 125,
-    location: "Paris, France",
-    image: "/paris-rooftop-fashion-tour.jpg",
-    description:
-      "Join an exclusive fashion experience on a chic Parisian rooftop, where stylist Chloé unveils the season's hottest trends in real time. From couture pieces to emerging local designers, get front-row insights into the looks redefining European street style. Ask questions, get styling tips, and shop limited pieces directly during the session — all while soaking in stunning rooftop views of the Eiffel Tower.",
-    categories: ["Arts and Crafts", "Nature and Outdoors"],
-    highlights:
-      "Explore Paris's remarkable blend of elegance and history, where iconic landmarks stand alongside charming cafés and beautiful gardens. Begin your unforgettable adventure at the Eiffel Tower, the tallest. Explore Paris's remarkable blend of elegance and history, where iconic landmarks stand alongside charming cafés and beautiful gardens.",
-    features: [
-      {
-        icon: "calendar",
-        title: "Reserve Now and Pay Later",
-        description: "Keep your travel plans flexible - book your spot and pay nothing today",
-      },
-      { icon: "users", title: "Group Tour", description: "Join a group and forge lifelong friendship" },
-      { icon: "clock", title: "Duration 10 Hours", description: "Check availability to see starting time" },
-      { icon: "accessibility", title: "Accessibility", description: "Wheelchair accessible" },
-      { icon: "users", title: "Age Range", description: "12 to 99" },
-      { icon: "car", title: "Transfer", description: "Included" },
-      {
-        icon: "alert",
-        title: "Cancellation Policy",
-        description: "Cancel up to 24 hours in advance for a full refund - This activity is non-refundable",
-      },
-      { icon: "bed", title: "Stay", description: "Included" },
-      { icon: "phone", title: "Mobile Ticketing", description: "Use your phone or print your voucher" },
-      { icon: "utensils", title: "Meals", description: "Breakfast included" },
-      { icon: "user", title: "Instructor", description: "English" },
-      { icon: "pet", title: "Pet", description: "Not allowed" },
-    ],
-    availableDates: [
-      {
-        date: "Mon, July 15",
-        time: "11:00 AM - 1:00 PM",
-        note: "Book For a Private group",
-        price: 1050,
-        originalPrice: 1050,
-        discountPrice: 980,
-      },
-      {
-        date: "Mon, July 18",
-        time: "11:00 AM - 1:00 PM",
-        note: "Book For a Private group",
-        price: 1050,
-        originalPrice: 1050,
-        discountPrice: 980,
-      },
-      {
-        date: "Mon, July 25",
-        time: "11:00 AM - 1:00 PM",
-        note: "Book For a Private group",
-        price: 1050,
-        originalPrice: 1050,
-        discountPrice: 980,
-      },
-    ],
-    itinerary: [
-      {
-        day: 1,
-        title: "Arrival & Introduction to Paris",
-        description:
-          "Welcome to Paris! Upon arrival at the airport, get driven to your hotel. First check-in, spend the day at your leisure, where you can relax or explore the city on your own.",
-        activities: [
-          "Welcome to Paris! Upon arrival at the airport, get driven to your hotel. First check-in, spend the day at your leisure, where you can relax or explore the city on your own.",
-          "Arriving in Paris at 13:00",
-          "Picking you up at 14:00",
-          "Hotel check-in starts at 15:00",
-        ],
-        meals: ["Breakfast", "Dinner", "Lunch"],
-        images: ["/paris-hotel-breakfast.jpg", "/paris-city-view.jpg"],
-        notes: "Early check-in is allowed after 00:00",
-        tip: "Today's schedule is free. You can use the hotels spa and pool",
-      },
-      {
-        day: 2,
-        title: "Arrival & Introduction to Paris",
-      },
-      {
-        day: 3,
-        title: "Arrival & Introduction to Paris",
-      },
-      {
-        day: 4,
-        title: "Arrival & Introduction to Paris",
-      },
-      {
-        day: 5,
-        title: "Arrival & Introduction to Paris",
-      },
-    ],
-    inclusions: [
-      "4 nights stay in Paris with breakfast",
-      "Paris Hop-On Hop-Off Bus Tour - Paris Hop-On Hop-Off Tootbus Tour (24 hours) and ticket",
-      "Disneyland Paris Tickets - 1 Day and 1 Park Tickets (Undated) and ticket",
-      "Palace of Versailles And Gardens Full Access Tickets and ticket",
-      "Eiffel Tower Second Floor Tickets and ticket",
-      "Louvre Museum Tickets, Paris and ticket",
-      "Airport transfer from Charles de Gaulle International Airport to Deluxe Hotel",
-      "Daily Breakfast",
-    ],
-    exclusions: ["Expenses of a personal nature.", "Meals not mentioned in the itinerary or inclusions"],
-    reviews: [
-      {
-        author: "Sarah Johnson",
-        location: "Canada",
-        rating: 5,
-        text: '"Marco\'s pasta-making class was the highlight of our trip to Rome! His knowledge of Italian cuisine and warm personality made for an unforgettable experience. We not only learned how to make authentic pasta but also about the history and culture behind the dishes."',
-        avatar: "/sarah-johnson-avatar.jpg",
-      },
-      {
-        author: "David Chen",
-        location: "United States",
-        rating: 5,
-        text: '"Akiko\'s tea ceremony was a serene and mindful experience that gave us a deep appreciation for Japanese traditions. Her attention to detail and willingness to answer all our questions made it educational and enjoyable. A truly authentic cultural immersion!"',
-        avatar: "/david-chen-avatar.jpg",
-      },
-      {
-        author: "Emma Rodriguez",
-        location: "Australia",
-        rating: 5,
-        text: "\"Isabella's samba class was energetic, fun, and a perfect introduction to Brazilian culture! She was patient with beginners and made everyone feel comfortable. By the end, we were all dancing with confidence. Can't recommend this experience enough!\"",
-        avatar: "/emma-rodriguez-avatar.jpg",
-      },
-    ],
-  }
+import { ReactElement } from 'react'
+
+export function TourDetailPage({ tourId }: TourDetailPageProps): ReactElement {
+  const [expandedDay, setExpandedDay] = useState<string>("day-1")
+  const [tour, setTour] = useState<ITourDetail | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchTour() {
+      setLoading(true)
+      setError(null)
+      try {
+        const res = await fetch(`/api/tours/${tourId}`)
+        if (!res.ok) throw new Error("Failed to fetch tour data")
+        const data = await res.json()
+
+        // Transform and map backend API to frontend needed structure
+        const mappedTour: ITourDetail = {
+          id: data.id,
+          title: data.title,
+          price: data.price,
+          location: data.location,
+          images: data.images && data.images.length > 0 ? data.images : ["/placeholder.svg"],
+          description: data.description,
+          categories: data.categories || [],
+          highlights: data.description, // using desc as highlight for demo
+            features: [ // Demo (map real amenity/fields later)
+            { icon: "calendar", title: "Reserve Now and Pay Later", description: "Keep your travel plans flexible - book now, pay later" },
+            { icon: "users", title: "Group Tour", description: "Join a group and forge lifelong friendship" },
+            { icon: "clock", title: `Duration ${data.duration ?? "N/A"}`, description: "Check availability to see starting time" },
+          ],
+          availableDates: [], // Placeholder; ideally, comes from backend (add real logic as API supports)
+          itinerary: data.itinerary || [],
+          inclusions: data.amenities || [],
+          exclusions: [], // placeholder
+          reviews: (data.reviews || []).map((review: any) => ({
+            author: `${review.reviewer?.firstName ?? ""} ${review.reviewer?.lastName ?? ""}`.trim(),
+            location: review.reviewer?.location ?? "",
+            rating: review.rating,
+            text: review.comment,
+            avatar: review.reviewer?.avatar,
+          })),
+        }
+        setTour(mappedTour)
+      } catch (e: any) {
+        setError(e.message ?? 'Unknown error')
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchTour()
+  }, [tourId])
+
+  if (loading) return <div className="p-8">Loading tour details...</div>
+  if (error) return <div className="p-8 text-red-500">{error}</div>
+  if (!tour) return <div className="p-8">No details found.</div>
 
   return (
     <div className="w-full">
@@ -161,7 +104,7 @@ export function TourDetailPage({ tourId }: TourDetailPageProps) {
 
       {/* Hero Image */}
       <div className="relative h-64 sm:h-80 md:h-96 lg:h-[500px] w-full overflow-hidden bg-muted">
-        <Image src={tour.image || "/placeholder.svg"} alt={tour.title} fill className="object-cover" priority />
+        <Image src={tour.images[0] || "/placeholder.svg"} alt={tour.title} fill className="object-cover" priority />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
         <div className="absolute bottom-4 left-4 flex items-center gap-2 bg-black/50 px-3 py-1 rounded-full text-white text-sm">
           <MapPin className="h-4 w-4" />
@@ -203,11 +146,11 @@ export function TourDetailPage({ tourId }: TourDetailPageProps) {
 
               <TabsContent value="itinerary" className="space-y-4">
                 <Accordion type="single" collapsible value={expandedDay} onValueChange={setExpandedDay}>
-                  {tour.itinerary.map((item) => (
-                    <AccordionItem key={`day-${item.day}`} value={`day-${item.day}`}>
+                  {tour.itinerary?.map((item, idx) => (
+                    <AccordionItem key={`day-${idx}`} value={`day-${idx}`}>
                       <AccordionTrigger className="hover:no-underline">
                         <div className="flex items-center gap-3 text-left">
-                          <Badge className="bg-coral-500 text-white">Day {item.day}</Badge>
+                          <Badge className="bg-coral-500 text-white">Day {idx + 1}</Badge>
                           <span className="font-semibold">{item.title}</span>
                         </div>
                       </AccordionTrigger>
@@ -217,7 +160,7 @@ export function TourDetailPage({ tourId }: TourDetailPageProps) {
 
                           {item.activities && (
                             <div className="space-y-2">
-                              {item.activities.map((activity, idx) => (
+                              {item.activities.map((activity: string, idx: number) => (
                                 <div key={idx} className="flex gap-3">
                                   <div className="h-5 w-5 rounded-full bg-coral-100 flex items-center justify-center flex-shrink-0 mt-0.5">
                                     <div className="h-2 w-2 rounded-full bg-coral-500" />
@@ -230,7 +173,7 @@ export function TourDetailPage({ tourId }: TourDetailPageProps) {
 
                           {item.meals && (
                             <div className="flex flex-wrap gap-2 pt-2">
-                              {item.meals.map((meal) => (
+                              {item.meals.map((meal: string) => (
                                 <Badge key={meal} variant="secondary">
                                   {meal}
                                 </Badge>
@@ -240,11 +183,11 @@ export function TourDetailPage({ tourId }: TourDetailPageProps) {
 
                           {item.images && (
                             <div className="grid grid-cols-2 gap-3 pt-2">
-                              {item.images.map((img, idx) => (
+                              {item.images.map((img: string, idx: number) => (
                                 <div key={idx} className="relative h-32 rounded-lg overflow-hidden">
                                   <Image
                                     src={img || "/placeholder.svg"}
-                                    alt={`Day ${item.day} image ${idx + 1}`}
+                                    alt={`Day ${idx + 1} image`}
                                     fill
                                     className="object-cover"
                                   />
@@ -289,13 +232,13 @@ export function TourDetailPage({ tourId }: TourDetailPageProps) {
                 <span className="text-muted-foreground">/ Person</span>
               </div>
 
-              <div className="space-y-3">
+              {/* <div className="space-y-3">
                 <Button className="w-full bg-coral-500 hover:bg-coral-600 text-white">Approve Tour</Button>
                 <div className="grid grid-cols-2 gap-2">
                   <Button variant="secondary">Request Edits</Button>
                   <Button variant="secondary">Reject Tour</Button>
                 </div>
-              </div>
+              </div> */}
             </Card>
           </div>
         </div>
@@ -304,7 +247,7 @@ export function TourDetailPage({ tourId }: TourDetailPageProps) {
         <div className="mb-12">
           <h2 className="text-2xl font-bold mb-6">What's included in the package?</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tour.features.map((feature, idx) => (
+            {tour.features?.map((feature, idx) => (
               <div key={idx} className="flex gap-4">
                 <div className="h-10 w-10 rounded-lg bg-coral-100 flex items-center justify-center flex-shrink-0">
                   <div className="h-5 w-5 text-coral-600">
@@ -328,7 +271,7 @@ export function TourDetailPage({ tourId }: TourDetailPageProps) {
         <div className="mb-12">
           <h2 className="text-2xl font-bold mb-6">Available Dates</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {tour.availableDates.map((dateOption, idx) => (
+            {tour.availableDates?.map((dateOption, idx) => (
               <Card key={idx} className="p-6 hover:shadow-lg transition-shadow">
                 <h3 className="font-semibold text-lg text-coral-600 mb-2">{dateOption.date}</h3>
                 <p className="text-sm text-muted-foreground mb-3">{dateOption.time}</p>
@@ -350,7 +293,7 @@ export function TourDetailPage({ tourId }: TourDetailPageProps) {
           <div>
             <h3 className="text-xl font-bold mb-4 text-foreground">Inclusions</h3>
             <ul className="space-y-3">
-              {tour.inclusions.map((item, idx) => (
+              {tour.inclusions?.map((item, idx) => (
                 <li key={idx} className="flex gap-3">
                   <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <div className="h-2 w-2 rounded-full bg-green-600" />
@@ -364,7 +307,7 @@ export function TourDetailPage({ tourId }: TourDetailPageProps) {
           <div>
             <h3 className="text-xl font-bold mb-4 text-coral-600">Exclusions</h3>
             <ul className="space-y-3">
-              {tour.exclusions.map((item, idx) => (
+              {tour.exclusions?.map((item, idx) => (
                 <li key={idx} className="flex gap-3">
                   <div className="h-5 w-5 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <div className="h-2 w-2 rounded-full bg-red-600" />
@@ -378,9 +321,9 @@ export function TourDetailPage({ tourId }: TourDetailPageProps) {
 
         {/* Reviews */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">Verified Reviews ({tour.reviews.length})</h2>
+          <h2 className="text-2xl font-bold mb-6">Verified Reviews ({tour.reviews?.length})</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tour.reviews.map((review, idx) => (
+            {tour.reviews?.map((review, idx) => (
               <Card key={idx} className="p-6">
                 <div className="flex gap-1 mb-3">
                   {Array.from({ length: review.rating }).map((_, i) => (

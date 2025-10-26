@@ -206,8 +206,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="flex h-screen flex-col">
           {/* Logo */}
           <div className="flex h-16 items-center justify-between px-6 ">
-            <Link href="/dashboard" className="lobster">
-              Tourlity
+          <Link href="/" className='flex items-end '>
+            <img src={"/images/logo/logo.svg"} alt="" className='w-10 mt-2'/>
+              <h1 className='lobster !text-3xl mb-0'>Tourlity</h1>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}

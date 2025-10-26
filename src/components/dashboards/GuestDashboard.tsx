@@ -5,6 +5,7 @@ import Button from '../root/button'
 import Image from 'next/image'
 import { useTourStore } from '@/lib/stores/tour-store'
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 export default function GuestDashboard() {
   const {
     homeTours,
@@ -208,9 +209,11 @@ export default function GuestDashboard() {
                           <div className="flex flex-col gap-3.5 justify-start items-center w-full px-4 lg:px-6">
                             <div className="flex flex-col gap-2.5 justify-start items-start w-full">
                               <div className="flex flex-col gap-1 justify-center items-start w-full">
-                                <h4 className="text-[20px] sm:text-[24px] font-plus-jakarta font-semibold leading-[26px] sm:leading-[31px] text-left text-global-1">
-                                  {experience.title}
-                                </h4>
+                                <Link href={`/dashboard/${experience.id}`}>
+                                  <h4 className="text-[20px] sm:text-[24px] font-plus-jakarta font-semibold leading-[26px] sm:leading-[31px] text-left text-global-1 hover:underline cursor-pointer">
+                                    {experience.title}
+                                  </h4>
+                                </Link>
                                 <p className="text-sm font-inter description font-normal leading-[22px] text-left text-global-2 w-full">
                                   {experience.description.slice(0, 70)}...
                                 </p>
@@ -356,9 +359,11 @@ export default function GuestDashboard() {
                             <div className="flex flex-col gap-3.5 justify-start items-center w-full px-4 lg:px-6">
                               <div className="flex flex-col gap-2.5 justify-start items-start w-full">
                                 <div className="flex flex-col gap-1 justify-center items-start w-full">
-                                  <h4 className="text-[20px] sm:text-[24px] font-plus-jakarta font-semibold leading-[26px] sm:leading-[31px] text-left text-global-1">
-                                    {experience.title}
-                                  </h4>
+                                  <Link href={`/dashboard/(tour-details)/${experience.id}`}>
+                                    <h4 className="text-[20px] sm:text-[24px] font-plus-jakarta font-semibold leading-[26px] sm:leading-[31px] text-left text-global-1 hover:underline cursor-pointer">
+                                      {experience.title}
+                                    </h4>
+                                  </Link>
                                   <p className="text-sm font-inter description font-normal leading-[22px] text-left text-global-2 w-full">
                                     {experience.description}
                                   </p>
