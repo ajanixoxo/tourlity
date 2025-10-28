@@ -10,13 +10,13 @@ import {TourModerationTable} from "@/components/admin/moderation/tour-moderation
 import { EmptyState } from "@/components/admin/empty-state"
 import { useDashboardStore } from "@/lib/stores/dashboard-store"
 import SuccessModal from "@/components/modals/success-modal"
-import { set } from "zod"
+import { toast } from 'react-toastify'
 
 export default function TourListingModeration() {
   const [searchQuery, setSearchQuery] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [localSearchQuery, setLocalSearchQuery] = useState("") // For immediate UI updates
-  const [isApproved, setIsApproved] = useState(true) // null = all, true = approved, false = rejected
+  const [isApproved, setIsApproved] = useState(false) // null = all, true = approved, false = rejected
 
   const {
     tours,
@@ -49,10 +49,12 @@ export default function TourListingModeration() {
   const handleApprove = async (tourId: string) => {
     try {
       await approveTour(tourId)
+      toast.success("Tour approved successfully")
       setIsApproved(true)
       // Refresh the current page after action
       fetchTours({ search: searchQuery || undefined, page: currentPage, limit: 6 })
     } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to approve tour")
       console.error("Failed to approve tour:", error)
     }
   }
@@ -60,9 +62,11 @@ export default function TourListingModeration() {
   const handleReject = async (tourId: string, reason?: string) => {
     try {
       await rejectTour(tourId, reason)
+      toast.success("Tour rejected successfully")
       // Refresh the current page after action
       fetchTours({ search: searchQuery || undefined, page: currentPage, limit: 6 })
     } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to reject tour")
       console.error("Failed to reject tour:", error)
     }
   }
@@ -70,9 +74,11 @@ export default function TourListingModeration() {
   const handleRequestEdits = async (tourId: string, reason: string) => {
     try {
       await requestTourEdits(tourId, reason)
+      toast.success("Edit request sent successfully")
       // Refresh the current page after action
       fetchTours({ search: searchQuery || undefined, page: currentPage, limit: 6 })
     } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to request edits")
       console.error("Failed to request edits:", error)
     }
   }

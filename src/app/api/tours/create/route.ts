@@ -26,9 +26,12 @@ export async function POST(request: NextRequest) {
     const validation = await validateTourCreationData(formData);
 
     if (!validation.success) {
+      // Format validation errors into a readable message
+      const errorMessages = validation.errors.join(', ');
       return NextResponse.json({
         success: false,
         error: 'Validation failed',
+        message: errorMessages,
         details: validation.errors
       }, { status: 400 });
     }

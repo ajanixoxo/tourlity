@@ -1,71 +1,55 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { getServerUser } from '@/lib/get-server-user';
+import { NextRequest, NextResponse } from "next/server"
+import { prisma } from "@/lib/prisma"
+import { getServerUser } from "@/lib/get-server-user"
 
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await getServerUser();
-    
+    // Verify admin user
+    const user = await getServerUser()
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    if (user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    if (user.role !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 
-    const { id } = await params;
+    const tourId = (await params).id
 
-    // Check if tour exists and is in pending approval status
+    // Check if tour exists
     const tour = await prisma.tour.findUnique({
-      where: { id },
-      select: { id: true, status: true, title: true }
-    });
+      where: { id: tourId }
+    })
 
     if (!tour) {
-      return NextResponse.json({ error: 'Tour not found' }, { status: 404 });
+      return NextResponse.json({ error: "Tour not found" }, { status: 404 })
     }
 
-    if (tour.status !== 'PENDING_APPROVAL') {
-      return NextResponse.json(
-        { error: 'Tour is not in pending approval status' },
-        { status: 400 }
-      );
-    }
-
-    // Update tour status to APPROVED
+    // Update tour status
     const updatedTour = await prisma.tour.update({
-      where: { id },
+      where: { id: tourId },
       data: {
-        status: 'ACTIVE',
+        status: "ACTIVE",
         updatedAt: new Date()
-      },
-      include: {
-        host: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true
-          }
-        }
       }
-    });
+    })
+
+    // Send notification to host (you can implement this later)
+    // await notifyHost(tour.hostId, "Tour Approved", `Your tour "${tour.title}" has been approved.`)
 
     return NextResponse.json({
       success: true,
-      message: 'Tour approved successfully',
       data: updatedTour
-    });
+    })
 
   } catch (error) {
-    console.error('Error approving tour:', error);
+    console.error("Error approving tour:", error)
     return NextResponse.json(
-      { error: 'Failed to approve tour' },
+      { error: "Failed to approve tour" },
       { status: 500 }
-    );
+    )
   }
 }

@@ -1,83 +1,57 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { getServerUser } from '@/lib/get-server-user';
+import { NextRequest, NextResponse } from "next/server"
+import { prisma } from "@/lib/prisma"
+import { getServerUser } from "@/lib/get-server-user"
 
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await getServerUser();
-    
+    // Verify admin user
+    const user = await getServerUser()
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    if (user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    if (user.role !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 
-    const { id } = await params;
-    const body = await request.json();
-    const { reason } = body;
+    const tourId = (await params).id
+    const { reason } = await request.json()
 
-    if (!reason || reason.trim().length === 0) {
-      return NextResponse.json(
-        { error: 'Rejection reason is required' },
-        { status: 400 }
-      );
-    }
-
-    // Check if tour exists and is in pending approval status
+    // Check if tour exists
     const tour = await prisma.tour.findUnique({
-      where: { id },
-      select: { id: true, status: true, title: true }
-    });
+      where: { id: tourId }
+    })
 
     if (!tour) {
-      return NextResponse.json({ error: 'Tour not found' }, { status: 404 });
+      return NextResponse.json({ error: "Tour not found" }, { status: 404 })
     }
 
-    if (tour.status !== 'PENDING_APPROVAL') {
-      return NextResponse.json(
-        { error: 'Tour is not in pending approval status' },
-        { status: 400 }
-      );
-    }
-
-    // Update tour status to REJECTED
+    // Update tour status
     const updatedTour = await prisma.tour.update({
-      where: { id },
+      where: { id: tourId },
       data: {
-        status: 'REJECTED',
+        status: "REJECTED",
+        // rejectionReason: reason,
         updatedAt: new Date()
-      },
-      include: {
-        host: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true
-          }
-        }
       }
-    });
+    })
 
-    // TODO: Send notification to host about rejection with reason
-    // This could be implemented with email service or in-app notifications
+    // Send notification to host (you can implement this later)
+    // await notifyHost(tour.hostId, "Tour Rejected", `Your tour "${tour.title}" has been rejected. Reason: ${reason}`)
 
     return NextResponse.json({
       success: true,
-      message: 'Tour rejected successfully',
       data: updatedTour
-    });
+    })
 
   } catch (error) {
-    console.error('Error rejecting tour:', error);
+    console.error("Error rejecting tour:", error)
     return NextResponse.json(
-      { error: 'Failed to reject tour' },
+      { error: "Failed to reject tour" },
       { status: 500 }
-    );
+    )
   }
 }
