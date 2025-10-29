@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Eye, Check, X, Edit, MoreVertical, MapPin, Calendar, Users, Star } from "lucide-react"
+import { Eye, Check, X, Edit, MoreVertical, MapPin, Calendar, Users, Star, Loader2 } from "lucide-react"
 import Button from "@/components/root/button"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -45,9 +45,9 @@ interface Tour {
 
 interface TourModerationTableProps {
   tours: Tour[]
-  onApprove: (tourId: string) => void
-  onReject: (tourId: string, reason: string) => void
-  onRequestEdits: (tourId: string, reason: string) => void
+  onApprove: (tourId: string) => Promise<void>
+  onReject: (tourId: string, reason: string) => Promise<void>
+  onRequestEdits: (tourId: string, reason: string) => Promise<void>
 }
 
 export function TourModerationTable({
@@ -61,14 +61,23 @@ export function TourModerationTable({
   const [showRejectModal, setShowRejectModal] = useState(false)
   const [showEditsModal, setShowEditsModal] = useState(false)
   const [tourToAction, setTourToAction] = useState<Tour | null>(null)
+  const [loadingTourId, setLoadingTourId] = useState<string | null>(null)
+  const [actionType, setActionType] = useState<'approve' | 'reject' | 'edit' | null>(null)
 
   const handleViewDetails = (tour: Tour) => {
     setSelectedTour(tour)
     setShowDetails(true)
   }
 
-  const handleApprove = (tour: Tour) => {
-    onApprove(tour.id)
+  const handleApprove = async (tour: Tour) => {
+    setLoadingTourId(tour.id)
+    setActionType('approve')
+    try {
+      await onApprove(tour.id)
+    } finally {
+      setLoadingTourId(null)
+      setActionType(null)
+    }
   }
 
   const handleReject = (tour: Tour) => {
@@ -81,19 +90,33 @@ export function TourModerationTable({
     setShowEditsModal(true)
   }
 
-  const handleRejectConfirm = (reason: string) => {
+  const handleRejectConfirm = async (reason: string) => {
     if (tourToAction) {
-      onReject(tourToAction.id, reason)
-      setShowRejectModal(false)
-      setTourToAction(null)
+      setLoadingTourId(tourToAction.id)
+      setActionType('reject')
+      try {
+        await onReject(tourToAction.id, reason)
+        setShowRejectModal(false)
+        setTourToAction(null)
+      } finally {
+        setLoadingTourId(null)
+        setActionType(null)
+      }
     }
   }
 
-  const handleEditsConfirm = (reason: string) => {
+  const handleEditsConfirm = async (reason: string) => {
     if (tourToAction) {
-      onRequestEdits(tourToAction.id, reason)
-      setShowEditsModal(false)
-      setTourToAction(null)
+      setLoadingTourId(tourToAction.id)
+      setActionType('edit')
+      try {
+        await onRequestEdits(tourToAction.id, reason)
+        setShowEditsModal(false)
+        setTourToAction(null)
+      } finally {
+        setLoadingTourId(null)
+        setActionType(null)
+      }
     }
   }
 
@@ -198,29 +221,38 @@ export function TourModerationTable({
 
                   <td className="p-4">
                     <div className="flex items-center space-x-2">
-
-
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="secondary" className="border-none!" >
-                            <MoreVertical className="w-4 h-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => handleApprove(tour)}>
-                            <Check className="w-4 h-4 mr-2 text-green-600" />
-                            Approve
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleReject(tour)}>
-                            <X className="w-4 h-4 mr-2 text-red-600" />
-                            Reject
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleRequestEdits(tour)}>
-                            <Edit className="w-4 h-4 mr-2 text-blue-600" />
-                            Request Edits
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      {loadingTourId === tour.id ? (
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>
+                            {actionType === 'approve' && 'Approving...'}
+                            {actionType === 'reject' && 'Rejecting...'}
+                            {actionType === 'edit' && 'Processing...'}
+                          </span>
+                        </div>
+                      ) : (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="secondary" className="border-none!" >
+                              <MoreVertical className="w-4 h-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => handleApprove(tour)}>
+                              <Check className="w-4 h-4 mr-2 text-green-600" />
+                              Approve
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleReject(tour)}>
+                              <X className="w-4 h-4 mr-2 text-red-600" />
+                              Reject
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleRequestEdits(tour)}>
+                              <Edit className="w-4 h-4 mr-2 text-blue-600" />
+                              Request Edits
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -239,8 +271,8 @@ export function TourModerationTable({
             setShowDetails(false)
             setSelectedTour(null)
           }}
-          onApprove={() => {
-            handleApprove(selectedTour)
+          onApprove={async () => {
+            await handleApprove(selectedTour)
             setShowDetails(false)
             setSelectedTour(null)
           }}
