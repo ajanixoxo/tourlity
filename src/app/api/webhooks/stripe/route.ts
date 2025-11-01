@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 import stripe from '@/lib/stripe';
 import { prisma } from '@/lib/prisma';
 import Stripe from 'stripe';
+import { sendBookingConfirmationEmailToGuest, sendBookingConfirmationEmailToHost } from '@/lib/email';
 
 // Define webhook event types for better type safety
 type WebhookEventType = 
@@ -62,6 +63,9 @@ export async function POST(request: NextRequest) {
         }
 
         // Start transaction to ensure data consistency
+        let bookingId: string | null = null;
+        let tourTitle: string | null = null;
+
         await prisma.$transaction(async (tx) => {
           // Validate tour status and details
           const tour = await tx.tour.findUnique({
@@ -90,9 +94,11 @@ export async function POST(request: NextRequest) {
           }
 
           // Validate payment amount
-          const expectedAmount = tour.price;
-          if (paymentIntent.amount !== Math.round(expectedAmount * 100)) { // Stripe amounts are in cents
-            throw new Error(`Payment amount mismatch. Expected: ${expectedAmount}, Got: ${paymentIntent.amount / 100}`);
+          // PaymentIntent.amount is in cents, tour.price is in dollars
+          // Convert tour.price to cents for comparison
+          const expectedAmountInCents = Math.round(tour.price * 100);
+          if (paymentIntent.amount !== expectedAmountInCents) {
+            throw new Error(`Payment amount mismatch. Expected: ${tour.price} (${expectedAmountInCents} cents), Got: ${paymentIntent.amount / 100} (${paymentIntent.amount} cents)`);
           }
 
           // Validate guest user
@@ -107,6 +113,7 @@ export async function POST(request: NextRequest) {
           if (guest.role !== 'GUEST') {
             throw new Error(`Invalid user role for guest: ${metadata.guestId}`);
           }
+          
           // Find the transaction
           const transaction = await tx.platformTransaction.findFirst({
             where: { stripeRef: paymentIntent.id }
@@ -131,11 +138,14 @@ export async function POST(request: NextRequest) {
             }
           });
 
-          // Update transaction with booking reference
+          bookingId = booking.id;
+          tourTitle = tour.title;
+
+          // Update transaction status to SUCCESS
           await tx.platformTransaction.update({
             where: { id: transaction.id },
             data: {
-              type: 'TOUR_PAYMENT',
+              status: 'SUCCESS',
               description: `Successful tour payment for ${tourId}`,
               relatedTour: tourId
             }
@@ -209,9 +219,59 @@ export async function POST(request: NextRequest) {
               description: `Tour payment earnings for ${metadata.tourId}`
             }
           });
+
+          // Get guest and host user details for email
+          const guestUser = await tx.user.findUnique({
+            where: { id: guestId },
+            select: { email: true, firstName: true, lastName: true }
+          });
+
+          const hostUser = await tx.user.findUnique({
+            where: { id: hostId },
+            select: { email: true, firstName: true, lastName: true }
+          });
+
+          // Generate confirmation number
+          const confirmationNumber = `TVR${booking.id.substring(0, 8).toUpperCase()}`;
+
+          // Send confirmation emails (outside transaction to avoid blocking)
+          if (guestUser && hostUser) {
+            Promise.all([
+              sendBookingConfirmationEmailToGuest(
+                guestUser.email,
+                `${guestUser.firstName} ${guestUser.lastName}`,
+                tour.title,
+                confirmationNumber,
+                booking.scheduledDate.toISOString(),
+                booking.scheduledDate.toISOString(), // TODO: Use actual end date from tour
+                booking.amount,
+                `${hostUser.firstName} ${hostUser.lastName}`
+              ),
+              sendBookingConfirmationEmailToHost(
+                hostUser.email,
+                `${hostUser.firstName} ${hostUser.lastName}`,
+                tour.title,
+                `${guestUser.firstName} ${guestUser.lastName}`,
+                guestUser.email,
+                confirmationNumber,
+                booking.scheduledDate.toISOString(),
+                booking.scheduledDate.toISOString(), // TODO: Use actual end date from tour
+                booking.amount
+              )
+            ])
+            .then(() => {
+              console.log(`Successfully sent confirmation emails for booking: ${booking.id}`);
+            })
+            .catch((error) => {
+              console.error('Error sending confirmation emails:', error);
+              // Log but don't fail the webhook
+            });
+          } else {
+            console.warn('Guest or host user not found, skipping email notifications');
+          }
         });
 
-        console.log(`Successfully processed payment: ${paymentIntent.id}`);
+        console.log(`Successfully processed payment: ${paymentIntent.id}, created booking: ${bookingId || 'unknown'}`);
         break;
       }
 
@@ -228,7 +288,7 @@ export async function POST(request: NextRequest) {
             await tx.platformTransaction.update({
               where: { id: transaction.id },
               data: {
-                type: 'FAILED_PAYMENT',
+                status: 'FAILED',
                 description: `Failed payment: ${paymentIntent.last_payment_error?.message || 'Unknown error'}`
               }
             });

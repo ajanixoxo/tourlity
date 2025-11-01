@@ -6,6 +6,12 @@ import Image from 'next/image'
 import { useTourStore } from '@/lib/stores/tour-store'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import BookingConfirmationModal from '../modals/booking-confirmation-modal'
+import TourPaymentModal from '../modals/tour-payment-modal'
+import TourSuccessModal from '../modals/tour-success-modal'
+import BookingTicketModal from '../modals/booking-ticket-modal'
+import { useRouter } from 'next/navigation'
+import BaseModal from '../modals/base-modal'
 export default function GuestDashboard() {
   const {
     homeTours,
@@ -19,6 +25,20 @@ export default function GuestDashboard() {
   const [activeTab, setActiveTab] = useState('interest')
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
+  
+  // Booking flow state
+  const [selectedTour, setSelectedTour] = useState<any>(null)
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false)
+  const [showPaymentModal, setShowPaymentModal] = useState(false)
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [showTicketModal, setShowTicketModal] = useState(false)
+  const [bookingData, setBookingData] = useState<any>(null)
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false)
+  const [isConfirmingPayment, setIsConfirmingPayment] = useState(false)
+  const [isLoadingBookingData, setIsLoadingBookingData] = useState(false)
+  const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const [paymentError, setPaymentError] = useState<string | null>(null)
+  const router = useRouter()
 
   // Fetch home tours on component mount
   useEffect(() => {
@@ -83,6 +103,182 @@ export default function GuestDashboard() {
 
   // Show loading state for initial load
   const isInitialLoading = isLoading && tours.length === 0
+
+  // Booking flow handlers
+  const handleBookNow = (tour: any) => {
+    setSelectedTour(tour)
+    setShowConfirmationModal(true)
+  }
+
+  const handleConfirmBooking = async () => {
+    setShowConfirmationModal(false)
+    setIsProcessingPayment(true)
+    setPaymentError(null)
+
+    try {
+      // Create payment intent via API
+      const response = await fetch('/api/payments/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          tourId: selectedTour.id,
+          amount: selectedTour.price,
+          currency: 'USD',
+        }),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to initialize payment')
+      }
+
+      const { clientSecret: secret } = await response.json()
+      setClientSecret(secret)
+      setIsProcessingPayment(false)
+      setShowPaymentModal(true)
+    } catch (error: any) {
+      console.error('Payment initialization error:', error)
+      setIsProcessingPayment(false)
+      setPaymentError(error.message || 'Failed to initialize payment. Please try again.')
+      alert(error.message || 'Failed to initialize payment. Please try again.')
+    }
+  }
+
+  const handlePaymentSuccess = async (paymentMethod: 'card' | 'paypal', paymentIntentId?: string) => {
+    setShowPaymentModal(false)
+    setClientSecret(null)
+    
+    if (!paymentIntentId || !selectedTour?.id) {
+      setPaymentError('Missing payment information. Please contact support.')
+      return
+    }
+
+    setIsConfirmingPayment(true)
+
+    try {
+      // Call the confirmation API to create booking, update transaction, send emails, and update escrow
+      const response = await fetch('/api/payments/confirm', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          paymentIntentId,
+          tourId: selectedTour.id,
+        }),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to confirm payment and create booking')
+      }
+
+      const result = await response.json()
+      console.log('Payment confirmed and booking created:', result)
+
+      setIsConfirmingPayment(false)
+      
+      // Show success modal with actual booking data
+      setShowSuccessModal(true)
+    } catch (error: any) {
+      console.error('Payment confirmation error:', error)
+      setIsConfirmingPayment(false)
+      setPaymentError(error.message || 'Payment succeeded but failed to create booking. Please contact support.')
+      // Still show success modal since payment succeeded
+      setShowSuccessModal(true)
+    }
+  }
+
+  const handlePaymentError = (error: string) => {
+    setPaymentError(error)
+    console.error('Payment error:', error)
+  }
+
+  const handleSuccessNext = async () => {
+    setShowSuccessModal(false)
+    setIsLoadingBookingData(true)
+    
+    // Fetch the created booking to get actual data
+    if (selectedTour?.id) {
+      try {
+        // Fetch bookings to find the newly created one
+        const bookingsResponse = await fetch(`/api/bookings?page=1&limit=10&status=CONFIRMED`, {
+          credentials: 'include',
+        })
+        
+        if (bookingsResponse.ok) {
+          const data = await bookingsResponse.json()
+          const newBooking = data.bookings?.find((b: any) => b.tourId === selectedTour.id)
+          
+          if (newBooking) {
+            const confirmationNumber = `TVR${newBooking.id.substring(0, 8).toUpperCase()}`
+            setBookingData({
+              id: newBooking.id,
+              confirmationNumber,
+              tourTitle: selectedTour.title,
+              startDate: newBooking.scheduledDate,
+              endDate: selectedTour.endDate || newBooking.scheduledDate,
+              guestEmail: newBooking.guest?.email || 'guest@example.com',
+              guestName: newBooking.guest ? `${newBooking.guest.firstName} ${newBooking.guest.lastName}` : 'Guest User',
+            })
+          } else {
+            // Fallback if booking not found yet
+            const confirmationNumber = `TVR${Math.random().toString(36).substring(2, 9).toUpperCase()}`
+            setBookingData({
+              id: selectedTour.id,
+              confirmationNumber,
+              tourTitle: selectedTour.title,
+              startDate: selectedTour.startDate || new Date().toISOString(),
+              endDate: selectedTour.endDate || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+              guestEmail: 'guest@example.com',
+              guestName: 'Guest User',
+            })
+          }
+        } else {
+          // Fallback if API call fails
+          const confirmationNumber = `TVR${Math.random().toString(36).substring(2, 9).toUpperCase()}`
+          setBookingData({
+            id: selectedTour.id,
+            confirmationNumber,
+            tourTitle: selectedTour.title,
+            startDate: selectedTour.startDate || new Date().toISOString(),
+            endDate: selectedTour.endDate || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+            guestEmail: 'guest@example.com',
+            guestName: 'Guest User',
+          })
+        }
+      } catch (error) {
+        console.error('Error fetching booking details:', error)
+        // Fallback
+        const confirmationNumber = `TVR${Math.random().toString(36).substring(2, 9).toUpperCase()}`
+        setBookingData({
+          id: selectedTour.id,
+          confirmationNumber,
+          tourTitle: selectedTour.title,
+          startDate: selectedTour.startDate || new Date().toISOString(),
+          endDate: selectedTour.endDate || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+          guestEmail: 'guest@example.com',
+          guestName: 'Guest User',
+        })
+      }
+    }
+    
+    setIsLoadingBookingData(false)
+    setShowTicketModal(true)
+  }
+
+  const handleGoToBookings = () => {
+    setShowTicketModal(false)
+    router.push('/dashboard/my-bookings')
+  }
+
+  const handleDownloadTicket = () => {
+    // TODO: Implement ticket download
+    console.log('Download ticket')
+  }
 
   return (
     <GuestOnly>
@@ -275,6 +471,7 @@ export default function GuestDashboard() {
                               <Button
                                 variant="primary"
                                 className=' text-[#F5F5F4]  w-[200px] lg:w-[200px] rounded-[14px]'
+                                onClick={() => handleBookNow(experience)}
                               >
                                 Book Now
                               </Button>
@@ -442,6 +639,75 @@ export default function GuestDashboard() {
         </div>
       </div>
 
+      {/* Booking Modals */}
+      <BookingConfirmationModal
+        isOpen={showConfirmationModal}
+        onClose={() => {
+          setShowConfirmationModal(false)
+          setSelectedTour(null)
+        }}
+        tour={selectedTour}
+        onConfirm={handleConfirmBooking}
+        isLoading={isProcessingPayment}
+      />
+
+      <TourPaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => {
+          setShowPaymentModal(false)
+          setClientSecret(null)
+          setPaymentError(null)
+          if (!isProcessingPayment) {
+            setSelectedTour(null)
+          }
+        }}
+        tour={selectedTour ? { title: selectedTour.title, price: selectedTour.price, id: selectedTour.id } : { title: '', price: 0 }}
+        clientSecret={clientSecret}
+        onPaymentSuccess={handlePaymentSuccess}
+        onPaymentError={handlePaymentError}
+      />
+
+      <TourSuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        onNext={handleSuccessNext}
+        tourTitle={selectedTour?.title}
+        isLoading={isLoadingBookingData}
+      />
+
+      <BookingTicketModal
+        isOpen={showTicketModal}
+        onClose={() => {
+          setShowTicketModal(false)
+          setSelectedTour(null)
+          setBookingData(null)
+        }}
+        booking={bookingData}
+        onDownloadTicket={handleDownloadTicket}
+        onGoToBookings={handleGoToBookings}
+      />
+
+      {/* Loading Overlay for Payment Confirmation */}
+      {isConfirmingPayment && (
+        <BaseModal isOpen={true} onClose={() => {}} showOnMobile={true}>
+          <div className="p-8 text-center flex flex-col items-center justify-center min-h-[200px]">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#F26457] mb-4"></div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Confirming Payment</h3>
+            <p className="text-gray-600 text-sm">Creating your booking and updating payment status...</p>
+          </div>
+        </BaseModal>
+      )}
+
+      {/* Loading Overlay for Booking Data */}
+      {isLoadingBookingData && (
+        <BaseModal isOpen={true} onClose={() => {}} showOnMobile={true}>
+          <div className="p-8 text-center flex flex-col items-center justify-center min-h-[200px]">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#F26457] mb-4"></div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Loading Ticket</h3>
+            <p className="text-gray-600 text-sm">Fetching your booking details...</p>
+          </div>
+        </BaseModal>
+      )}
     </GuestOnly>
   );
 }

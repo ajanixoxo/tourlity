@@ -73,6 +73,8 @@ export async function GET(request: NextRequest) {
           amount: true,
           currency: true,
           type: true,
+          status: true,
+          stripeRef: true,
           createdAt: true,
           relatedTour: true,
         },
@@ -146,7 +148,8 @@ export async function GET(request: NextRequest) {
         currency: transaction.currency
       },
       paymentMethod: 'Stripe',
-      status: transaction.type === 'TOUR_PAYMENT' ? 'COMPLETED' : 'FAILED'
+      status: transaction.status || 'PENDING', // PENDING, SUCCESS, FAILED
+      stripeRef: transaction.stripeRef || null
     }));
 
     return NextResponse.json({

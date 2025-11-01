@@ -66,7 +66,7 @@ export async function createPhysicalTour(
           coverageAreas: data.coverageAreas,
           amenities: data.amenities,
           giveFacilitatorAccess: data.giveFacilitatorAccess,
-          status: 'PENDING_APPROVAL',
+            status: 'PENDING_APPROVAL',
           images: []
         }
       });

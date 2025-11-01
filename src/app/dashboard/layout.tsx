@@ -373,9 +373,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </button>
 
               {/* Messages */}
-              <button className="p-2 bg-background rounded-full">
-                <MessageCircleMore size={20} className="text-primary-color" />
-              </button>
+              <Link href="/dashboard/chat">
+                <button className="p-2 bg-background rounded-full hover:bg-gray-100 transition-colors">
+                  <MessageCircleMore size={20} className="text-primary-color" />
+                </button>
+              </Link>
 
               {/* Language Selector */}
               <div className="hidden lg:flex relative">

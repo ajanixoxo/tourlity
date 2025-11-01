@@ -4,14 +4,24 @@ import type { PaymentSummary, Transaction } from '@/types/payment';
 
 // Transform API response to UI format
 function transformTransaction(apiTx: any): Transaction {
+  // Map status from API (SUCCESS, PENDING, FAILED) to UI format (completed, pending, failed)
+  let status: 'completed' | 'pending' | 'failed' = 'pending';
+  if (apiTx.status === 'SUCCESS') {
+    status = 'completed';
+  } else if (apiTx.status === 'FAILED') {
+    status = 'failed';
+  } else if (apiTx.status === 'PENDING') {
+    status = 'pending';
+  }
+
   return {
     id: apiTx.id,
     date: apiTx.date,
-    experience: apiTx.experience.title,
-    host: apiTx.host.name,
-    amount: apiTx.amount.value,
-    paymentMethod: 'Stripe',
-    status: apiTx.status.toLowerCase() as 'completed' | 'pending' | 'failed'
+    experience: apiTx.experience?.title || 'Unknown Experience',
+    host: apiTx.host?.name || 'Unknown Host',
+    amount: apiTx.amount?.value || 0,
+    paymentMethod: apiTx.paymentMethod || 'Stripe',
+    status: status
   };
 }
 

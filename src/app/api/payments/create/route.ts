@@ -92,17 +92,23 @@ export async function POST(request: NextRequest) {
     const platformFee = calculatePlatformFee(amount);
     const hostAmount = amount - platformFee;
 
+    // Convert amount to cents (Stripe requires amounts in smallest currency unit)
+    // If amount is in dollars (e.g., 2000 = $2000), convert to cents (200000)
+    // If amount is already in cents, no conversion needed
+    // We'll assume amount is in dollars and convert to cents
+    const amountInCents = Math.round(amount * 100);
+
     // Create Stripe PaymentIntent
     const paymentIntent = await stripe.paymentIntents.create({
-      amount,
-      currency,
+      amount: amountInCents,
+      currency: currency.toLowerCase(),
       automatic_payment_methods: {
         enabled: true,
       },
       metadata: {
         tourId,
-        platformFee,
-        hostAmount,
+        platformFee: platformFee.toString(),
+        hostAmount: hostAmount.toString(),
         guestId: user.id,
         hostId: tour.hostId
       },
@@ -114,9 +120,10 @@ export async function POST(request: NextRequest) {
         type: 'TOUR_PAYMENT',
         amount,
         currency,
+        status: 'PENDING', // Will be updated by webhook
         stripeRef: paymentIntent.id,
         relatedTour: tourId,
-        relatedUser: tour.hostId,
+        relatedUser: user.id, // Guest user who made the payment
         description: `Tour payment for ${tourId} by ${user.id}`,
       },
     });

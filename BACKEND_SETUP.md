@@ -27,6 +27,12 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 # Email (for OTP verification)
 EMAIL_USER="your-email@gmail.com"
 EMAIL_PASSWORD="your-app-password"
+
+# Stripe (Test Mode - for development)
+# Get test keys from: https://dashboard.stripe.com/test/apikeys
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_... # Use Stripe CLI for local testing
 ```
 
 ### 2. Install Dependencies

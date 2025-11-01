@@ -1,20 +1,63 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Button from "@/components/root/button"
 import { MapPin, Calendar, Download, SlidersHorizontal } from "lucide-react"
-import { bookings } from "@/data/tour-management-data"
 import Image from "next/image"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
+import { fetchBookings, type Booking } from "@/lib/services/bookingService"
+import { format } from "date-fns"
 
-type FilterStatus = "in-progress" | "upcoming" | "completed" | "cancelled"
+type FilterStatus = "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED"
+
+const statusMap: Record<FilterStatus, string> = {
+  "PENDING": "In Progress",
+  "CONFIRMED": "Upcoming",
+  "COMPLETED": "Completed",
+  "CANCELLED": "Cancelled"
+}
 
 export default function MyBookingsPage() {
-  const [activeFilter, setActiveFilter] = useState<FilterStatus>("in-progress")
+  const [activeFilter, setActiveFilter] = useState<FilterStatus>("CONFIRMED")
   const [searchQuery, setSearchQuery] = useState("")
+  const [bookings, setBookings] = useState<Booking[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const filteredBookings = bookings.filter((booking) => booking.status === activeFilter)
+  // Fetch bookings on mount and when filter changes
+  useEffect(() => {
+    const loadBookings = async () => {
+      setIsLoading(true)
+      setError(null)
+      try {
+        const response = await fetchBookings({
+          page: 1,
+          limit: 50,
+          status: activeFilter
+        })
+        setBookings(response.bookings)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load bookings")
+        console.error("Error loading bookings:", err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadBookings()
+  }, [activeFilter])
+
+  // Filter bookings by search query
+  const filteredBookings = bookings.filter((booking) => {
+    if (!searchQuery) return true
+    const query = searchQuery.toLowerCase()
+    return (
+      booking.tour?.title?.toLowerCase().includes(query) ||
+      booking.tour?.location?.toLowerCase().includes(query) ||
+      booking.id.toLowerCase().includes(query)
+    )
+  })
 
   return (
     <div className="min-h-screen  p-4 md:p-6 lg:p-8">
@@ -29,31 +72,31 @@ export default function MyBookingsPage() {
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 mb-8">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <Button
-              variant={activeFilter === "in-progress" ? "primary" : "secondary"}
-              onClick={() => setActiveFilter("in-progress")}
+              variant={activeFilter === "PENDING" ? "primary" : "secondary"}
+              onClick={() => setActiveFilter("PENDING")}
               className="rounded-full"
             >
-              In Progess
+              In Progress
             </Button>
             <Button
-              variant={activeFilter === "upcoming" ? "primary" : "secondary"}
-              onClick={() => setActiveFilter("upcoming")}
+              variant={activeFilter === "CONFIRMED" ? "primary" : "secondary"}
+              onClick={() => setActiveFilter("CONFIRMED")}
               className="rounded-full"
             >
               Upcoming
             </Button>
             <Button
-              variant={activeFilter === "completed" ? "primary" : "secondary"}
-              onClick={() => setActiveFilter("completed")}
+              variant={activeFilter === "COMPLETED" ? "primary" : "secondary"}
+              onClick={() => setActiveFilter("COMPLETED")}
               className="rounded-full"
             >
               Completed
             </Button>
             <Button
-              variant={activeFilter === "cancelled" ? "primary" : "secondary"}
-              onClick={() => setActiveFilter("cancelled")}
+              variant={activeFilter === "CANCELLED" ? "primary" : "secondary"}
+              onClick={() => setActiveFilter("CANCELLED")}
               className="rounded-full"
             >
               Cancelled
@@ -80,120 +123,153 @@ export default function MyBookingsPage() {
         {/* Count */}
         <div className="mb-6">
           <h2 className="text-lg font-medium text-foreground">
-            {activeFilter.charAt(0).toUpperCase() + activeFilter.slice(1)} Bookings{" "}
+            {statusMap[activeFilter]} Bookings{" "}
             <span className="text-muted-foreground">({filteredBookings.length})</span>
           </h2>
         </div>
 
-        {/* Bookings List */}
-        <div className="space-y-4 bg-white rounded-3xl p-4">
-          {filteredBookings.map((booking) => (
-            <div
-              key={booking.id}
-              className="flex flex-col gap-4 rounded-lg border border-border bg-card p-4 transition-shadow hover:shadow-md md:flex-row md:items-center"
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex justify-center items-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral-500"></div>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && !isLoading && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <p className="text-red-800">{error}</p>
+            <Button
+              variant="primary"
+              onClick={() => window.location.reload()}
+              className="mt-2"
             >
-              {/* Tour Image */}
-              <div className="relative h-48 w-full overflow-hidden rounded-lg md:h-32 md:w-48 md:shrink-0">
-                <Image
-                  src={booking.image || "/placeholder.svg"}
-                  alt={booking.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 192px"
-                />
-              </div>
+              Retry
+            </Button>
+          </div>
+        )}
 
-              {/* Tour Details */}
-              <div className="flex flex-1 flex-col gap-3">
-                <h3 className="text-lg font-semibold text-foreground">{booking.title}</h3>
-
-                {/* Location */}
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <MapPin className="h-4 w-4" />
-                  <span>{booking.location}</span>
+        {/* Bookings List */}
+        {!isLoading && !error && (
+          <div className="space-y-4 bg-white rounded-3xl p-4">
+            {filteredBookings.map((booking) => (
+              <div
+                key={booking.id}
+                className="flex flex-col gap-4 rounded-lg border border-border bg-card p-4 transition-shadow hover:shadow-md md:flex-row md:items-center"
+              >
+                {/* Tour Image */}
+                <div className="relative h-48 w-full overflow-hidden rounded-lg md:h-32 md:w-48 md:shrink-0">
+                  <Image
+                    src={booking.tour?.images?.[0] || "/placeholder.svg"}
+                    alt={booking.tour?.title || "Tour"}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 192px"
+                  />
                 </div>
 
-                {/* Date & Time */}
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Calendar className="h-4 w-4" />
-                  <span>{booking.dateTime}</span>
-                </div>
+                {/* Tour Details */}
+                <div className="flex flex-1 flex-col gap-3">
+                  <Link href={booking.tourId ? `/dashboard/tours/${booking.tourId}` : "#"}>
+                    <h3 className="text-lg font-semibold text-foreground hover:text-coral-500 cursor-pointer">
+                      {booking.tour?.title || "Tour"}
+                    </h3>
+                  </Link>
 
-                {/* Host and Translator */}
-                <div className="flex flex-wrap items-center gap-6">
-                  <div className="flex items-center gap-2">
-                    <div className="relative h-8 w-8 overflow-hidden rounded-full">
-                      <Image
-                        src={booking.host.avatar || "/placeholder.svg"}
-                        alt={booking.host.name}
-                        fill
-                        className="object-cover"
-                        sizes="32px"
-                      />
+                  {/* Location */}
+                  {booking.tour?.location && (
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <MapPin className="h-4 w-4" />
+                      <span>{booking.tour.location}</span>
                     </div>
-                    <div className="text-sm">
-                      <p className="text-muted-foreground">Host</p>
-                      <p className="font-medium text-foreground">{booking.host.name}</p>
+                  )}
+
+                  {/* Date & Time */}
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Calendar className="h-4 w-4" />
+                    <span>{format(new Date(booking.scheduledDate), "PPP 'at' p")}</span>
+                  </div>
+
+                  {/* Booking Details */}
+                  <div className="flex flex-wrap items-center gap-4 text-sm">
+                    <div>
+                      <span className="text-muted-foreground">Amount: </span>
+                      <span className="font-medium text-foreground">
+                        ${booking.amount} {booking.currency}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Participants: </span>
+                      <span className="font-medium text-foreground">{booking.participants}</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <div className="relative h-8 w-8 overflow-hidden rounded-full">
-                      <Image
-                        src={booking.translator.avatar || "/placeholder.svg"}
-                        alt={booking.translator.name}
-                        fill
-                        className="object-cover"
-                        sizes="32px"
-                      />
+                  {/* Host */}
+                  {booking.tour?.host && (
+                    <div className="flex items-center gap-2">
+                      <div className="relative h-8 w-8 overflow-hidden rounded-full">
+                        <Image
+                          src={booking.tour.host.avatar || "/placeholder.svg"}
+                          alt={`${booking.tour.host.firstName} ${booking.tour.host.lastName}`}
+                          fill
+                          className="object-cover"
+                          sizes="32px"
+                        />
+                      </div>
+                      <div className="text-sm">
+                        <p className="text-muted-foreground">Host</p>
+                        <p className="font-medium text-foreground">
+                          {booking.tour.host.firstName} {booking.tour.host.lastName}
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-sm">
-                      <p className="text-muted-foreground">Translator</p>
-                      <p className="font-medium text-foreground">{booking.translator.name}</p>
-                    </div>
-                  </div>
+                  )}
                 </div>
-              </div>
 
-              {/* Actions */}
-              <div className="flex flex-col gap-2 md:shrink-0 md:items-end">
-
-                <div className="flex gap-2">
-                  {activeFilter === "upcoming" && (
-                    <>
-                      <Button variant="secondary">
-                        Cancel Tour
-                      </Button>
+                {/* Actions */}
+                <div className="flex flex-col gap-2 md:shrink-0 md:items-end">
+                  <div className="flex gap-2">
+                    {activeFilter === "CONFIRMED" && (
+                      <>
+                        <Button variant="secondary">
+                          Cancel Tour
+                        </Button>
+                        <Button className="flex items-center">
+                          <Download className="mr-2 h-4 w-4 flex items-center" />
+                          Download Ticket
+                        </Button>
+                      </>
+                    )}
+                    {(activeFilter === "COMPLETED" || booking.status === "COMPLETED") && (
                       <Button className="flex items-center">
-                        <Download className="mr-2 h-4 w-4 flex items-center" />
+                        <Download className="mr-2 h-4 w-4 " />
                         Download Ticket
                       </Button>
-                    </>
-                  )}
-                  {activeFilter === "completed" && (
-                    <Button className="flex items-center">
-                      <Download className="mr-2 h-4 w-4 " />
-                      Download Ticket
-                    </Button>
-                  )}
+                    )}
+                    <Link href={`/dashboard/bookings/${booking.id}`}>
+                      <Button variant="secondary">
+                        View Details
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* Empty State */}
-        {filteredBookings.length === 0 && (
+        {!isLoading && !error && filteredBookings.length === 0 && (
           <div className="flex flex-col items-center justify-center py-12">
             <div className="text-center">
-              <p className="text-lg text-muted-foreground">No {activeFilter} bookings found</p>
+              <p className="text-lg text-muted-foreground">No {statusMap[activeFilter]} bookings found</p>
               <p className="mt-2 text-sm text-muted-foreground">
-                {activeFilter === "upcoming"
+                {activeFilter === "CONFIRMED"
                   ? "Book a tour to see it here"
-                  : `You don't have any ${activeFilter} bookings`}
+                  : `You don't have any ${statusMap[activeFilter].toLowerCase()} bookings`}
               </p>
-              {activeFilter === "upcoming" && (
-                <Link href="/explore">
+              {activeFilter === "CONFIRMED" && (
+                <Link href="/dashboard">
                   <Button className="mt-4">Explore Tours</Button>
                 </Link>
               )}
