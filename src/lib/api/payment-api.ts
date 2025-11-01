@@ -28,9 +28,9 @@ function transformTransaction(apiTx: any): Transaction {
 // Transform summary data
 function transformSummary(apiSummary: any): PaymentSummary {
   return {
-    upcomingTrips: apiSummary.upcomingTrips,
-    totalSpent: apiSummary.totalSpent,
-    nextTripDays: 0 // We'll implement this later
+    upcomingTrips: apiSummary.upcomingTrips || 0,
+    totalSpent: apiSummary.totalSpent || 0,
+    nextTripDays: apiSummary.nextTripDays || 0
   };
 }
 

@@ -19,7 +19,13 @@ export function PaymentSummaryCards({ summary }: PaymentSummaryProps) {
 
                         </div>
                         <div className="text-3xl font-bold text-gray-900">{summary.upcomingTrips}</div>
-                        <div className="text-sm text-gray-500 mt-1">Next trip in {summary.nextTripDays} days</div>
+                        {summary.nextTripDays > 0 ? (
+                          <div className="text-sm text-gray-500 mt-1">Next trip in {summary.nextTripDays} {summary.nextTripDays === 1 ? 'day' : 'days'}</div>
+                        ) : summary.upcomingTrips > 0 ? (
+                          <div className="text-sm text-gray-500 mt-1">You have upcoming trips</div>
+                        ) : (
+                          <div className="text-sm text-gray-500 mt-1">No upcoming trips</div>
+                        )}
                     </div>
                     <div className="flex flex-col items-end gap-4 w-max">
                         <div className=" w-max flex items-center gap-2 text-blue-700 rounded-full bg-blue-50 p-2">

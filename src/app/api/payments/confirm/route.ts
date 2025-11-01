@@ -76,7 +76,12 @@ export async function POST(request: NextRequest) {
       }),
       prisma.tour.findUnique({
         where: { id: tourId },
-        include: {
+        select: {
+          id: true,
+          title: true,
+          status: true,
+          startDate: true,
+          endDate: true,
           host: {
             select: {
               id: true,
@@ -148,6 +153,16 @@ export async function POST(request: NextRequest) {
       });
 
       // 2. Create booking
+      // Use tour startDate if available, otherwise use a date 7 days from now (or today if tour has no date)
+      const defaultScheduledDate = tour.startDate 
+        ? new Date(tour.startDate) 
+        : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // Default to 7 days from now
+      
+      // Ensure scheduledDate is at least today
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const bookingScheduledDate = defaultScheduledDate < today ? today : defaultScheduledDate;
+      
       const booking = await tx.booking.create({
         data: {
           tourId: tourId,
@@ -157,7 +172,7 @@ export async function POST(request: NextRequest) {
           currency: paymentIntent.currency.toUpperCase(),
           paymentStatus: 'PAID',
           paymentMethod: paymentIntent.payment_method_types[0] || 'card',
-          scheduledDate: new Date(),
+          scheduledDate: bookingScheduledDate,
           participants: 1,
         }
       });

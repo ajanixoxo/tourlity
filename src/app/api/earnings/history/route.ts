@@ -20,6 +20,16 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Get user to check role
+    const user = await prisma.user.findUnique({
+      where: { id: payload.id },
+      select: { id: true, role: true }
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 401 });
+    }
+
     // Get pagination parameters
     const searchParams = request.nextUrl.searchParams;
     const page = parseInt(searchParams.get('page') || '1');
@@ -28,7 +38,102 @@ export async function GET(request: NextRequest) {
     const endDate = searchParams.get('endDate');
     const status = searchParams.get('status');
 
-    // Build filters
+    // For HOST users, return PlatformTransactions for their tours
+    if (user.role === 'HOST') {
+      // First, get all tour IDs for this host
+      const hostTours = await prisma.tour.findMany({
+        where: { hostId: user.id },
+        select: { id: true }
+      });
+      const tourIds = hostTours.map(tour => tour.id);
+
+      // Build where clause
+      const where: any = {
+        type: 'TOUR_PAYMENT',
+        relatedTour: {
+          in: tourIds
+        }
+      };
+
+      // Add date filter
+      if (startDate && endDate) {
+        where.createdAt = {
+          gte: new Date(startDate),
+          lte: new Date(endDate)
+        };
+      }
+
+      // Add status filter if provided
+      if (status) {
+        where.status = status;
+      }
+
+      // Get platform transactions for host's tours
+      const transactions = await prisma.platformTransaction.findMany({
+        where,
+        orderBy: {
+          createdAt: 'desc'
+        },
+        skip: (page - 1) * limit,
+        take: limit
+      });
+
+      // Get total count for pagination
+      const total = await prisma.platformTransaction.count({ where });
+
+      // Fetch tour details for each transaction
+      const tourIdsFromTransactions = transactions
+        .map(tx => tx.relatedTour)
+        .filter((id): id is string => id !== null);
+
+      const tours = await prisma.tour.findMany({
+        where: {
+          id: { in: tourIdsFromTransactions }
+        },
+        select: {
+          id: true,
+          title: true
+        }
+      });
+
+      // Create a map for quick lookup
+      const tourMap = new Map(tours.map(tour => [tour.id, tour]));
+
+      // Format transactions to match EarningsTransaction interface
+      const formattedTransactions = transactions.map(tx => {
+        // Map status: SUCCESS -> paid, PENDING -> pending, FAILED -> (exclude or show as failed)
+        let transactionStatus: 'paid' | 'processing' | 'pending' = 'pending';
+        if (tx.status === 'SUCCESS') {
+          transactionStatus = 'paid';
+        } else if (tx.status === 'PENDING') {
+          transactionStatus = 'processing';
+        } else {
+          transactionStatus = 'pending';
+        }
+
+        const tour = tx.relatedTour ? tourMap.get(tx.relatedTour) : null;
+
+        return {
+          id: tx.id,
+          tourName: tour?.title || 'Unknown Tour',
+          amount: tx.amount,
+          date: tx.createdAt.toISOString(),
+          status: transactionStatus
+        };
+      });
+
+      return NextResponse.json({
+        transactions: formattedTransactions,
+        pagination: {
+          currentPage: page,
+          totalPages: Math.ceil(total / limit),
+          totalItems: total,
+          itemsPerPage: limit
+        }
+      });
+    }
+
+    // For other roles (FACILITATOR, TRANSLATOR), return payouts as before
     const where = {
       userId: payload.id
     } as Record<string, any>;
@@ -108,8 +213,21 @@ export async function GET(request: NextRequest) {
       }))
     }));
 
+    // For non-host roles, format payouts as transactions
+    const formattedTransactions = formattedPayouts.flatMap(payout => 
+      payout.transactions.map(tx => ({
+        id: `${payout.id}-${tx.id}`,
+        tourName: tx.serviceName,
+        amount: tx.amount.net,
+        date: payout.date,
+        status: payout.status === 'COMPLETED' ? 'paid' as const : 
+                payout.status === 'PENDING' ? 'processing' as const : 
+                'pending' as const
+      }))
+    );
+
     return NextResponse.json({
-      payouts: formattedPayouts,
+      transactions: formattedTransactions,
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(total / limit),
@@ -119,9 +237,9 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Failed to fetch payout history:', error);
+    console.error('Failed to fetch earnings history:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch payout history' },
+      { error: 'Failed to fetch earnings history' },
       { status: 500 }
     );
   }

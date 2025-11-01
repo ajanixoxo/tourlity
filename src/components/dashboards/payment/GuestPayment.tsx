@@ -58,7 +58,7 @@ export default function PaymentDashboard() {
           summary={{
             upcomingTrips: summary?.upcomingTrips || 0,
             totalSpent: summary?.totalSpent || 0,
-            nextTripDays: 0 // We'll implement this later
+            nextTripDays: summary?.nextTripDays || 0
           }} 
         />
 

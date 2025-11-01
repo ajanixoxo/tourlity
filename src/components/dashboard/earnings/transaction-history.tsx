@@ -96,20 +96,38 @@ export function TransactionHistory({ transactions, hasData }: TransactionHistory
               </tr>
             </thead>
             <tbody>
-              {transactions.map((transaction) => (
-                <tr key={transaction.id} className="border-b border-gray-100">
-                  <td className="py-4 px-4 text-gray-900">{transaction.tourName}</td>
-                  <td className="py-4 px-4 text-gray-900">${transaction.amount}</td>
-                  <td className="py-4 px-4 text-gray-600">{transaction.date}</td>
-                  <td className="py-4 px-4">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(transaction.status)}`}
-                    >
-                      {getStatusText(transaction.status)}
-                    </span>
-                  </td>
-                </tr>
-              ))}
+              {transactions.map((transaction) => {
+                // Format date for display
+                const formatDate = (dateString: string) => {
+                  try {
+                    const date = new Date(dateString);
+                    return date.toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    });
+                  } catch {
+                    return dateString;
+                  }
+                };
+
+                return (
+                  <tr key={transaction.id} className="border-b border-gray-100">
+                    <td className="py-4 px-4 text-gray-900">{transaction.tourName}</td>
+                    <td className="py-4 px-4 text-gray-900">${transaction.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    <td className="py-4 px-4 text-gray-600">{formatDate(transaction.date)}</td>
+                    <td className="py-4 px-4">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(transaction.status)}`}
+                      >
+                        {getStatusText(transaction.status)}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
