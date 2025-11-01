@@ -469,6 +469,8 @@ enum PayoutStatus {
   PROCESSING
   PAID
   FAILED
+  IN_PROGRESS
+  COMPLETED
 }
 
 enum UserRole {

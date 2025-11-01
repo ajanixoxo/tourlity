@@ -52,12 +52,6 @@ export async function GET(request: NextRequest) {
     // Get transactions with related data
     const transactions = await prisma.platformTransaction.findMany({
       where,
-      include: {
-        // Include tour details if available
-        ...(user.role === 'GUEST' && {
-          // For guests, include tour and host info
-        })
-      },
       orderBy: {
         createdAt: 'desc'
       },
@@ -131,4 +125,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

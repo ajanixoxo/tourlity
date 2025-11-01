@@ -220,9 +220,18 @@ export async function GET(request: NextRequest) {
         tourName: tx.serviceName,
         amount: tx.amount.net,
         date: payout.date,
-        status: payout.status === 'COMPLETED' ? 'paid' as const : 
-                payout.status === 'PENDING' ? 'processing' as const : 
-                'pending' as const
+        status: (() => {
+          switch (payout.status) {
+            case 'COMPLETED':
+              return 'paid';
+            case 'PENDING':
+              return 'processing';
+            case 'IN_PROGRESS':
+              return 'pending';
+            default:
+              return payout.status?.toLowerCase?.() || 'unknown';
+          }
+        })() as 'paid' | 'processing' | 'pending' | string
       }))
     );
 
